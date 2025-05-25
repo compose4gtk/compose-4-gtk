@@ -8,6 +8,7 @@ import io.github.compose4gtk.GtkComposeWidget
 import io.github.compose4gtk.SingleChildComposeNode
 import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gobject.SignalConnection
+import kotlinx.coroutines.NonCancellable.children
 import org.gnome.gtk.Button
 import org.gnome.gtk.LinkButton
 import org.gnome.gtk.ToggleButton
@@ -27,10 +28,10 @@ private class GtkLinkButtonComposeNode(
 ) : SingleChildComposeNode<LinkButton>(gObject, { child = it })
 
 @Composable
-private fun <B : GtkComposeWidget<Button>> BaseButton(
+private fun <B : GtkComposeWidget<Button>> BaseGenericButton(
     creator: () -> B,
     updater: Updater<B>.() -> Unit,
-    label: String,
+    label: String?,
     modifier: Modifier = Modifier,
     hasFrame: Boolean = true,
     child: @Composable () -> Unit,
@@ -48,14 +49,14 @@ private fun <B : GtkComposeWidget<Button>> BaseButton(
 }
 
 @Composable
-fun Button(
-    label: String,
+private fun BaseButton(
+    label: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    child: @Composable () -> Unit = {},
     hasFrame: Boolean = true,
+    child: @Composable () -> Unit,
 ) {
-    BaseButton(
+    BaseGenericButton(
         creator = { GtkButtonComposeNode(Button.builder().build()) },
         label = label,
         modifier = modifier,
@@ -71,15 +72,31 @@ fun Button(
 }
 
 @Composable
-fun ToggleButton(
+fun Button(
     label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    hasFrame: Boolean = true,
+) = BaseButton(label, onClick, modifier, hasFrame, child = {})
+
+@Composable
+fun Button(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    hasFrame: Boolean = true,
+    child: @Composable () -> Unit = {},
+) = BaseButton(label = null, onClick, modifier, hasFrame, child)
+
+@Composable
+private fun BaseToggleButton(
+    label: String?,
     active: Boolean,
     onToggle: () -> Unit,
     modifier: Modifier = Modifier,
     hasFrame: Boolean = true,
     child: @Composable () -> Unit = {},
 ) {
-    BaseButton(
+    BaseGenericButton(
         creator = {
             val tb = ToggleButton.builder().build()
             GtkToggleButtonComposeNode(tb, tb.onToggled { })
@@ -108,6 +125,24 @@ fun ToggleButton(
 }
 
 @Composable
+fun ToggleButton(
+    label: String,
+    active: Boolean,
+    onToggle: () -> Unit,
+    modifier: Modifier = Modifier,
+    hasFrame: Boolean = true,
+) = BaseToggleButton(label, active, onToggle, modifier, hasFrame, child = {})
+
+@Composable
+fun ToggleButton(
+    active: Boolean,
+    onToggle: () -> Unit,
+    modifier: Modifier = Modifier,
+    hasFrame: Boolean = true,
+    child: @Composable () -> Unit = {},
+) = BaseToggleButton(label = null, active, onToggle, modifier, hasFrame, child)
+
+@Composable
 fun IconButton(
     iconName: String,
     onClick: () -> Unit,
@@ -115,9 +150,9 @@ fun IconButton(
     hasFrame: Boolean = true,
     child: @Composable () -> Unit = {},
 ) {
-    BaseButton(
+    BaseGenericButton(
         creator = { GtkButtonComposeNode(Button.builder().build()) },
-        label = "",
+        label = null,
         modifier = modifier,
         hasFrame = hasFrame,
         child = child,
@@ -136,19 +171,20 @@ fun LinkButton(
     label: String,
     uri: String,
     modifier: Modifier = Modifier,
+    visited: Boolean = false,
     onActivateLink: () -> Boolean = { false },
-    child: @Composable () -> Unit = {},
 ) {
-    BaseButton(
+    BaseGenericButton(
         creator = {
             val lb = LinkButton.builder().build()
             GtkLinkButtonComposeNode(lb, lb.onActivateLink { false })
         },
         label = label,
         modifier = modifier,
-        child = child,
+        child = { },
         updater = {
             set(uri) { this.widget.uri = it }
+            set(visited) { this.widget.visited = it }
             set(onActivateLink) {
                 this.onActivateLink?.disconnect()
                 this.onActivateLink = this.widget.onActivateLink {
