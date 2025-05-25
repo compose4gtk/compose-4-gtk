@@ -70,7 +70,7 @@ fun main(args: Array<String>) {
                     ToggleButton(
                         label = "Toggle dialog",
                         active = floatingDialog,
-                        onToggle = { floatingDialog = !floatingDialog }
+                        onToggle = { floatingDialog = !floatingDialog },
                     )
                     Button(
                         modifier = Modifier.horizontalAlignment(Align.CENTER),

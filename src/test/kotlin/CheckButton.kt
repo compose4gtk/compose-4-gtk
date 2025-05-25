@@ -21,7 +21,8 @@ fun main(args: Array<String>) {
                 HeaderBar(modifier = Modifier.cssClasses("flat"))
 
                 StatusPage(
-                    title = "Check Button", description = "Allow users to control binary options or properties"
+                    title = "Check Button",
+                    description = "Allow users to control binary options or properties",
                 ) {
                     HorizontalBox {
                         VerticalBox(spacing = 8) {
@@ -31,14 +32,14 @@ fun main(args: Array<String>) {
                                 onActiveRequest = { active -> isChecked = active },
                                 modifier = Modifier.alignment(Align.START),
                                 active = isChecked,
-                                label = "Change me!"
+                                label = "Change me!",
                             )
 
                             CheckButton(
                                 onActiveRequest = { println("Can't change me!") },
                                 modifier = Modifier.alignment(Align.START),
                                 active = isChecked,
-                                label = "Mirror only"
+                                label = "Mirror only",
                             )
 
                             CheckButton(

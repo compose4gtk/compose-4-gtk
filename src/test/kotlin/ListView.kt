@@ -1,5 +1,6 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -19,7 +20,7 @@ fun main(args: Array<String>) {
         ApplicationWindow("Test", onClose = ::exitApplication, defaultWidth = 800, defaultHeight = 800) {
             VerticalBox {
                 HeaderBar(title = { Label("ListView") })
-                var itemSize by remember { mutableStateOf(5) }
+                var itemSize by remember { mutableIntStateOf(5) }
                 var show by remember { mutableStateOf(true) }
                 HorizontalBox(Modifier.expand()) {
                     if (show) {
@@ -53,7 +54,7 @@ fun main(args: Array<String>) {
                 Button("Remove all items", onClick = {
                     itemSize = 0
                 })
-                Button(if(show)"hide" else "show", onClick = {
+                Button(if (show)"hide" else "show", onClick = {
                     show = !show
                 })
             }

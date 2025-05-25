@@ -9,5 +9,5 @@ fun Modifier.sizeRequest(
     },
     undo = {
         it.setSizeRequest(-1, -1)
-    }
+    },
 )

@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
                     } else {
                         Orientation.HORIZONTAL
                     },
-                    modifier = Modifier.margin(8, 0)
+                    modifier = Modifier.margin(8, 0),
                 ) {
                     Carousel(
                         state = carouselState,
@@ -86,14 +86,14 @@ fun main(args: Array<String>) {
 }
 
 @Composable
-fun Presentation() {
+private fun Presentation() {
     StatusPage(title = "Carousel") {
         Label("This is a carousel component")
     }
 }
 
 @Composable
-fun Settings(
+private fun Settings(
     allowLongSwipes: MutableState<Boolean>,
     allowMouseDrag: MutableState<Boolean>,
     allowScrollWheel: MutableState<Boolean>,
@@ -106,28 +106,28 @@ fun Settings(
                 active = allowLongSwipes.value,
                 onToggle = {
                     allowLongSwipes.value = !allowLongSwipes.value
-                }
+                },
             )
             ToggleButton(
                 label = "Allow mouse drag",
                 active = allowMouseDrag.value,
                 onToggle = {
                     allowMouseDrag.value = !allowMouseDrag.value
-                }
+                },
             )
             ToggleButton(
                 label = "Allow scroll wheel",
                 active = allowScrollWheel.value,
                 onToggle = {
                     allowScrollWheel.value = !allowScrollWheel.value
-                }
+                },
             )
         }
     }
 }
 
 @Composable
-fun MoreSettings(orientation: MutableState<Orientation>) {
+private fun MoreSettings(orientation: MutableState<Orientation>) {
     StatusPage(title = "More Settings!") {
         Box(orientation = Orientation.VERTICAL, modifier = Modifier.margin(16), spacing = 16) {
             Label("I am ${if (orientation.value == Orientation.HORIZONTAL) "Horizontal" else "Vertical"}")

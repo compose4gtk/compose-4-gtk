@@ -11,7 +11,6 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.gtk.IconSize
 import org.gnome.gtk.Image
 
-
 /**
  * The size of the GTK [Image].
  * The possible values correspond to GTK's [IconSize], plus the [Specific] class to represent
@@ -44,7 +43,7 @@ fun Image(
                 img,
                 setIcon = { setFromIconName(it) },
                 setPaintable = { setFromPaintable(it) },
-                getCurrentPaintable = { paintable }
+                getCurrentPaintable = { paintable },
             )
             // It seems like setting a new image will ignore the previous icon size. This is a trick to restore it
             widget.iconSize = IconSize.INHERIT

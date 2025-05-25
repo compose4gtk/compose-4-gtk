@@ -6,10 +6,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.github.jwharm.javagi.gobject.SignalConnection
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
+import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.Switch
 
 private class GtkSwitchComposeNode(

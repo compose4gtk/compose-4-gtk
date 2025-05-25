@@ -16,6 +16,6 @@ fun Modifier.hover(
         },
         undo = {
             it.removeController(controller)
-        }
+        },
     )
 }

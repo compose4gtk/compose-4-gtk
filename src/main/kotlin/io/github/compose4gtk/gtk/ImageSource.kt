@@ -1,9 +1,9 @@
 package io.github.compose4gtk.gtk
 
 import org.gnome.adw.SpinnerPaintable
-import org.gnome.gdk.Paintable as GtkPaintable
 import org.gnome.gdk.Texture
 import org.gnome.gtk.Widget
+import org.gnome.gdk.Paintable as GtkPaintable
 
 sealed interface ImageSource {
     data class Icon(val iconName: String) : ImageSource
@@ -48,7 +48,6 @@ fun <W : Widget> W.setImage(
         }
     }
 }
-
 
 fun <W : Widget> W.setPaintable(
     paintable: GtkPaintable?,

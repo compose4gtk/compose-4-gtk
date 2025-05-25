@@ -19,5 +19,5 @@ fun Modifier.margin(
         it.marginTop = 0
         it.marginEnd = 0
         it.marginBottom = 0
-    }
+    },
 )

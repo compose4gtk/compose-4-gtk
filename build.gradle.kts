@@ -48,6 +48,7 @@ dependencies {
     api(libs.javagi.adw)
     implementation(libs.kotlin.logging)
     implementation(libs.slf4j.api)
+    detektPlugins(libs.detekt.formatting)
     detektPlugins(libs.detekt.compose)
 
     testImplementation(libs.slf4j.simple)

@@ -20,7 +20,6 @@ interface Modifier {
     }
 }
 
-
 operator fun Modifier.plus(another: Modifier): Modifier {
     val me = this
     return Modifier.of(
@@ -31,7 +30,7 @@ operator fun Modifier.plus(another: Modifier): Modifier {
         undo = {
             another.undo(it)
             me.undo(it)
-        }
+        },
     )
 }
 

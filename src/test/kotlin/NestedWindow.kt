@@ -39,7 +39,7 @@ fun main(args: Array<String>) {
                             if (allowClose) {
                                 show = false
                             }
-                        }
+                        },
                     ) {
                         VerticalBox {
                             HeaderBar()

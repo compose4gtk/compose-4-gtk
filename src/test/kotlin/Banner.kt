@@ -40,7 +40,7 @@ fun main(args: Array<String>) {
                         modifier = Modifier.alignment(Align.CENTER),
                         label = "${if (isRevealed.value) "Hide" else "Reveal"} the banner",
                         active = isRevealed.value,
-                        onToggle = { isRevealed.value = !isRevealed.value }
+                        onToggle = { isRevealed.value = !isRevealed.value },
                     )
                 }
             }

@@ -64,7 +64,6 @@ private fun ToolbarViewBar(
                 GtkContainerComposeNode.appendOnly(
                     toolbar,
                     add = { appendBar(it) },
-                    // TOOD: test
                     remove = { remove(it) },
                 )
             }
@@ -82,8 +81,8 @@ private fun ToolbarViewContent(
         {
             VirtualComposeNode<ToolbarView> { toolbar ->
                 SingleChildComposeNode(
-                    toolbar,
-                    { this.content = it }
+                    widget = toolbar,
+                    set = { this.content = it },
                 )
             }
         },

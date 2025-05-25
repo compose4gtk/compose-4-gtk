@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
                 sidebar = {
                     VerticalBox {
                         HeaderBar(
-                            title = { Label("Sidebar") }
+                            title = { Label("Sidebar") },
                         )
                     }
                 },
@@ -36,14 +36,17 @@ fun main(args: Array<String>) {
                         title = { Label("Content") },
                         startWidgets = {
                             Button(if (showSidebar) "Hide sidebar" else "Show sidebar", onClick = {
-                                if (showSidebar) hideSidebar()
-                                else showSidebar()
+                                if (showSidebar) {
+                                    hideSidebar()
+                                } else {
+                                    showSidebar()
+                                }
                             })
                         },
                     )
                     ScrolledWindow(
                         horizontalScrollbarPolicy = PolicyType.NEVER,
-                        modifier = Modifier.expandVertically()
+                        modifier = Modifier.expandVertically(),
                     ) {
                         VerticalBox(Modifier.margin(40), spacing = 40) {
                             repeat(10) { index ->

@@ -9,7 +9,7 @@ import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.adw.Banner
 
 private class AdwBannerComposeNode(
-    gObject: Banner
+    gObject: Banner,
 ) : LeafComposeNode<Banner>(gObject) {
     var onButtonClicked: SignalConnection<Banner.ButtonClickedCallback>? = null
 }

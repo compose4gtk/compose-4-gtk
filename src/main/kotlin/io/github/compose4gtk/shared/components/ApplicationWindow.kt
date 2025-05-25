@@ -5,9 +5,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
-import io.github.compose4gtk.gtkSubComposition
 import io.github.compose4gtk.LocalApplication
 import io.github.compose4gtk.SingleChildComposeNode
+import io.github.compose4gtk.gtkSubComposition
 import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.ApplicationWindow
@@ -70,7 +70,7 @@ internal fun <AW : ApplicationWindow, B : ApplicationWindow.Builder<*>> Initiali
             CompositionLocalProvider(LocalApplicationWindow provides composeNode.widget) {
                 content(composeNode.widget)
             }
-        }
+        },
     )
     val window = composeNode.widget
 

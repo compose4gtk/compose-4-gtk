@@ -4,9 +4,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.github.compose4gtk.adw.application
 import io.github.compose4gtk.adw.components.ApplicationWindow
+import io.github.compose4gtk.adw.components.HeaderBar
 import io.github.compose4gtk.gtk.components.Box
 import io.github.compose4gtk.gtk.components.Button
-import io.github.compose4gtk.adw.components.HeaderBar
 import io.github.compose4gtk.gtk.components.Label
 import io.github.compose4gtk.gtk.components.ToggleButton
 import io.github.compose4gtk.modifier.Modifier

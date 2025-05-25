@@ -45,7 +45,7 @@ fun main(args: Array<String>) {
                             side = PackType.END,
                             modifier = Modifier.alignment(Align.END, Align.START),
                         )
-                    }
+                    },
                 )
             }
         }

@@ -8,7 +8,6 @@ import io.github.compose4gtk.GtkComposeWidget
 import io.github.compose4gtk.SingleChildComposeNode
 import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gobject.SignalConnection
-import kotlinx.coroutines.NonCancellable.children
 import org.gnome.gtk.Button
 import org.gnome.gtk.LinkButton
 import org.gnome.gtk.ToggleButton
@@ -44,7 +43,7 @@ private fun <B : GtkComposeWidget<Button>> BaseGenericButton(
             set(hasFrame) { this.widget.hasFrame = it }
             updater()
         },
-        content = child
+        content = child,
     )
 }
 
@@ -67,7 +66,7 @@ private fun BaseButton(
                 this.onClick?.disconnect()
                 this.onClick = this.widget.onClicked(it)
             }
-        }
+        },
     )
 }
 
@@ -120,7 +119,7 @@ private fun BaseToggleButton(
                     this.onToggle.unblock()
                 }
             }
-        }
+        },
     )
 }
 
@@ -162,7 +161,7 @@ fun IconButton(
                 this.onClick?.disconnect()
                 this.onClick = this.widget.onClicked(it)
             }
-        }
+        },
     )
 }
 
@@ -191,6 +190,6 @@ fun LinkButton(
                     onActivateLink()
                 }
             }
-        }
+        },
     )
 }

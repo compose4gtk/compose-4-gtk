@@ -22,11 +22,23 @@ style:
       - io.github.compose4gtk.adw.components.*
       - io.github.compose4gtk.gtk.components.*
 
+formatting:
+  NoWildcardImports:
+    packagesToUseImportOnDemandProperty:
+      "io.github.compose4gtk.adw.components.*,io.github.compose4gtk.gtk.components.*"
+  TrailingCommaOnCallSite:
+    active: true
+  TrailingCommaOnDeclarationSite:
+    active: true
+
 Compose:
   active: true
-  excludes: '**/test/**'
+  ModifierMissing:
+    excludes: '**/test/**'
+  MutableStateParam:
+    excludes: '**/test/**'
   CompositionLocalAllowlist:
     active: true
     allowedCompositionLocals:
-     - LocalApplication
-     - LocalApplicationWindow
+      - LocalApplication
+      - LocalApplicationWindow

@@ -28,16 +28,14 @@ fun Popover(
                 .setHasArrow(arrow)
                 .build()
             scope.gObject = popover
-            SingleChildComposeNode<Popover>(
-                popover
-            ) {
+            SingleChildComposeNode<Popover>(popover) {
                 child = it
             }
         },
         update = {
             set(modifier) { applyModifier(it) }
         },
-        content = content
+        content = content,
     )
     scope.trigger()
 }

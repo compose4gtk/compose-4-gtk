@@ -12,10 +12,10 @@ fun Modifier.alignment(horizontal: Align = Align.FILL, vertical: Align = Align.F
 
 fun Modifier.verticalAlignment(alignment: Align) = combine(
     apply = { it.valign = alignment },
-    undo = { it.valign = Align.FILL }
+    undo = { it.valign = Align.FILL },
 )
 
 fun Modifier.horizontalAlignment(alignment: Align) = combine(
     apply = { it.halign = alignment },
-    undo = { it.halign = Align.FILL }
+    undo = { it.halign = Align.FILL },
 )

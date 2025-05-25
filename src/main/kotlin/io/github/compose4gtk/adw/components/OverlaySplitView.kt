@@ -50,7 +50,6 @@ private class OverlaySplitViewImpl : OverlaySplitViewScope {
             else -> w.showSidebar = show
         }
     }
-
 }
 
 /**

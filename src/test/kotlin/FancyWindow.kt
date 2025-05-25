@@ -22,9 +22,9 @@ fun main(args: Array<String>) {
                         endWidgets = { Button("End", onClick = {}) },
                         title = {
                             Label("Custom title")
-                        }
+                        },
                     )
-                }
+                },
             ) {
                 Overlay(
                     mainChild = {

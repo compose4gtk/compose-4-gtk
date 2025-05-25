@@ -24,18 +24,17 @@ fun main(args: Array<String>) {
                                 val uri = "https://github.com/compose4gtk/compose-4-gtk"
                                 LinkButton(
                                     "Link to the GitHub repo",
-                                    uri = uri
+                                    uri = uri,
                                 )
                             }
                         }
-
 
                         Box(modifier = Modifier.cssClasses("card").alignment(Align.CENTER)) {
                             VerticalBox(modifier = Modifier.margin(16)) {
                                 val uri = "https://docs.gtk.org/gtk4/"
                                 LinkButton(
                                     "Link to the GTK documentation",
-                                    uri = uri
+                                    uri = uri,
                                 ) {
                                     println("Visiting $uri")
                                     false

@@ -15,7 +15,7 @@ fun Revealer(
     modifier: Modifier = Modifier,
     transitionType: RevealerTransitionType = RevealerTransitionType.NONE,
     transitionDuration: Int = 0,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     ComposeNode<GtkComposeWidget<Revealer>, GtkApplier>(
         factory = {

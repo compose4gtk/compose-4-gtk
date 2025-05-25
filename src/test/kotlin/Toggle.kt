@@ -2,9 +2,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.github.compose4gtk.adw.components.HeaderBar
-import io.github.compose4gtk.adw.components.ApplicationWindow
 import io.github.compose4gtk.adw.application
+import io.github.compose4gtk.adw.components.ApplicationWindow
+import io.github.compose4gtk.adw.components.HeaderBar
 import io.github.compose4gtk.gtk.components.*
 import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.modifier.sizeRequest

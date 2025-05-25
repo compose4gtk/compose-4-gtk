@@ -6,7 +6,7 @@ fun Modifier.tooltipText(text: String): Modifier = combine(
     },
     undo = {
         it.tooltipText = null
-    }
+    },
 )
 
 fun Modifier.tooltipMarkup(markup: String): Modifier = combine(
@@ -15,5 +15,5 @@ fun Modifier.tooltipMarkup(markup: String): Modifier = combine(
     },
     undo = {
         it.tooltipMarkup = null
-    }
+    },
 )

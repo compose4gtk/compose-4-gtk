@@ -21,7 +21,7 @@ fun Modifier.click(
         },
         undo = {
             it.removeController(gesture)
-        }
+        },
     )
 }
 
