@@ -25,8 +25,8 @@ fun BottomSheet(
     fullWidth: Boolean = true,
     modal: Boolean = true,
     showDragHandle: Boolean = true,
-    onOpen: (() -> Unit)? = null,
-    onClose: (() -> Unit)? = null,
+    onClose: () -> Unit = {},
+    onOpen: () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     sheet: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {},
@@ -56,10 +56,9 @@ fun BottomSheet(
             bottomSheet.onNotify("open") {
                 val currentWidgetOpen = bottomSheet.open
                 if (currentWidgetOpen != lastOpen) {
-                    if (currentWidgetOpen && onOpen != null) {
+                    if (currentWidgetOpen) {
                         onOpen()
-                    }
-                    if (!currentWidgetOpen && onClose != null) {
+                    } else {
                         onClose()
                     }
                     bottomSheet.open = open
