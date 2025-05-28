@@ -2,6 +2,10 @@ package io.github.compose4gtk.adw.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.GtkComposeNode
 import io.github.compose4gtk.GtkComposeWidget
@@ -21,13 +25,18 @@ fun BottomSheet(
     fullWidth: Boolean = true,
     modal: Boolean = true,
     showDragHandle: Boolean = true,
+    onOpen: (() -> Unit)? = null,
+    onClose: (() -> Unit)? = null,
     bottomBar: @Composable () -> Unit = {},
     sheet: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
+    val bottomSheet = remember { BottomSheet.builder().build() }
+    var lastOpen by remember { mutableStateOf(open) }
+
     ComposeNode<GtkComposeWidget<BottomSheet>, GtkApplier>(
         factory = {
-            VirtualComposeNodeContainer(BottomSheet.builder().build())
+            VirtualComposeNodeContainer(bottomSheet)
         },
         update = {
             set(open) { this.widget.open = it }
@@ -38,6 +47,24 @@ fun BottomSheet(
             set(fullWidth) { this.widget.fullWidth = it }
             set(modal) { this.widget.modal = it }
             set(showDragHandle) { this.widget.showDragHandle = it }
+
+            if (lastOpen != open) {
+                bottomSheet.open = open
+                lastOpen = open
+            }
+
+            bottomSheet.onNotify("open") {
+                val currentWidgetOpen = bottomSheet.open
+                if (currentWidgetOpen != lastOpen) {
+                    if (currentWidgetOpen && onOpen != null) {
+                        onOpen()
+                    }
+                    if (!currentWidgetOpen && onClose != null) {
+                        onClose()
+                    }
+                    bottomSheet.open = open
+                }
+            }
         },
         content = {
             BottomBar {
@@ -49,7 +76,7 @@ fun BottomSheet(
             Content {
                 content()
             }
-        }
+        },
     )
 }
 
