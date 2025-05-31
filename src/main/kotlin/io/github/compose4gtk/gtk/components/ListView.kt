@@ -200,7 +200,7 @@ private fun <Item : GObject, Model : SelectionModel<Item>> rememberSelectionMode
 /**
  * Creates a [SignalListItemFactory] where each element is provided by [child].
  */
-private fun <T : GObject> createListItemFactory(
+internal fun <T : GObject> createListItemFactory(
     compositionContext: CompositionContext,
     child: @Composable (T) -> Unit,
 ): SignalListItemFactory {

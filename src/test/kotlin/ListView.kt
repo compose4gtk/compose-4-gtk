@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
                 var itemSize by remember { mutableIntStateOf(5) }
                 val items = remember(itemSize) {
                     List(itemSize) { index ->
-                        CustomItem("Custom item #$index")
+                        ListItem("Custom item #$index")
                     }
                 }
                 var show by remember { mutableStateOf(true) }
@@ -72,7 +72,7 @@ fun main(args: Array<String>) {
     }
 }
 
-private data class CustomItem(val name: String) : GObject()
+private data class ListItem(val name: String) : GObject()
 
 @Composable
 private fun Panel(title: String, content: @Composable () -> Unit) {
