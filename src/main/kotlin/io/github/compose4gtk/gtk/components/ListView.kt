@@ -52,36 +52,69 @@ private class GtkListItemComposeNode(val listItem: ListItem) : GtkComposeNode {
     }
 }
 
+sealed interface SelectionMode<M : SelectionModel<ListIndexModel.ListIndex>> {
+    fun createSelectionModel(dataModel: ListStore<ListIndexModel.ListIndex>): M
+
+    object None : SelectionMode<NoSelection<ListIndexModel.ListIndex>> {
+        override fun createSelectionModel(
+            dataModel: ListStore<ListIndexModel.ListIndex>,
+        ): NoSelection<ListIndexModel.ListIndex> {
+            return NoSelection<ListIndexModel.ListIndex>(dataModel)
+        }
+    }
+
+    object Single : SelectionMode<SingleSelection<ListIndexModel.ListIndex>> {
+        override fun createSelectionModel(
+            dataModel: ListStore<ListIndexModel.ListIndex>,
+        ): SingleSelection<ListIndexModel.ListIndex> {
+            return SingleSelection(dataModel)
+        }
+    }
+
+    object Multiple : SelectionMode<MultiSelection<ListIndexModel.ListIndex>> {
+        override fun createSelectionModel(
+            dataModel: ListStore<ListIndexModel.ListIndex>,
+        ): MultiSelection<ListIndexModel.ListIndex> {
+            return MultiSelection(dataModel)
+        }
+    }
+}
+
 /**
  * Creates a [org.gnome.gtk.ListView] with [items] items.
  * Each element is a composable created using [child].
  *
- * The created [org.gnome.gio.ListModel] will have no selection mode.
+ * The created [org.gnome.gio.ListModel] will have the specified [selectionMode].
  * You can use `ListView(model){ ... }` if you want more customization options.
+ *
+ * @return the selection model you can use to manage the selection
  */
+@Suppress("ComposableNaming")
 @Composable
-fun ListView(
+fun <M : SelectionModel<ListIndexModel.ListIndex>> ListView(
     items: Int,
+    selectionMode: SelectionMode<M>,
     modifier: Modifier = Modifier,
     child: @Composable (index: Int) -> Unit,
-) {
-    val model = remember {
+): M {
+    val dataModel = remember {
         ListStore<ListIndexModel.ListIndex>()
     }
     remember(items) {
-        while (model.size > items) {
-            model.removeLast()
+        while (dataModel.size > items) {
+            dataModel.removeLast()
         }
-        while (model.size < items) {
-            model.append(ListIndexModel.ListIndex(model.size))
+        while (dataModel.size < items) {
+            dataModel.append(ListIndexModel.ListIndex(dataModel.size))
         }
     }
-    val selectionModel = remember(model) {
-        NoSelection<ListIndexModel.ListIndex>(model)
+    val selectionModel = remember(dataModel) {
+        selectionMode.createSelectionModel(dataModel)
     }
     ListView(selectionModel, modifier) {
         child(it.index)
     }
+    return selectionModel
 }
 
 /**
@@ -114,7 +147,7 @@ fun <T : GObject> ListView(
 @Composable
 fun <Item : GObject> rememberNoSelectionModel(
     items: List<Item>,
-): SelectionModel<Item> =
+): NoSelection<Item> =
     rememberSelectionModel(
         items = items,
         selectionModelFactory = { model -> NoSelection(model) },
@@ -123,7 +156,7 @@ fun <Item : GObject> rememberNoSelectionModel(
 @Composable
 fun <Item : GObject> rememberSingleSelectionModel(
     items: List<Item>,
-): SelectionModel<Item> =
+): SingleSelection<Item> =
     rememberSelectionModel(
         items = items,
         selectionModelFactory = { model -> SingleSelection(model) },
@@ -132,7 +165,7 @@ fun <Item : GObject> rememberSingleSelectionModel(
 @Composable
 fun <Item : GObject> rememberMultiSelectionModel(
     items: List<Item>,
-): SelectionModel<Item> =
+): MultiSelection<Item> =
     rememberSelectionModel(
         items = items,
         selectionModelFactory = { model -> MultiSelection(model) },
@@ -142,7 +175,7 @@ fun <Item : GObject> rememberMultiSelectionModel(
 private fun <Item : GObject, Model : SelectionModel<Item>> rememberSelectionModel(
     items: List<Item>,
     selectionModelFactory: (model: ListModel<Item>) -> Model,
-): SelectionModel<Item> {
+): Model {
     val model = remember { ListStore<Item>() }
 
     remember(items) {
@@ -151,7 +184,9 @@ private fun <Item : GObject, Model : SelectionModel<Item>> rememberSelectionMode
         }
 
         for (i in 0 until model.size) {
-            model[i] = items[i]
+            if (model[i] != items[i]) {
+                model[i] = items[i]
+            }
         }
 
         while (model.size < items.size) {

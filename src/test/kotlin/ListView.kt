@@ -12,6 +12,7 @@ import io.github.compose4gtk.gtk.components.HorizontalBox
 import io.github.compose4gtk.gtk.components.Label
 import io.github.compose4gtk.gtk.components.ListView
 import io.github.compose4gtk.gtk.components.ScrolledWindow
+import io.github.compose4gtk.gtk.components.SelectionMode
 import io.github.compose4gtk.gtk.components.VerticalBox
 import io.github.compose4gtk.gtk.components.rememberMultiSelectionModel
 import io.github.compose4gtk.modifier.Modifier
@@ -32,8 +33,8 @@ fun main(args: Array<String>) {
                 var show by remember { mutableStateOf(true) }
                 HorizontalBox(Modifier.expand()) {
                     if (show) {
-                        Panel("Default model (no selection)") {
-                            ListView(items = itemSize) { index ->
+                        Panel("Base model (single selection)") {
+                            ListView(items = itemSize, selectionMode = SelectionMode.Single) { index ->
                                 Label("Item #$index")
                             }
                         }
@@ -63,7 +64,7 @@ fun main(args: Array<String>) {
                 Button("Remove all items", onClick = {
                     itemSize = 0
                 })
-                Button(if (show)"hide" else "show", onClick = {
+                Button(if (show) "hide" else "show", onClick = {
                     show = !show
                 })
             }
