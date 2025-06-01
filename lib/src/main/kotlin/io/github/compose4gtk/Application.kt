@@ -43,7 +43,7 @@ interface ApplicationScope {
 
 val LocalApplication = staticCompositionLocalOf<Application> { throw IllegalStateException("not in a GTK application") }
 
-fun Application.initializeApplication(
+internal fun Application.initializeApplication(
     args: Array<String>,
     content: @Composable ApplicationScope.() -> Unit,
 ) {

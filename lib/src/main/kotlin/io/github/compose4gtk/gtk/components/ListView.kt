@@ -215,6 +215,7 @@ private fun <T : GObject> createListItemFactory(
     }
     factory.onBind { listItem ->
         listItem as ListItem
+        @Suppress("UNCHECKED_CAST")
         val item = listItem.item as T
         val composition = compositionMap[listItem]
         checkNotNull(composition)

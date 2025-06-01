@@ -115,6 +115,7 @@ internal class VirtualComposeNode<G : GObject>(
 internal class VirtualComposeNodeContainer<W : Widget>(widget: W) : GtkComposeWidget<W>(widget) {
     private val children = mutableListOf<VirtualComposeNode<W>>()
     override fun addNode(index: Int, child: GtkComposeNode) {
+        @Suppress("UNCHECKED_CAST")
         child as VirtualComposeNode<W>
         children.add(index, child)
         child.setParent(widget)

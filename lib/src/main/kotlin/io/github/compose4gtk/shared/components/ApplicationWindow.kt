@@ -63,6 +63,7 @@ internal fun <AW : ApplicationWindow, B : ApplicationWindow.Builder<*>> Initiali
     val application = LocalApplication.current
     val composeNode = gtkSubComposition(
         createNode = {
+            @Suppress("UNCHECKED_CAST")
             val window = builder().build() as AW
             GtkApplicationWindowComposeNode(window, setContent)
         },

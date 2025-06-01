@@ -54,7 +54,34 @@ dependencies {
     testImplementation(libs.slf4j.simple)
 }
 
+val readMeToDocIndexTask = tasks.register<Copy>("readmeToDocIndex") {
+    group = "dokka"
+    val inputFile = layout.projectDirectory.file("../README.md")
+    from(inputFile)
+    into(layout.buildDirectory.dir("generated-doc"))
+    filter { line ->
+        line.replace("# A Kotlin Compose library for Gtk4 and Adw", "# Module Compose 4 GTK")
+    }
+    rename { "main.md" }
+}
+
+tasks.named("dokkaGeneratePublicationHtml") {
+    dependsOn.add(readMeToDocIndexTask)
+}
+
+dokka {
+    moduleName.set("Compose 4 GTK")
+    dokkaPublications.html {
+        failOnWarning.set(true)
+    }
+    dokkaSourceSets.main {
+        includes.from(layout.buildDirectory.file("generated-doc/main.md"))
+        includes.from(layout.projectDirectory.files("../docs/gtk.md"))
+    }
+}
+
 tasks.register<Jar>("dokkaHtmlJar") {
+    dependsOn(tasks.dokkaGeneratePublicationHtml)
     from(tasks.dokkaGeneratePublicationHtml.flatMap { it.outputDirectory })
     archiveClassifier = "javadoc"
 }
@@ -63,6 +90,7 @@ publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["kotlin"])
+            artifactId = "compose-4-gtk"
             artifact(tasks.getByName("dokkaHtmlJar"))
             artifact(tasks.getByName("kotlinSourcesJar"))
 
@@ -155,12 +183,9 @@ tasks.named("jreleaserFullRelease") {
 }
 
 // TODO: used on examples. They should probably be moved in a separate module to avoid polluting the main build file
-tasks.register("compileTestGResources") {
-    exec {
-        workingDir = file("src/test/gresources")
-        commandLine =
-            listOf("glib-compile-resources", "--target=../resources/resources.gresource", "resources.gresource.xml")
-    }
+tasks.register<Exec>("compileTestGResources") {
+    workingDir("src/test/gresources")
+    commandLine("glib-compile-resources", "--target=../resources/resources.gresource", "resources.gresource.xml")
 }
 
 detekt {
