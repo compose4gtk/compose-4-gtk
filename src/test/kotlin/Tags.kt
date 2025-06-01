@@ -35,6 +35,7 @@ fun main(args: Array<String>) {
                                 val tokens = text.split(' ').filter { it.isNotBlank() }
                                 tokens.forEach { token ->
                                     Button(token, modifier = Modifier.margin(8), onClick = {
+                                        dismissAllToasts()
                                         addToast(Toast.builder().setTitle("Clicked on $token").build())
                                     })
                                 }

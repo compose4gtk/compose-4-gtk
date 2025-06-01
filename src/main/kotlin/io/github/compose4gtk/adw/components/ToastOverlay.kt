@@ -15,12 +15,17 @@ interface ToastOverlayScope {
      * Shows a Toast
      */
     fun addToast(toast: Toast)
+    fun dismissAllToasts()
 }
 
 private class ToastOverlayScopeImpl : ToastOverlayScope {
     var toastOverlay: ToastOverlay? = null
     override fun addToast(toast: Toast) {
         toastOverlay!!.addToast(toast)
+    }
+
+    override fun dismissAllToasts() {
+        toastOverlay?.dismissAll()
     }
 }
 
