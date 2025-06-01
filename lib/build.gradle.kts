@@ -60,7 +60,11 @@ val readMeToDocIndexTask = tasks.register<Copy>("readmeToDocIndex") {
     from(inputFile)
     into(layout.buildDirectory.dir("generated-doc"))
     filter { line ->
-        line.replace("# A Kotlin Compose library for Gtk4 and Adw", "# Module Compose 4 GTK")
+        if (line.startsWith("Documentation is available on")) {
+            ""
+        } else {
+            line.replace("# A Kotlin Compose library for Gtk4 and Adw", "# Module Compose 4 GTK")
+        }
     }
     rename { "main.md" }
 }

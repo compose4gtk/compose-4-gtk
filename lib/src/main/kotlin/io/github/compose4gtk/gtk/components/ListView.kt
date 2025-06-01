@@ -84,7 +84,20 @@ sealed interface SelectionMode<M : SelectionModel<ListIndexModel.ListIndex>> {
  * Creates a [org.gnome.gtk.ListView] with [items] items.
  * Each element is a composable created using [child].
  *
- * The created [org.gnome.gio.ListModel] will have the specified [selectionMode].
+ * The created [org.gnome.gio.ListModel] will have the specified [selectionMode] (e.g. [SelectionMode.Multiple]).
+ *
+ * Example:
+ * ```kotlin
+ * ListView(
+ *     items = 10000,
+ *     selectionMode = SelectionMode.Multiple,
+ * ) { index ->
+ *     Label("Item #$index")
+ * }
+ * ```
+ *
+ * You usually want to wrap this component into a scrollable container, like [ScrolledWindow].
+ *
  * You can use `ListView(model){ ... }` if you want more customization options.
  *
  * @return the selection model you can use to manage the selection
@@ -120,6 +133,9 @@ fun <M : SelectionModel<ListIndexModel.ListIndex>> ListView(
 /**
  * Creates a [org.gnome.gtk.ListView] bound to the given [model].
  * Each element is a composable created using [child].
+ *
+ * [SelectionModel] can be created using the [rememberNoSelectionModel], [rememberSingleSelectionModel] and
+ * [rememberMultiSelectionModel] functions, but you can also create them explicitly if you need more customization.
  */
 @Composable
 fun <T : GObject> ListView(

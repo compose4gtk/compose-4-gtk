@@ -7,6 +7,8 @@ applications using GTK 4 and Libadwaita (Adw).
 This library enables developers to build modern, responsive desktop applications with Kotlin, leveraging the power of
 Compose and the native capabilities of GTK.
 
+Documentation is available on https://compose4gtk.github.io/compose-4-gtk.
+
 ### Great for users
 
 Applications built with Compose 4 GTK fit perfectly in with the rest of other applications in Gnome.  
@@ -26,10 +28,10 @@ goodness to the Linux desktop.
 
 ## Getting started
 
-![Maven Central](https://img.shields.io/maven-central/v/io.github.compose4gtk/compose-4-gtk.svg?label=Maven%20Central)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.compose4gtk/compose-4-gtk.svg)
 
 This library is still under development. Pre-release versions are
-available [on Maven Central](https://central.sonatype.com/artifact/io.github.compose4gtk/compose-4-gtk).
+available on [Maven Central](https://central.sonatype.com/artifact/io.github.compose4gtk/compose-4-gtk).
 
 JDK 22 or newer and the Kotlin Compose compiler plugin are required.
 
@@ -62,13 +64,13 @@ application {
 ```
 
 More information on how to set up the Compose compiler plugin
-on https://developer.android.com/develop/ui/compose/compiler.
+on [the official documentation](https://developer.android.com/develop/ui/compose/compiler).
 
 ## Examples
 
 ### Basic window
 
-![Basic window](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/docs/screenshots/basic_window.png)
+![Demo](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/docs/screenshots/basic_window.png)
 
 Source [here](examples/src/main/kotlin/1_BasicWindow.kt).
 
@@ -100,7 +102,7 @@ creating, updating and destroying the native GTK/ADW widgets.
 
 ### Dynamic window
 
-![Dynamic window](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/docs/screenshots/dynamic_window.gif)
+![Demo](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/docs/screenshots/dynamic_window.gif)
 
 Source [here](examples/src/main/kotlin/2_DynamicWindow.kt).
 
@@ -139,7 +141,7 @@ although some concepts only apply to Android.
 
 ### Entry with text transformation
 
-![Uppercase Entry](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/docs/screenshots/uppercase_entry.png)
+![Demo](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/docs/screenshots/uppercase_entry.png)
 
 Source [here](examples/src/main/kotlin/3_Uppercase_Entry.kt).
 
@@ -171,11 +173,12 @@ This means that the source of truth for what the text should be is the `text` va
 Since we ensure only uppercase strings are assigned to `text`, we're guaranteed that the `Entry` will only contain
 uppercase text.
 
-See https://developer.android.com/jetpack/compose/state#state-hoisting for more details.
+See [the official Compose documentation](https://developer.android.com/jetpack/compose/state#state-hoisting) for more
+details.
 
 ### Dynamic tags
 
-![Demo](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/screenshots/docs/tags.gif)
+![Demo](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/docs/screenshots/tags.gif)
 
 Source [here](examples/src/main/kotlin/4_DynamicTags.kt).
 
@@ -221,6 +224,38 @@ This example is a more advanced version of the same concepts explained above:
 - `Buttons` are added to the UI tree by simply iterating over the split words.
 
 As a bonus, this example also illustrates how to show toasts using `ToastOverlay`.
+
+### ListView
+
+![Demo](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/docs/screenshots/list_view.png)
+
+Source [here](examples/src/main/kotlin/5_ListView.kt).
+
+```kotlin
+fun main(args: Array<String>) {
+    adwApplication("my.example.hello-app", args) {
+        ApplicationWindow("Test", onClose = ::exitApplication, defaultWidth = 800, defaultHeight = 800) {
+            VerticalBox {
+                HeaderBar(title = { Label("ListView with 10 thousand items") })
+                ScrolledWindow(Modifier.expand()) {
+                    ListView(
+                        items = 10000,
+                        selectionMode = SelectionMode.Multiple,
+                    ) { index ->
+                        Label("Item #$index")
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+This example explains how to declare a `ListView` with 10 thousand items.
+Items are created, reused, updated and destroyed dynamically as the list scrolls.
+
+There are alternative options to create a `ListView`,
+see [the full documentation](https://compose4gtk.github.io/compose-4-gtk/-compose%204%20-g-t-k/io.github.compose4gtk.gtk.components/-list-view.html).
 
 ## GIO Resources
 
