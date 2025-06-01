@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.github.compose4gtk.adw.application
+import io.github.compose4gtk.adw.adwApplication
 import io.github.compose4gtk.adw.components.*
 import io.github.compose4gtk.gtk.components.*
 import io.github.compose4gtk.modifier.Modifier
@@ -14,7 +14,7 @@ import io.github.compose4gtk.modifier.margin
 import org.gnome.gtk.Orientation
 
 fun main(args: Array<String>) {
-    application("my.example.hello-app", args) {
+    adwApplication("my.example.hello-app", args) {
         ApplicationWindow("Carousel", onClose = ::exitApplication) {
             var pageCount by remember { mutableIntStateOf(8) }
             val orientation = remember { mutableStateOf(Orientation.HORIZONTAL) }

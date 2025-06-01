@@ -1,4 +1,4 @@
-import io.github.compose4gtk.adw.application
+import io.github.compose4gtk.adw.adwApplication
 import io.github.compose4gtk.adw.components.ApplicationWindow
 import io.github.compose4gtk.adw.components.HeaderBar
 import io.github.compose4gtk.adw.components.StatusPage
@@ -9,7 +9,7 @@ import io.github.compose4gtk.modifier.cssClasses
 import io.github.compose4gtk.modifier.expandVertically
 
 fun main(args: Array<String>) {
-    application("my.example.hello-app", args) {
+    adwApplication("my.example.hello-app", args) {
         ApplicationWindow(
             "StatusPage",
             onClose = ::exitApplication,

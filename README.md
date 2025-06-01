@@ -2,9 +2,22 @@
 
 ![Welcome](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/screenshots/welcome.png)
 
-This library provides a Kotlin Compose interface to interact with native Gtk4 and Adw (Libadwaita) components.
+Compose 4 GTK is a Kotlin library that brings Jetpack Compose-style declarative UI development to native Linux applications using GTK 4 and Libadwaita (Adw).  
+This library enables developers to build modern, responsive desktop applications with Kotlin, leveraging the power of Compose and the native capabilities of GTK.
 
-TL;DR: with this library, you can declaratively and dynamically create UIs with the GTK and Adw frameworks.
+### Great for users
+
+Applications built with Compose 4 GTK fit perfectly in with the rest of other applications in Gnome.  
+They match in look, feel, customizability, accessibility, etc.
+
+They also perform great, use modern APIs (e.g. Wayland) and benefits from all the optimizations implemented for native GTK apps.
+
+### Great for developers
+
+Writing synamic UIs with Compose 4 GTK is extremely simple, consistent, and predictable.  
+UIs are written using declarative, stateless and side effect free functions, that take care of creating, updating, and destroying GTK widgets for you.
+
+Jetpack Compose is the default and recommended UI framework for Android, and this library brings some of the same goodness to the Linux desktop.
 
 ## Usage
 
@@ -50,7 +63,7 @@ An empty window:
 
 ```kotlin
 fun main(args: Array<String>) {
-    application("my.example.HelloApp", args) {
+    adwApplication("my.example.HelloApp", args) {
         ApplicationWindow("Test", onClose = ::exitApplication) {
             // Your content here
         }
@@ -64,7 +77,7 @@ A window with a header, and three buttons inside:
 
 ```kotlin
 fun main(args: Array<String>) {
-    application("my.example.HelloApp", args) {
+    adwApplication("my.example.HelloApp", args) {
         ApplicationWindow("Test", onClose = ::exitApplication) {
             Box(orientation = Orientation.VERTICAL) {
                 HeaderBar()
@@ -84,7 +97,7 @@ An interactive button that shows or hides a label:
 
 ```kotlin
 fun main(args: Array<String>) {
-    application("my.example.HelloApp", args) {
+    adwApplication("my.example.HelloApp", args) {
         ApplicationWindow("Test", onClose = ::exitApplication) {
             Box(orientation = Orientation.VERTICAL) {
                 HeaderBar()
@@ -112,7 +125,7 @@ An `Entry`, that will make all text uppercase:
 
 ```kotlin
 fun main(args: Array<String>) {
-    application("my.example.HelloApp", args) {
+    adwApplication("my.example.HelloApp", args) {
         ApplicationWindow("Test", onClose = ::exitApplication) {
             Box(orientation = Orientation.VERTICAL) {
                 HeaderBar()
@@ -144,7 +157,7 @@ In this example, at any point the `Entry` could ever contain a text that is no u
 
 ```kotlin
 fun main(args: Array<String>) {
-    application("my.example.HelloApp", args) {
+    adwApplication("my.example.HelloApp", args) {
         ApplicationWindow("Test", onClose = ::exitApplication) {
             ToastOverlay {
                 VerticalBox {
@@ -192,7 +205,7 @@ This library provides a convenience function to load `gresource` files in the JA
 ```kotlin
 fun main(args: Array<String>) {
     useGioResource("resources.gresource") {
-        application("my.example.hello-app", args) {
+        adwApplication("my.example.hello-app", args) {
             ApplicationWindow("Embedded picture", onClose = ::exitApplication) {
                 Picture(
                     ImageSource.forResource("/my/example/hello-app/images/lulu.jpg"),

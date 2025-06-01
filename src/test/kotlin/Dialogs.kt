@@ -3,7 +3,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.github.compose4gtk.adw.application
+import io.github.compose4gtk.adw.adwApplication
 import io.github.compose4gtk.adw.components.AboutDialog
 import io.github.compose4gtk.adw.components.AlertDialog
 import io.github.compose4gtk.adw.components.AlertDialogResponse
@@ -33,7 +33,7 @@ private val replaceResponse = AlertDialogResponse(
 )
 
 fun main(args: Array<String>) {
-    application("my.example.hello-app", args) {
+    adwApplication("my.example.hello-app", args) {
         ApplicationWindow(
             "Dialogs",
             onClose = ::exitApplication,

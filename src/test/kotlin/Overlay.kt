@@ -1,5 +1,5 @@
 import androidx.compose.runtime.getValue
-import io.github.compose4gtk.adw.application
+import io.github.compose4gtk.adw.adwApplication
 import io.github.compose4gtk.adw.components.ApplicationWindow
 import io.github.compose4gtk.adw.components.HeaderBar
 import io.github.compose4gtk.adw.components.OverlaySplitView
@@ -13,7 +13,7 @@ import org.gnome.gtk.PolicyType
 private val BREAKPOINT_CONDITION = BreakpointCondition.parse("min-width: 800px")
 
 fun main(args: Array<String>) {
-    application("my.example.hello-app", args) {
+    adwApplication("my.example.hello-app", args) {
         ApplicationWindow(
             "Overlay",
             onClose = ::exitApplication,

@@ -1,4 +1,4 @@
-import io.github.compose4gtk.adw.application
+import io.github.compose4gtk.adw.adwApplication
 import io.github.compose4gtk.adw.components.ApplicationWindow
 import io.github.compose4gtk.gtk.ImageSource
 import io.github.compose4gtk.gtk.components.*
@@ -13,7 +13,7 @@ import org.gnome.gtk.PackType
 
 fun main(args: Array<String>) {
     useGioResource("resources.gresource") {
-        application("my.example.hello-app", args) {
+        adwApplication("my.example.hello-app", args) {
             ApplicationWindow(
                 "compose-4-gtk",
                 onClose = ::exitApplication,
