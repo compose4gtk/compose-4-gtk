@@ -136,6 +136,7 @@ publishing {
 
 jreleaser {
     strict = true
+    gitRootSearch = true
     signing {
         active = Active.ALWAYS
         armored = true
