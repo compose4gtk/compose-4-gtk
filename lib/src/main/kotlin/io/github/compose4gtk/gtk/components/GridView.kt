@@ -4,20 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.rememberCompositionContext
 import io.github.compose4gtk.GtkApplier
-import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gio.ListIndexModel
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gobject.GObject
 import org.gnome.gtk.ListTabBehavior
 import org.gnome.gtk.SelectionModel
 import org.gnome.gtk.GridView as GTKGridView
-
-private class GridViewComposeNode(
-    gObject: GTKGridView,
-) : LeafComposeNode<GTKGridView>(gObject) {
-    var onActivate: SignalConnection<GTKGridView.ActivateCallback>? = null
-}
 
 /**
  * Creates a [org.gnome.gtk.GridView] with [items] items.
@@ -76,10 +68,10 @@ fun <T : GObject> GridView(
 ) {
     val compositionContext = rememberCompositionContext()
 
-    ComposeNode<GridViewComposeNode, GtkApplier>(
+    ComposeNode<BaseListComposeNode<GTKGridView, GTKGridView.ActivateCallback>, GtkApplier>(
         factory = {
-            GridViewComposeNode(
-                GTKGridView.builder()
+            BaseListComposeNode(
+                gObject = GTKGridView.builder()
                     .setFactory(createListItemFactory(compositionContext, child))
                     .build(),
             )

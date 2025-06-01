@@ -11,17 +11,27 @@ import io.github.compose4gtk.GtkComposeNode
 import io.github.compose4gtk.GtkComposeWidget
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
+import io.github.jwharm.javagi.base.FunctionPointer
 import io.github.jwharm.javagi.gio.ListIndexModel
+import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gio.ListModel
 import org.gnome.gio.ListStore
 import org.gnome.gobject.GObject
 import org.gnome.gtk.ListItem
+import org.gnome.gtk.ListTabBehavior
 import org.gnome.gtk.MultiSelection
 import org.gnome.gtk.NoSelection
 import org.gnome.gtk.SelectionModel
 import org.gnome.gtk.SignalListItemFactory
 import org.gnome.gtk.SingleSelection
+import org.gnome.gtk.Widget
 import org.gnome.gtk.ListView as GTKListView
+
+internal class BaseListComposeNode<W : Widget, C : FunctionPointer>(
+    gObject: W,
+) : LeafComposeNode<W>(gObject) {
+    var onActivate: SignalConnection<C>? = null
+}
 
 /**
  * The [GtkComposeNode] for each item of a [org.gnome.gtk.ListView].
@@ -102,16 +112,29 @@ sealed interface SelectionMode<M : SelectionModel<ListIndexModel.ListIndex>> {
  *
  * @return the selection model you can use to manage the selection
  */
-@Suppress("ComposableNaming")
+@Suppress("ComposableNaming", "ContentEmitterReturningValues")
 @Composable
 fun <M : SelectionModel<ListIndexModel.ListIndex>> ListView(
     items: Int,
     selectionMode: SelectionMode<M>,
     modifier: Modifier = Modifier,
+    enableRubberband: Boolean = false,
+    singleClickActivate: Boolean = false,
+    showSeparators: Boolean = false,
+    tabBehaviour: ListTabBehavior = ListTabBehavior.ALL,
+    onActivate: ((position: Int) -> Unit)? = null,
     child: @Composable (index: Int) -> Unit,
 ): M {
     val selectionModel = rememberSelectionModel(itemsCount = items, selectionMode = selectionMode)
-    ListView(selectionModel, modifier) {
+    ListView(
+        model = selectionModel,
+        modifier = modifier,
+        enableRubberband = enableRubberband,
+        singleClickActivate = singleClickActivate,
+        showSeparators = showSeparators,
+        tabBehaviour = tabBehaviour,
+        onActivate = onActivate,
+    ) {
         child(it.index)
     }
     return selectionModel
@@ -128,14 +151,19 @@ fun <M : SelectionModel<ListIndexModel.ListIndex>> ListView(
 fun <T : GObject> ListView(
     model: SelectionModel<T>,
     modifier: Modifier = Modifier,
+    enableRubberband: Boolean = false,
+    singleClickActivate: Boolean = false,
+    showSeparators: Boolean = false,
+    tabBehaviour: ListTabBehavior = ListTabBehavior.ALL,
+    onActivate: ((position: Int) -> Unit)? = null,
     child: @Composable (item: T) -> Unit,
 ) {
     val compositionContext = rememberCompositionContext()
 
-    ComposeNode<GtkComposeWidget<GTKListView>, GtkApplier>(
+    ComposeNode<BaseListComposeNode<GTKListView, GTKListView.ActivateCallback>, GtkApplier>(
         factory = {
-            LeafComposeNode(
-                widget = GTKListView.builder()
+            BaseListComposeNode(
+                gObject = GTKListView.builder()
                     .setFactory(createListItemFactory(compositionContext, child))
                     .build(),
             )
@@ -143,6 +171,14 @@ fun <T : GObject> ListView(
         update = {
             set(modifier) { applyModifier(it) }
             set(model) { this.widget.model = it }
+            set(enableRubberband) { this.widget.enableRubberband = it }
+            set(showSeparators) { this.widget.showSeparators = it }
+            set(singleClickActivate) { this.widget.singleClickActivate = it }
+            set(tabBehaviour) { this.widget.tabBehavior = it }
+            set(onActivate) {
+                this.onActivate?.disconnect()
+                this.onActivate = this.widget.onActivate(it)
+            }
         },
     )
 }

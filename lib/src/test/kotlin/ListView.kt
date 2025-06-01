@@ -17,7 +17,10 @@ import io.github.compose4gtk.gtk.components.VerticalBox
 import io.github.compose4gtk.gtk.components.rememberMultiSelectionModel
 import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.modifier.expand
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.gnome.gobject.GObject
+
+private val logger = KotlinLogging.logger {}
 
 fun main(args: Array<String>) {
     adwApplication("my.example.hello-app", args) {
@@ -34,13 +37,18 @@ fun main(args: Array<String>) {
                 HorizontalBox(Modifier.expand()) {
                     if (show) {
                         Panel("Base model (single selection)") {
-                            ListView(items = itemSize, selectionMode = SelectionMode.Single) { index ->
+                            ListView(
+                                items = itemSize,
+                                selectionMode = SelectionMode.Single,
+                                onActivate = { position -> logger.info { "activated item #$position" } },
+                            ) { index ->
                                 Label("Item #$index")
                             }
                         }
                         Panel("Custom model (multiple selection)") {
                             ListView(
                                 model = rememberMultiSelectionModel(items),
+                                onActivate = { position -> logger.info { "activated item #$position" } },
                             ) { customItem ->
                                 Label(customItem.name)
                             }
