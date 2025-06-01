@@ -69,9 +69,9 @@ fun main(args: Array<String>) {
             Box(orientation = Orientation.VERTICAL) {
                 HeaderBar()
 
-                Button("Button 1") { println("Clicked!") }
-                Button("Button 2") { println("Clicked!") }
-                Button("Button 3") { println("Clicked!") }
+                Button("Button 1", onClick = { println("Clicked!") })
+                Button("Button 2", onClick = { println("Clicked!") })
+                Button("Button 3", onClick = { println("Clicked!") })
             }
         }
     }
@@ -90,9 +90,10 @@ fun main(args: Array<String>) {
                 HeaderBar()
 
                 var show by remember { mutableStateOf(false) }
-                Button(if (show) "Hide" else "Show") {
-                    show = !show
-                }
+                Button(
+                    label = if (show) "Hide" else "Show",
+                    onClick = { show = !show },
+                )
                 if (show) {
                     Label("A random label that can be hidden")
                 }
@@ -162,9 +163,14 @@ fun main(args: Array<String>) {
                                 HorizontalBox {
                                     val tokens = text.split(' ').filter { it.isNotBlank() }
                                     tokens.forEach { token ->
-                                        Button(token, modifier = Modifier.margin(8)) {
-                                            addToast(Toast.builder().title("Clicked on $token").build())
-                                        }
+                                        Button(
+                                            label = token,
+                                            modifier = Modifier.margin(8),
+                                            onClick = {
+                                                dismissAllToasts()
+                                                addToast(Toast.builder().setTitle("Clicked on $token").build())
+                                            },
+                                        )
                                     }
                                 }
                             }
