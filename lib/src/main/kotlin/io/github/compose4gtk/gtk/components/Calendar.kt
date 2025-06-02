@@ -6,6 +6,8 @@ import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gobject.SignalConnection
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Month
 import org.gnome.glib.DateTime
 import org.gnome.gtk.Calendar
 
@@ -63,4 +65,37 @@ fun Calendar(
             onPreviousYear?.let { this.widget.onPrevYear(onPreviousYear) }
         }
     }
+}
+
+@Composable
+fun Calendar(
+    modifier: Modifier = Modifier,
+    date: LocalDate = LocalDate(year = DateTime.nowLocal().year, month = Month.JANUARY, dayOfMonth = 1),
+    showDayNames: Boolean = true,
+    showHeading: Boolean = true,
+    showWeekNumber: Boolean = false,
+    onDaySelect: ((date: LocalDate) -> Unit)? = null,
+    onNextMonth: (() -> Unit)? = null,
+    onNextYear: (() -> Unit)? = null,
+    onPreviousMonth: (() -> Unit)? = null,
+    onPreviousYear: (() -> Unit)? = null,
+) {
+    Calendar(
+        modifier = modifier,
+        day = date.dayOfMonth,
+        month = date.monthNumber - 1,
+        showDayNames = showDayNames,
+        showHeading = showHeading,
+        showWeekNumber = showWeekNumber,
+        year = date.year,
+        onDaySelect = if (onDaySelect != null) {
+            { day, month, year -> onDaySelect(LocalDate(year = year, monthNumber = month + 1, dayOfMonth = day)) }
+        } else {
+            null
+        },
+        onNextMonth = onNextMonth,
+        onNextYear = onNextYear,
+        onPreviousMonth = onPreviousMonth,
+        onPreviousYear = onPreviousYear,
+    )
 }

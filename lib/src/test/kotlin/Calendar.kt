@@ -6,6 +6,8 @@ import io.github.compose4gtk.gtk.components.Calendar
 import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.modifier.margin
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Month
 import org.gnome.gtk.Orientation
 
 private val logger = KotlinLogging.logger {}
@@ -21,9 +23,9 @@ fun main(args: Array<String>) {
                         .margin(16),
                 ) {
                     Calendar(
-                        year = 1989,
-                        onDaySelect = { day, month, year ->
-                            logger.info { "selected $year-${month + 1}-$day" }
+                        date = LocalDate(year = 1989, month = Month.JANUARY, dayOfMonth = 1),
+                        onDaySelect = { date ->
+                            logger.info { "selected $date" }
                         },
                         onNextYear = {
                             logger.info { "navigated to next year" }

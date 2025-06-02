@@ -46,6 +46,7 @@ dependencies {
     api(compose.runtime)
     api(libs.javagi.gtk)
     api(libs.javagi.adw)
+    api(libs.kotlinx.datetime)
     implementation(libs.kotlin.logging)
     implementation(libs.slf4j.api)
     detektPlugins(libs.detekt.formatting)
