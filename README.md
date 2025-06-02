@@ -2,29 +2,31 @@
 
 ![Welcome](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/docs/screenshots/welcome.png)
 
-Compose 4 GTK is a Kotlin library that brings Jetpack Compose-style declarative UI development to native Linux
+**Compose 4 GTK** is a Kotlin library that brings the Jetpack Compose-style declarative UI development model to native
+Linux
 applications using GTK 4 and Libadwaita (Adw).  
-This library enables developers to build modern, responsive desktop applications with Kotlin, leveraging the power of
-Compose and the native capabilities of GTK.
+With this library, developers can build modern, responsive desktop applications in Kotlin, combining the power of
+Compose with the native capabilities of GTK.
 
 Documentation is available on https://compose4gtk.github.io/compose-4-gtk.
 
-### Great for users
+### Benefits for Users
 
-Applications built with Compose 4 GTK fit perfectly in with the rest of other applications in Gnome.  
-They match in look, feel, customizability, accessibility, etc.
+Applications built with Compose 4 GTK integrate seamlessly into GNOME, offering a look and feel consistent with other
+GTK applications.
 
-They also perform great, use modern APIs (e.g. Wayland) and benefits from all the optimizations implemented for native
-GTK apps.
+They are customizable, accessible, and performant—leveraging modern APIs like Wayland and the latest optimizations from
+the GTK ecosystem.
 
-### Great for developers
+### Benefits for Developers
 
-Writing synamic UIs with Compose 4 GTK is extremely simple, consistent, and predictable.  
-UIs are written using declarative, stateless and side effect free functions, that take care of creating, updating, and
-destroying GTK widgets for you.
+Building dynamic UIs with **Compose 4 GTK** is simple, consistent, and predictable.  
+You write UIs using declarative, stateless, and side-effect-free functions, letting the framework manage the creation,
+updating, and destruction of GTK widgets automatically.
 
-Jetpack Compose is the default and recommended UI framework for Android, and this library brings some of the same
-goodness to the Linux desktop.
+Jetpack Compose is the default and recommended UI framework for Android—and now, with **Compose 4 GTK**, you can bring
+that
+same declarative power to the Linux desktop.
 
 ## Getting started
 
@@ -91,7 +93,7 @@ fun main(args: Array<String>) {
 }
 ```
 
-This first example highlights the structure of Compose 4 GTK projects:
+This first example highlights the structure of **Compose 4 GTK** projects:
 
 - a call to `adwApplication` to initialize the application
 - one or more `ApplicationWindow`
@@ -197,12 +199,12 @@ fun main(args: Array<String>) {
                                 text = text,
                                 onTextChange = { text = it },
                                 placeholderText = "Inset text here",
-                                modifier = Modifier.margin(8),
+                                modifier = Modifier.margin(margin = 8),
                             )
                             FlowBox(homogeneous = true) {
                                 val tokens = text.split(' ').filter { it.isNotBlank() }
                                 for (token in tokens) {
-                                    Button(token, modifier = Modifier.margin(8), onClick = {
+                                    Button(token, modifier = Modifier.margin(margin = 8), onClick = {
                                         dismissAllToasts()
                                         addToast(Toast.builder().setTitle("Clicked on $token").build())
                                     })
@@ -257,25 +259,52 @@ Items are created, reused, updated and destroyed dynamically as the list scrolls
 There are alternative options to create a `ListView`,
 see [the full documentation](https://compose4gtk.github.io/compose-4-gtk/-compose%204%20-g-t-k/io.github.compose4gtk.gtk.components/-list-view.html).
 
-## GIO Resources
+### GIO Resources
 
-This library provides a convenience function to load `gresource` files in the JAR's resources:
+![Demo](https://raw.githubusercontent.com/compose4gtk/compose-4-gtk/main/docs/screenshots/gio_resources.png)
+
+Source [here](examples/src/main/kotlin/6_GIOResources.kt).
 
 ```kotlin
 fun main(args: Array<String>) {
     useGioResource("resources.gresource") {
         adwApplication("my.example.hello-app", args) {
-            ApplicationWindow("Embedded picture", onClose = ::exitApplication) {
-                Picture(
-                    ImageSource.forResource("/my/example/hello-app/images/lulu.jpg"),
-                    contentFit = ContentFit.COVER,
-                    modifier = Modifier.expand(),
-                )
+            ApplicationWindow("Lulù", onClose = ::exitApplication, defaultWidth = 400, defaultHeight = 400) {
+                VerticalBox {
+                    HeaderBar(
+                        startWidgets = {
+                            IconButton(
+                                // The vector icon is embedded into the gresources file
+                                icon = ImageSource.Icon("heart-filled-symbolic"),
+                                // The "accent-colored" CSS class is defined in the gresources file
+                                modifier = Modifier.cssClasses("accent-colored"),
+                                onClick = { println("TODO: pet the dog") },
+                            )
+                        },
+                    )
+                    Picture(
+                        // The image is embedded into the gresources file
+                        ImageSource.forResource("/my/example/hello-app/images/lulu.jpg"),
+                        contentFit = ContentFit.COVER,
+                        modifier = Modifier.expand(),
+                    )
+                }
             }
         }
     }
 }
 ```
 
-In this example, `resources.gresource` is a GIO resource bundle compiled with `glib-compile-resources`, and included in
-the JAR. 
+This example demonstrates how to load and use resources packaged in GIO resource bundles:
+
+- `useGioResource` (a non-composable helper function) loads the `resources.gresource` file from the JAR’s resources and
+  makes it available throughout the application
+- `ImageSource.Icon`, `ImageSource.forResource` and `Modifier.cssClasses` are examples of how to reference resources
+  loaded via the GIO bundle
+
+For this example, `resources.gresource` was compiled with `glib-compile-resources`, and bundled into the JAR. See
+the [build.gradle.kts](examples/build.gradle.kts) for more details.
+
+Of course, you’re not limited to this helper function: GIO resources can also be loaded using any method provided by GTK
+(e.g. `org.gnome.gio.Resource.load` or `org.gnome.gio.Resource.fromData`) and registered in the application using
+`org.gnome.gio.Gio.resourcesRegister`.

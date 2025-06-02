@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/my/example/hello-app">
+    <file>style.css</file>
+    <file>images/lulu.jpg</file>
+  </gresource>
+  <gresource prefix="/my/example/hello-app/icons/scalable/actions">
+    <file preprocess="xml-stripblanks" alias="heart-filled-symbolic.svg">icons/heart-filled-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="cat-symbolic.svg">icons/cat-symbolic.svg</file>
+  </gresource>
+</gresources>

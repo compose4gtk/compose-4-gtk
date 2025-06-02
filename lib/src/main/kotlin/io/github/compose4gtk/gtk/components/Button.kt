@@ -6,6 +6,7 @@ import androidx.compose.runtime.Updater
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.GtkComposeWidget
 import io.github.compose4gtk.SingleChildComposeNode
+import io.github.compose4gtk.gtk.ImageSource
 import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.Button
@@ -143,20 +144,19 @@ fun ToggleButton(
 
 @Composable
 fun IconButton(
-    iconName: String,
+    icon: ImageSource.Icon,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     hasFrame: Boolean = true,
-    child: @Composable () -> Unit = {},
 ) {
     BaseGenericButton(
         creator = { GtkButtonComposeNode(Button.builder().build()) },
         label = null,
         modifier = modifier,
         hasFrame = hasFrame,
-        child = child,
+        child = { },
         updater = {
-            set(iconName) { this.widget.iconName = it }
+            set(icon) { this.widget.iconName = it.iconName }
             set(onClick) {
                 this.onClick?.disconnect()
                 this.onClick = this.widget.onClicked(it)

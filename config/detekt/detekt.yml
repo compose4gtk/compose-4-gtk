@@ -30,6 +30,9 @@ formatting:
     active: true
   TrailingCommaOnDeclarationSite:
     active: true
+  Filename:
+    # Examples have a number prepended to the file name, to ensure users can read them in order
+    excludes: '**/examples/**'
 
 Compose:
   active: true

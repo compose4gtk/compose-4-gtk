@@ -29,12 +29,12 @@ fun main(args: Array<String>) {
                                 text = text,
                                 onTextChange = { text = it },
                                 placeholderText = "Inset text here",
-                                modifier = Modifier.margin(8),
+                                modifier = Modifier.margin(margin = 8),
                             )
                             FlowBox(homogeneous = true) {
                                 val tokens = text.split(' ').filter { it.isNotBlank() }
-                                tokens.forEach { token ->
-                                    Button(token, modifier = Modifier.margin(8), onClick = {
+                                for (token in tokens) {
+                                    Button(token, modifier = Modifier.margin(margin = 8), onClick = {
                                         dismissAllToasts()
                                         addToast(Toast.builder().setTitle("Clicked on $token").build())
                                     })

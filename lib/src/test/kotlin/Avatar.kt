@@ -1,4 +1,4 @@
-import io.github.compose4gtk.adw.application
+import io.github.compose4gtk.adw.adwApplication
 import io.github.compose4gtk.adw.components.ApplicationWindow
 import io.github.compose4gtk.adw.components.Avatar
 import io.github.compose4gtk.adw.components.HeaderBar
@@ -8,7 +8,7 @@ import io.github.compose4gtk.useGioResource
 
 fun main(args: Array<String>) {
     useGioResource("resources.gresource") {
-        application("my.example.hello-app", args) {
+        adwApplication("my.example.hello-app", args) {
             ApplicationWindow(title = "Avatar", onClose = ::exitApplication, defaultWidth = 600, defaultHeight = 540) {
                 VerticalBox(
                     spacing = 16,

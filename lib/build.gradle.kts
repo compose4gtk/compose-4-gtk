@@ -175,10 +175,6 @@ jreleaser {
     }
 }
 
-tasks.named("assembleTestResources") {
-    dependsOn("compileTestGResources")
-}
-
 tasks.named("publish") {
     dependsOn("clean")
 }
@@ -187,13 +183,16 @@ tasks.named("jreleaserFullRelease") {
     dependsOn("publish")
 }
 
-// TODO: used on examples. They should probably be moved in a separate module to avoid polluting the main build file
 tasks.register<Exec>("compileTestGResources") {
     workingDir("src/test/gresources")
     commandLine("glib-compile-resources", "--target=../resources/resources.gresource", "resources.gresource.xml")
 }
 
+tasks.named("assembleTestResources") {
+    dependsOn("compileTestGResources")
+}
+
 detekt {
-    config.setFrom(file("config/detekt/detekt.yml"))
+    config.setFrom(file("../config/detekt/detekt.yml"))
     buildUponDefaultConfig = true
 }
