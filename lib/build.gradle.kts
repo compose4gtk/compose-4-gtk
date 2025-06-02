@@ -63,7 +63,15 @@ val readMeToDocIndexTask = tasks.register<Copy>("readmeToDocIndex") {
         if (line.startsWith("Documentation is available on")) {
             ""
         } else {
-            line.replace("# A Kotlin Compose library for Gtk4 and Adw", "# Module Compose 4 GTK")
+            line
+                .replace(
+                    "# A Kotlin Compose library for Gtk4 and Adw",
+                    "# Module Compose 4 GTK",
+                )
+                .replace(
+                    "](examples/",
+                    "](https://github.com/compose4gtk/compose-4-gtk/blob/main/examples/",
+                )
         }
     }
     rename { "main.md" }
