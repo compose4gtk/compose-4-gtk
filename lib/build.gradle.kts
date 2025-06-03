@@ -42,7 +42,22 @@ java {
     targetCompatibility = JavaVersion.VERSION_22
 }
 
+fun DependencyHandler.runtimeOnly(
+    provider: Provider<MinimalExternalModuleDependency>,
+    classifier: String,
+): ExternalModuleDependency =
+    runtimeOnly(
+        group = provider.get().group,
+        name = provider.get().name,
+        version = provider.get().version,
+        classifier = classifier,
+    )
+
 dependencies {
+    implementation(libs.lwjgl.lwjgl)
+    runtimeOnly(libs.lwjgl.lwjgl, "natives-linux")
+    implementation(libs.lwjgl.opengl)
+    runtimeOnly(libs.lwjgl.opengl, "natives-linux")
     api(compose.runtime)
     api(libs.javagi.gtk)
     api(libs.javagi.adw)
@@ -52,6 +67,7 @@ dependencies {
     detektPlugins(libs.detekt.formatting)
     detektPlugins(libs.detekt.compose)
 
+    testImplementation(libs.joml)
     testImplementation(libs.slf4j.simple)
 }
 
