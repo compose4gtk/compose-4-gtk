@@ -36,7 +36,7 @@ fun main(args: Array<String>) {
                             value = scaleValue,
                             onChange = { scrollType, newValue ->
                                 println(newValue)
-//                                scaleValue = newValue
+                                scaleValue = newValue
                             },
                             lower = -10.0,
                             upper = 110.0,
