@@ -1,5 +1,5 @@
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.github.compose4gtk.adw.adwApplication
@@ -19,12 +19,12 @@ fun main(args: Array<String>) {
             VerticalBox {
                 HeaderBar(modifier = Modifier.cssClasses("flat"))
 
-                var scaleValue by remember { mutableStateOf(25.5) }
+                var scaleValue by remember { mutableDoubleStateOf(25.5) }
 
                 val marks = arrayOf(
                     Mark(15.0, PositionType.BOTTOM, "15"),
                     Mark(40.0, PositionType.BOTTOM, "40"),
-                    Mark(100.0, PositionType.BOTTOM, "100")
+                    Mark(100.0, PositionType.BOTTOM, "100"),
                 )
 
                 StatusPage(

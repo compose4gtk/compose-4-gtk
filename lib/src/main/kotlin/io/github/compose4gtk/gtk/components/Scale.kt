@@ -87,6 +87,6 @@ fun Scale(
                     true
                 }
             }
-        }
+        },
     )
 }
