@@ -76,7 +76,7 @@ fun Scale(
                 this.changeValue?.disconnect()
                 this.changeValue = this.widget.onChangeValue { scrollType, newValue ->
                     val max = upper.coerceAtMost(fillLevel)
-                    var correctedValue = newValue.coerceIn(lower, max)
+                    var correctedValue = newValue.coerceIn(lower, if (restrictToFillLevel) max else upper)
 
                     if (roundDigits >= 0) {
                         val factor = 10.0.pow(roundDigits.toDouble())
