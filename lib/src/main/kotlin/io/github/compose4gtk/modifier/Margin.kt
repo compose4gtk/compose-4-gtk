@@ -1,12 +1,12 @@
 package io.github.compose4gtk.modifier
 
 fun Modifier.margin(margin: Int) = margin(margin, margin)
-fun Modifier.margin(horizontal: Int, vertical: Int) = margin(horizontal, vertical, horizontal, vertical)
+fun Modifier.margin(horizontal: Int = 0, vertical: Int = 0) = margin(horizontal, vertical, horizontal, vertical)
 fun Modifier.margin(
-    start: Int,
-    top: Int,
-    end: Int,
-    bottom: Int,
+    start: Int = 0,
+    top: Int = 0,
+    end: Int = 0,
+    bottom: Int = 0,
 ) = combine(
     apply = {
         it.marginStart = start
