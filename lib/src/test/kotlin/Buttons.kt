@@ -4,7 +4,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.github.compose4gtk.adw.adwApplication
 import io.github.compose4gtk.adw.components.ApplicationWindow
+import io.github.compose4gtk.adw.components.ButtonContent
 import io.github.compose4gtk.adw.components.HeaderBar
+import io.github.compose4gtk.gtk.ImageSource
 import io.github.compose4gtk.gtk.components.Box
 import io.github.compose4gtk.gtk.components.Button
 import io.github.compose4gtk.gtk.components.Label
@@ -28,6 +30,15 @@ fun main(args: Array<String>) {
                     Button(label = "Button (no frame)", onClick = { println("Clicked!") }, hasFrame = false)
                     Button(onClick = { println("Clicked!") }) {
                         Label("Button (custom child)")
+                    }
+                    Button(onClick = { println("Clicked!") }) {
+                        ButtonContent(null, iconName = ImageSource.Icon("media-playback-start-symbolic"))
+                    }
+                    Button(onClick = { println("Clicked!") }) {
+                        ButtonContent(
+                            label = "Button",
+                            iconName = ImageSource.Icon("media-playback-start-symbolic"),
+                        )
                     }
                     var active by remember { mutableStateOf(false) }
                     ToggleButton("Toggle button", active, onToggle = { active = !active })
