@@ -178,7 +178,9 @@ fun <T : GObject> ListView(
             set(onActivate) {
                 this.onActivate?.disconnect()
                 if (onActivate != null) {
-                  this.onActivate = this.widget.onActivate(it)
+                    this.onActivate = this.widget.onActivate(it)
+                } else {
+                    this.onActivate = null
                 }
             }
         },
