@@ -44,9 +44,7 @@ fun main(args: Array<String>) {
                             drawValue = true,
                             fillLevel = 90.0,
                             increments = 10.0,
-                            restrictToFillLevel = true,
                             showFillLevel = true,
-                            roundDigits = 1,
                             marks = marks,
                         )
                     }

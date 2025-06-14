@@ -13,8 +13,6 @@ import org.gnome.gtk.Range
 import org.gnome.gtk.Scale
 import org.gnome.gtk.ScrollType
 import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.roundToInt
 
 private class GtkScaleComposeNode(gObject: Scale) : LeafComposeNode<Scale>(gObject) {
     var changeValue: SignalConnection<Range.ChangeValueCallback>? = null
@@ -31,15 +29,13 @@ fun Scale(
     lower: Double = 0.0,
     upper: Double = 100.0,
     digits: Int = 1,
-    drawValue: Boolean = false,
+    drawValue: Boolean = true,
     hasOrigin: Boolean = true,
     valuePosition: PositionType = PositionType.TOP,
     fillLevel: Double = Double.MAX_VALUE,
     flippable: Boolean = true,
     increments: Double = 0.0,
     inverted: Boolean = false,
-    restrictToFillLevel: Boolean = true,
-    roundDigits: Int = -1,
     showFillLevel: Boolean = false,
     marks: Array<Mark> = emptyArray(),
 ) {
@@ -62,8 +58,6 @@ fun Scale(
             set(flippable) { this.widget.flippable = it }
             set(increments) { this.widget.setIncrements(it, abs(lower - upper)) }
             set(inverted) { this.widget.inverted = it }
-            set(restrictToFillLevel) { this.widget.restrictToFillLevel = it }
-            set(roundDigits) { this.widget.roundDigits = it }
             set(showFillLevel) { this.widget.showFillLevel = it }
             set(marks) {
                 this.widget.clearMarks()
@@ -75,15 +69,7 @@ fun Scale(
             set(onChange) {
                 this.changeValue?.disconnect()
                 this.changeValue = this.widget.onChangeValue { scrollType, newValue ->
-                    val max = upper.coerceAtMost(fillLevel)
-                    var correctedValue = newValue.coerceIn(lower, if (restrictToFillLevel) max else upper)
-
-                    if (roundDigits >= 0) {
-                        val factor = 10.0.pow(roundDigits.toDouble())
-                        correctedValue = (correctedValue * factor).roundToInt() / factor
-                    }
-
-                    it(scrollType, correctedValue)
+                    it(scrollType, newValue)
                     true
                 }
             }
