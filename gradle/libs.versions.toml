@@ -10,6 +10,7 @@ versioning = "6.4.4"
 detekt = "1.23.8"
 detekt-formatting = "1.23.8"
 detekt-compose = "0.4.22"
+lwjgl = "3.3.6"
 
 [libraries]
 javagi-gtk = { group = "io.github.jwharm.javagi", name = "gtk", version.ref = "javagi" }
@@ -20,6 +21,9 @@ slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j"}
 slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j"}
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt-formatting"}
 detekt-compose = { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "detekt-compose"}
+lwjgl-lwjgl = { group = "org.lwjgl", name = "lwjgl", version.ref = "lwjgl" }
+lwjgl-opengl = { group = "org.lwjgl", name = "lwjgl-opengl", version.ref = "lwjgl" }
+lwjgl-opengles = { group = "org.lwjgl", name = "lwjgl-opengles", version.ref = "lwjgl" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
