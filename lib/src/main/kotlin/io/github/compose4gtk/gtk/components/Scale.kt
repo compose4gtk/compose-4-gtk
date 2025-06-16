@@ -12,7 +12,6 @@ import org.gnome.gtk.PositionType
 import org.gnome.gtk.Range
 import org.gnome.gtk.Scale
 import org.gnome.gtk.ScrollType
-import kotlin.math.abs
 
 private class GtkScaleComposeNode(gObject: Scale) : LeafComposeNode<Scale>(gObject) {
     var changeValue: SignalConnection<Range.ChangeValueCallback>? = null
@@ -34,10 +33,11 @@ fun Scale(
     valuePosition: PositionType = PositionType.TOP,
     fillLevel: Double = Double.MAX_VALUE,
     flippable: Boolean = true,
-    increments: Double = 0.0,
+    stepIncrements: Double = 0.0,
+    pageIncrements: Double = 0.0,
     inverted: Boolean = false,
     showFillLevel: Boolean = false,
-    marks: Array<Mark> = emptyArray(),
+    marks: List<Mark> = emptyList(),
 ) {
     val scale = remember { Scale.builder().build() }
 
@@ -56,10 +56,11 @@ fun Scale(
             set(valuePosition) { this.widget.valuePos = it }
             set(fillLevel) { this.widget.fillLevel = it }
             set(flippable) { this.widget.flippable = it }
-            set(increments) { this.widget.setIncrements(it, abs(lower - upper)) }
+            set(stepIncrements) { this.widget.adjustment.stepIncrement = it }
+            set(pageIncrements) { this.widget.adjustment.pageIncrement = it }
             set(inverted) { this.widget.inverted = it }
             set(showFillLevel) { this.widget.showFillLevel = it }
-            set(marks) {
+            set(marks.toList()) {
                 this.widget.clearMarks()
                 for (mark in marks) {
                     this.widget.addMark(mark.value, mark.position, mark.markup)
