@@ -1,5 +1,6 @@
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.github.compose4gtk.adw.adwApplication
@@ -21,7 +22,7 @@ import org.gnome.gtk.Align
 import org.gnome.gtk.LevelBarMode
 import org.gnome.gtk.Orientation
 
-val offsets = arrayOf(
+val defaultOffsets = listOf(
     Offset("full", 10.0),
     Offset("half", 5.0),
     Offset("low", 2.5),
@@ -35,6 +36,9 @@ fun main(args: Array<String>) {
                     HeaderBar(modifier = Modifier.cssClasses("flat"))
 
                     var level by remember { mutableDoubleStateOf(5.0) }
+                    val offsets = remember {
+                        mutableStateListOf<Offset>().apply { addAll(defaultOffsets) }
+                    }
 
                     StatusPage(
                         title = "Level Bar",
@@ -77,6 +81,21 @@ fun main(args: Array<String>) {
                                     if (level < 10.0) {
                                         level++
                                     }
+                                })
+                            }
+
+                            HorizontalBox(
+                                modifier = Modifier.alignment(Align.CENTER),
+                                spacing = 8,
+                            ) {
+                                Button("Remove offset", {
+                                    if (offsets.isNotEmpty()) {
+                                        offsets.removeLast()
+                                    }
+                                })
+                                Button("Reset", {
+                                    offsets.clear()
+                                    offsets.addAll(defaultOffsets)
                                 })
                             }
                         }
