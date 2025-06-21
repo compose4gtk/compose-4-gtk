@@ -42,6 +42,17 @@ java {
     targetCompatibility = JavaVersion.VERSION_22
 }
 
+fun DependencyHandler.testRuntimeOnly(
+    provider: Provider<MinimalExternalModuleDependency>,
+    classifier: String,
+): ExternalModuleDependency =
+    testRuntimeOnly(
+        group = provider.get().group,
+        name = provider.get().name,
+        version = provider.get().version,
+        classifier = classifier,
+    )
+
 dependencies {
     api(compose.runtime)
     api(libs.javagi.gtk)
@@ -53,6 +64,14 @@ dependencies {
     detektPlugins(libs.detekt.compose)
 
     testImplementation(libs.slf4j.simple)
+
+    // all dependencies below are just for GLArea test
+    testImplementation(libs.lwjgl.lwjgl)
+    testRuntimeOnly(libs.lwjgl.lwjgl, "natives-linux")
+    testImplementation(libs.lwjgl.opengl)
+    testRuntimeOnly(libs.lwjgl.opengl, "natives-linux")
+    testImplementation(libs.lwjgl.opengles)
+    testRuntimeOnly(libs.lwjgl.opengles, "natives-linux")
 }
 
 val readMeToDocIndexTask = tasks.register<Copy>("readmeToDocIndex") {
