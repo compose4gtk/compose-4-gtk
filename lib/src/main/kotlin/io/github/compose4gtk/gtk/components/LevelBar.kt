@@ -62,7 +62,7 @@ fun LevelBar(
                 this.widget.syncOffsets(offsets, it, maxValue, lastOffsetsNames)
             }
             set(mode) { this.widget.mode = it }
-            set(offsets.toList()) {
+            set(offsets) {
                 this.widget.syncOffsets(it, minValue, maxValue, lastOffsetsNames)
             }
             set(value) { this.widget.value = it }
