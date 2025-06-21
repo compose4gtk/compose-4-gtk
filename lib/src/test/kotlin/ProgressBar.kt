@@ -38,7 +38,7 @@ fun main(args: Array<String>) {
                     description = "Display the progress of a long running operation",
                 ) {
                     VerticalBox(spacing = 8) {
-                        ProgressBar(state = progressBarState, showText = true)
+                        ProgressBar(state = progressBarState, showText = true, text = "Progressbar fixed at 25%")
                         ProgressBar(state = pulsatingProgressBarState, pulseStep = 0.25)
                         ToggleButton(label = "Pulsate", active = pulsate, onToggle = { pulsate = !pulsate })
                     }

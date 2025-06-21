@@ -11,14 +11,13 @@ import org.gnome.gtk.ProgressBar
 import org.gnome.pango.EllipsizeMode
 
 sealed interface ProgressBarState {
-    val progressBar: ProgressBar?
     var fraction: Double
     fun pulse()
     fun reset()
 }
 
 private class ProgressBarStateImpl : ProgressBarState {
-    override var progressBar: ProgressBar? = null
+    var progressBar: ProgressBar? = null
         set(value) {
             check(field == null) { "ProgressBarState can be associated to a single ProgressBar" }
             requireNotNull(value)
