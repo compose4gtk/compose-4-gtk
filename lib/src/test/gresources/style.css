@@ -6,3 +6,16 @@
 .accent-colored {
     color: var(--accent-color);
 }
+
+levelbar block.full {
+    background-color: var(--success-color);
+}
+
+levelbar block.half {
+    background-color: var(--warning-color);
+}
+
+levelbar block.low {
+    background-color: var(--error-color);
+}
+
