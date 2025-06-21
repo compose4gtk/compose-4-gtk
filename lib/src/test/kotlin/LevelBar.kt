@@ -51,7 +51,7 @@ fun main(args: Array<String>) {
                                 value = level,
                                 maxValue = 10.0,
                                 mode = LevelBarMode.CONTINUOUS,
-                                offsets = offsets,
+                                offsets = offsets.toList(),
                             )
 
                             HorizontalClamp(
@@ -63,7 +63,7 @@ fun main(args: Array<String>) {
                                     inverted = true,
                                     maxValue = 10.0,
                                     mode = LevelBarMode.DISCRETE,
-                                    offsets = offsets,
+                                    offsets = offsets.toList(),
                                 )
                             }
 
