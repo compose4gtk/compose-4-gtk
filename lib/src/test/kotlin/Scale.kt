@@ -58,7 +58,7 @@ fun main(args: Array<String>) {
                                 stepIncrements = 10.0,
                                 pageIncrements = 25.0,
                                 showFillLevel = true,
-                                marks = marks,
+                                marks = marks.toList(),
                             )
 
                             HorizontalBox(

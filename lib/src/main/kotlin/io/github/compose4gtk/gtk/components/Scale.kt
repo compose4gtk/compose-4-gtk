@@ -60,7 +60,7 @@ fun Scale(
             set(pageIncrements) { this.widget.adjustment.pageIncrement = it }
             set(inverted) { this.widget.inverted = it }
             set(showFillLevel) { this.widget.showFillLevel = it }
-            set(marks.toList()) {
+            set(marks) {
                 this.widget.clearMarks()
                 for (mark in marks) {
                     this.widget.addMark(mark.value, mark.position, mark.markup)
