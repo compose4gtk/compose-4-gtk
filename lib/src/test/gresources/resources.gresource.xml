@@ -7,5 +7,7 @@
   <gresource prefix="/my/example/hello-app/icons/scalable/actions">
     <file preprocess="xml-stripblanks" alias="heart-filled-symbolic.svg">icons/heart-filled-symbolic.svg</file>
     <file preprocess="xml-stripblanks" alias="cat-symbolic.svg">icons/cat-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="left-small-symbolic.svg">icons/left-small-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="right-small-symbolic.svg">icons/right-small-symbolic.svg</file>
   </gresource>
 </gresources>
