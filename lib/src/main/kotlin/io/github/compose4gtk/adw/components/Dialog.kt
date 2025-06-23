@@ -82,6 +82,18 @@ private fun <D : Dialog> baseDialog(
     return dialog
 }
 
+/**
+ * An adaptive dialog container.
+ *
+ * @param title The title shown in the dialog header.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param contentHeight The height of the content.
+ * @param contentWidth The width of the content.
+ * @param followsContentSize Whether to size content automatically.
+ * @param presentationMode Which mode used to display the dialog.
+ * @param onClose Callback triggered when the dialog is closed.
+ * @param content The composable content to display inside the dialog.
+ */
 @Composable
 fun Dialog(
     title: String?,
@@ -108,6 +120,38 @@ fun Dialog(
     )
 }
 
+/**
+ * A standardized dialog for displaying application metadata and credits.
+ *
+ * @param title The title shown in the dialog header.
+ * @param applicationName The name of the application.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param applicationIcon The name of the application icon.
+ * @param artists The list of artists of the application.
+ * @param comments The comments about the application.
+ * @param contentHeight The height of the content.
+ * @param contentWidth The width of the content.
+ * @param copyright The copyright information.
+ * @param debugInfo The debug information.
+ * @param debugInfoFilename The debug information filename.
+ * @param designers The list of designers of the application.
+ * @param developerName The developer name.
+ * @param developers The list of developers of the application.
+ * @param documenters The list of documenters of the application.
+ * @param issueUrl The URL for the application’s issue tracker.
+ * @param followsContentSize Whether to size content automatically.
+ * @param license The license text.
+ * @param licenseType The license type.
+ * @param presentationMode Which mode used to display the dialog.
+ * @param releaseNotes The release notes of the application.
+ * @param releaseNotesVersion The version described by the application’s release notes.
+ * @param supportUrl The URL of the application’s support page.
+ * @param translatorCredits The translator credits string.
+ * @param version The version of the application.
+ * @param website The URL of the application's website.
+ * @param onClose Callback triggered when the dialog is closed.
+ * @param content The composable content to display inside the dialog.
+ */
 @Composable
 fun AboutDialog(
     title: String?,
@@ -174,6 +218,14 @@ fun AboutDialog(
     remember(website) { dialog.website = website }
 }
 
+/**
+ * Represents a response option (button) in an [AlertDialog].
+ *
+ * @property id Identifier for the response.
+ * @property label The text shown in the button.
+ * @property appearance Visual style.
+ * @property isEnabled Whether the response is currently interactable.
+ */
 data class AlertDialogResponse(
     val id: String,
     val label: String,
@@ -181,6 +233,21 @@ data class AlertDialogResponse(
     val isEnabled: Boolean = true,
 )
 
+/**
+ * A dialog presenting a message or a question.
+ *
+ * @param heading The heading of the dialog.
+ * @param body The body text of the dialog.
+ * @param responses List of possible responses shown as buttons.
+ * @param onResponse Callback triggered when a response is selected.
+ * @param onClose Callback triggered when the dialog is closed.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param contentHeight The height of the content.
+ * @param contentWidth The width of the content.
+ * @param followsContentSize Whether to size content automatically.
+ * @param presentationMode Which mode used to display the dialog.
+ * @param defaultResponse The response selected by default.
+ */
 @Composable
 fun AlertDialog(
     heading: String,

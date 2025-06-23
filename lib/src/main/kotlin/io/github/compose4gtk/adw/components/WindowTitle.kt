@@ -8,6 +8,13 @@ import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.WindowTitle
 
+/**
+ * A helper widget for setting a window’s title and subtitle.
+ *
+ * @param title The title to display.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param subtitle The subtitle to display.
+ */
 @Composable
 fun WindowTitle(
     title: String,

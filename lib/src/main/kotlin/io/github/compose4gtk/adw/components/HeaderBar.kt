@@ -14,6 +14,17 @@ import org.gnome.adw.CenteringPolicy
 import org.gnome.adw.HeaderBar
 import org.gnome.gtk.Widget
 
+/**
+ * A title bar widget.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param centeringPolicy The policy for aligning the center widget.
+ * @param showEndTitleButtons Whether to show title buttons at the end of the header bar.
+ * @param showStartTitleButtons Whether to show title buttons at the start of the header bar.
+ * @param title Composable widget to display as the title.
+ * @param startWidgets Composable widget displayed at the start of the header.
+ * @param endWidgets Composable widget displayed at the end of the header.
+ */
 @Composable
 fun HeaderBar(
     modifier: Modifier = Modifier,

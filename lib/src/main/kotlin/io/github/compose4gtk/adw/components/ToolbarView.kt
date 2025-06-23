@@ -14,6 +14,20 @@ import org.gnome.adw.ToolbarStyle
 import org.gnome.adw.ToolbarView
 import org.gnome.gtk.Widget
 
+/**
+ * A widget containing a page, as well as top and/or bottom bars.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param topBarStyle Appearance of the top bars.
+ * @param revealTopBars Whether top bars are revealed.
+ * @param extendContentToTopEdge Whether the content widget can extend behind top bars.
+ * @param topBar Composable widget displayed as the top bar.
+ * @param bottomBarStyle Appearance of the bottom bars.
+ * @param revealBottomBars Whether bottom bars are visible.
+ * @param extendContentToBottomEdge Whether the content widget can extend behind bottom bars.
+ * @param bottomBar Composable widget displayed as the bottom bar.
+ * @param content The composable content to display inside the view.
+ */
 @Composable
 fun ToolbarView(
     modifier: Modifier = Modifier,

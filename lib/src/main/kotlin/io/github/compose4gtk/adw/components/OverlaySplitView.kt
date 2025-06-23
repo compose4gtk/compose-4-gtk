@@ -53,6 +53,18 @@ private class OverlaySplitViewImpl : OverlaySplitViewScope {
 }
 
 /**
+ * A widget presenting sidebar and content side by side or as an overlay.
+ *
+ * @param sidebar Composable widget displayed as the sidebar.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param collapsed Whether the split view is collapsed.
+ * @param pinSidebar Whether the sidebar widget is pinned.
+ * @param sidebarPosition The sidebar position.
+ * @param sidebarWidthFraction The preferred sidebar width as a fraction of the total width.
+ * @param enableHideGesture Whether the sidebar can be closed with a swipe gesture.
+ * @param enableShowGesture Whether the sidebar can be opened with an edge swipe gesture.
+ * @param content The composable content to display inside the view.
+ *
  * TODO:
  *  - min/max sidebar width
  */

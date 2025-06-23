@@ -14,6 +14,16 @@ private class AdwBannerComposeNode(
     var onButtonClicked: SignalConnection<Banner.ButtonClickedCallback>? = null
 }
 
+/**
+ * A bar with contextual information.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param title Text displayed on the [Banner].
+ * @param buttonLabel Text displayed inside the button.
+ * @param onButtonClick Callback triggered when the button is clicked.
+ * @param revealed Whether the banner is shown or not.
+ * @param useMarkup Whether Pango markup for the [title] is enabled.
+ */
 @Composable
 fun Banner(
     modifier: Modifier = Modifier,
