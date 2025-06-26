@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
                         Label("Button (custom child)")
                     }
                     Button(onClick = { println("Clicked!") }) {
-                        ButtonContent(null, icon = ImageSource.Icon("media-playback-start-symbolic"))
+                        ButtonContent("", icon = ImageSource.Icon("media-playback-start-symbolic"))
                     }
                     Button(onClick = { println("Clicked!") }) {
                         ButtonContent(
