@@ -12,7 +12,7 @@ import org.gnome.adw.ButtonContent
 @Composable
 fun ButtonContent(
     label: String?,
-    iconName: ImageSource.Icon,
+    icon: ImageSource.Icon,
     modifier: Modifier = Modifier,
     useUnderline: Boolean = false,
     canShrink: Boolean = false,
@@ -22,7 +22,7 @@ fun ButtonContent(
     }) {
         set(modifier) { applyModifier(it) }
         set(label) { this.widget.label = it }
-        set(iconName) { this.widget.iconName = it?.iconName }
+        set(icon) { this.widget.iconName = it.iconName }
         set(useUnderline) { this.widget.useUnderline = it }
         set(canShrink) { this.widget.canShrink = it }
     }
