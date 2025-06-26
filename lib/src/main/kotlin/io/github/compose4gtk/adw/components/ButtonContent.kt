@@ -11,7 +11,7 @@ import org.gnome.adw.ButtonContent
 
 @Composable
 fun ButtonContent(
-    label: String?,
+    label: String,
     icon: ImageSource.Icon,
     modifier: Modifier = Modifier,
     useUnderline: Boolean = false,
