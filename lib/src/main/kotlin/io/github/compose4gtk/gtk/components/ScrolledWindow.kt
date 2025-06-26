@@ -10,6 +10,25 @@ import org.gnome.gtk.CornerType
 import org.gnome.gtk.PolicyType
 import org.gnome.gtk.ScrolledWindow
 
+/**
+ * Creates a [org.gnome.gtk.ScrolledWindow] that makes its child scrollable.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param horizontalScrollbarPolicy Determines when the horizontal scrollbar should appear.
+ * @param verticalScrollbarPolicy Determines when the vertical scrollbar should appear.
+ * @param kineticScrolling Whether the scroll window has kinetic scrolling.
+ * @param minContentHeight The minimum height of the content.
+ * @param maxContentHeight The maximum height of the content.
+ * @param minContentWidth The minimum width of the content.
+ * @param maxContentWidth The maximum width of the content.
+ * @param overlayScrolling Whether the scroll window has overlay scrolling.
+ * @param placement the placement of the contents with respect to the scrollbars.
+ * @param propagateNaturalHeight Whether the natural height of the child should be calculated
+ * and propagated through the scrolled window’s requested natural height.
+ * @param propagateNaturalWidth Whether the natural width of the child should be calculated
+ * and propagated through the scrolled window’s requested natural width.
+ * @param content The composable content to display.
+ */
 @Composable
 fun ScrolledWindow(
     modifier: Modifier = Modifier,

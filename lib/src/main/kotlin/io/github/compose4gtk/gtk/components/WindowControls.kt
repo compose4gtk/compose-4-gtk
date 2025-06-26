@@ -9,6 +9,12 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.gtk.PackType
 import org.gnome.gtk.WindowControls
 
+/**
+ * Creates a [org.gnome.gtk.WindowControls] that displays a window's control buttons.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param side Determines where the controls are packed.
+ */
 @Composable
 fun WindowControls(
     modifier: Modifier = Modifier,

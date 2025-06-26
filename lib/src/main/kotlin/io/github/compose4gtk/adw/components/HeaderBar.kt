@@ -15,7 +15,7 @@ import org.gnome.adw.HeaderBar
 import org.gnome.gtk.Widget
 
 /**
- * A title bar widget.
+ * Creates a [org.gnome.adw.HeaderBar] used as a title bar widget.
  *
  * @param modifier Compose [Modifier] for layout and styling.
  * @param centeringPolicy The policy for aligning the center widget.

@@ -11,6 +11,15 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.gtk.ContentFit
 import org.gnome.gtk.Picture
 
+/**
+ * Creates a [org.gnome.gtk.Picture] that displays a picture.
+ *
+ * @param image The image to display.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param alternativeText An alternative textual description for the picture content.
+ * @param canShrink Whether the picture can be made smaller than its content.
+ * @param contentFit How the content should be resized to fit.
+ */
 @Composable
 fun Picture(
     image: ImageSource.PaintableFactory?,

@@ -19,15 +19,31 @@ private class GtkCalendarComposeNode(gObject: Calendar) : LeafComposeNode<Calend
     var onPreviousYear: SignalConnection<Calendar.PrevYearCallback>? = null
 }
 
+/**
+ * Creates a [org.gnome.gtk.Calendar] to display a Gregorian calendar, one month at a time.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param day The selected day.
+ * @param month The selected month.
+ * @param year The selected year.
+ * @param showDayNames Whether the calendar shows day names.
+ * @param showHeading Whether the calendar should show a heading.
+ * @param showWeekNumber Whether week numbers are shown in the calendar.
+ * @param onDaySelect Callback triggered when a day is selected.
+ * @param onNextMonth Callback triggered when the calendar moves to the next month.
+ * @param onNextYear Callback triggered when the calendar moves to the next year.
+ * @param onPreviousMonth Callback triggered when the calendar moves to the previous month.
+ * @param onPreviousYear Callback triggered when the calendar moves to the previous year.
+ */
 @Composable
 fun Calendar(
     modifier: Modifier = Modifier,
     day: Int = 1,
     month: Int = 0,
+    year: Int = DateTime.nowLocal().year,
     showDayNames: Boolean = true,
     showHeading: Boolean = true,
     showWeekNumber: Boolean = false,
-    year: Int = DateTime.nowLocal().year,
     onDaySelect: ((day: Int, month: Int, year: Int) -> Unit)? = null,
     onNextMonth: (() -> Unit)? = null,
     onNextYear: (() -> Unit)? = null,
@@ -40,10 +56,10 @@ fun Calendar(
         set(modifier) { applyModifier(it) }
         set(day) { this.widget.day = it }
         set(month) { this.widget.month = it }
+        set(year) { this.widget.year = it }
         set(showDayNames) { this.widget.showDayNames = it }
         set(showHeading) { this.widget.showHeading = it }
         set(showWeekNumber) { this.widget.showWeekNumbers = it }
-        set(year) { this.widget.year = it }
         set(onDaySelect) {
             this.onDaySelect?.disconnect()
             onDaySelect?.let { this.widget.onDaySelected { onDaySelect(widget.day, widget.month, widget.year) } }
@@ -67,6 +83,20 @@ fun Calendar(
     }
 }
 
+/**
+ * Creates a [org.gnome.gtk.Calendar] to display a Gregorian calendar, one month at a time.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param date The selected date.
+ * @param showDayNames Whether the calendar shows day names.
+ * @param showHeading Whether the calendar should show a heading.
+ * @param showWeekNumber Whether week numbers are shown in the calendar.
+ * @param onDaySelect Callback triggered when a day is selected.
+ * @param onNextMonth Callback triggered when the calendar moves to the next month.
+ * @param onNextYear Callback triggered when the calendar moves to the next year.
+ * @param onPreviousMonth Callback triggered when the calendar moves to the previous month.
+ * @param onPreviousYear Callback triggered when the calendar moves to the previous year.
+ */
 @Composable
 fun Calendar(
     modifier: Modifier = Modifier,

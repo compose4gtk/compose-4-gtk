@@ -10,7 +10,7 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.ButtonContent
 
 /**
- * A container used to display a label and an icon inside buttons.
+ * Creates a [org.gnome.adw.ButtonContent], a container used to display a label and an icon inside buttons.
  *
  * @param label Text displayed inside the button.
  * @param iconName The icon displayed inside the button.

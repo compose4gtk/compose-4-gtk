@@ -83,7 +83,7 @@ private fun <D : Dialog> baseDialog(
 }
 
 /**
- * An adaptive dialog container.
+ * Creates a [org.gnome.adw.Dialog], an adaptive dialog container.
  *
  * @param title The title shown in the dialog header.
  * @param modifier Compose [Modifier] for layout and styling.
@@ -121,7 +121,7 @@ fun Dialog(
 }
 
 /**
- * A standardized dialog for displaying application metadata and credits.
+ * Creates a [org.gnome.adw.AboutDialog], a standardized dialog for displaying application metadata and credits.
  *
  * @param title The title shown in the dialog header.
  * @param applicationName The name of the application.
@@ -234,7 +234,7 @@ data class AlertDialogResponse(
 )
 
 /**
- * A dialog presenting a message or a question.
+ * Creates a [org.gnome.adw.AlertDialog], a dialog presenting a message or a question.
  *
  * @param heading The heading of the dialog.
  * @param body The body text of the dialog.

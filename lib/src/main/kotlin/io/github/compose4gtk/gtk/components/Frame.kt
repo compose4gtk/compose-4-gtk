@@ -11,6 +11,14 @@ import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.modifier.Modifier
 import org.gnome.gtk.Frame
 
+/**
+ * Creates a [org.gnome.gtk.Frame] used to surround its child with a decorative frame and an optional label.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param labelXAlign The X alignment of the label widget.
+ * @param label The composable widget used as the label.
+ * @param child The composable child.
+ */
 @Composable
 fun Frame(
     modifier: Modifier = Modifier,

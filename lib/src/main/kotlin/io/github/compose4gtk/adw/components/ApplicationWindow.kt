@@ -52,12 +52,12 @@ private class ApplicationWindowScopeImpl(val window: ApplicationWindow) : Applic
 }
 
 /**
- * A freeform application window.
+ * Creates a [org.gnome.adw.ApplicationWindow], a freeform application window.
  *
  * @param title The title of the window.
  * @param onClose Callback triggered when the window is closed.
  * @param modifier Compose [Modifier] for layout and styling.
- * @param styles
+ * @param styles A list of [CssProvider] used to style the window.
  * @param decorated Whether the window should have a frame.
  * @param defaultHeight The default height of the window.
  * @param defaultWidth The default width of the window.

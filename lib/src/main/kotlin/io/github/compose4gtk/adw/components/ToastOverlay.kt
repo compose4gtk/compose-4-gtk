@@ -37,7 +37,7 @@ private class ToastOverlayScopeImpl : ToastOverlayScope {
 }
 
 /**
- * A widget showing toasts above its content.
+ * Creates a [org.gnome.adw.ToastOverlay] that shows toasts above its content.
  *
  * This composable introduces a [ToastOverlayScope] as the receiver in its `content` lambda,
  * giving access to the following functions:

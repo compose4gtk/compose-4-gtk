@@ -58,20 +58,6 @@ sealed interface CarouselState {
     fun scrollTo(pageNumber: Int, animate: Boolean = true)
 }
 
-/**
- * Creates and remembers a [CarouselState] for controlling a [Carousel] composable.
- *
- * @param pageCount Total number of pages in the carousel.
- * @param orientation The scrolling direction.
- */
-@Composable
-fun rememberCarouselState(pageCount: Int, orientation: Orientation = Orientation.HORIZONTAL): CarouselState {
-    val state = remember { CarouselStateImpl() }
-    state.pageCount = pageCount
-    state.orientation = orientation
-    return state
-}
-
 private class CarouselStateImpl : CarouselState {
     override var carousel: Carousel? = null
         set(value) {
@@ -99,7 +85,21 @@ private class CarouselStateImpl : CarouselState {
 }
 
 /**
- * A paginated scrolling widget.
+ * Creates and remembers a [CarouselState] for controlling a [Carousel] composable.
+ *
+ * @param pageCount Total number of pages in the carousel.
+ * @param orientation The scrolling direction.
+ */
+@Composable
+fun rememberCarouselState(pageCount: Int, orientation: Orientation = Orientation.HORIZONTAL): CarouselState {
+    val state = remember { CarouselStateImpl() }
+    state.pageCount = pageCount
+    state.orientation = orientation
+    return state
+}
+
+/**
+ * Creates a [org.gnome.adw.Carousel], a paginated scrolling widget.
  *
  * @param state The shared [CarouselState] instance.
  * @param modifier Compose [Modifier] for layout and styling.
@@ -170,7 +170,7 @@ fun Carousel(
 }
 
 /**
- * A dots indicator for [Carousel].
+ * Creates a [org.gnome.adw.CarouselIndicatorDots], a dots indicator for [Carousel].
  *
  * @param carouselState The [CarouselState] used by the carousel.
  * @param modifier Compose [Modifier] for layout and styling.
@@ -190,7 +190,7 @@ fun CarouselIndicatorDots(
 }
 
 /**
- * A lines indicator for [Carousel].
+ * Creates a [org.gnome.adw.CarouselIndicatorLines], a lines indicator for [Carousel].
  *
  * @param carouselState The [CarouselState] used by the carousel.
  * @param modifier Compose [Modifier] for layout and styling.

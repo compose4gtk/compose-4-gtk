@@ -17,8 +17,36 @@ private class GtkScaleComposeNode(gObject: Scale) : LeafComposeNode<Scale>(gObje
     var changeValue: SignalConnection<Range.ChangeValueCallback>? = null
 }
 
+/**
+ * A visual mark that can be set on [Scale].
+ *
+ * @param value The value used to position the mark on the [Scale].
+ * @param position The position of the mark.
+ * @param markup The text displayed.
+ */
 data class Mark(val value: Double, val position: PositionType, val markup: String? = null)
 
+/**
+ * Creates a [org.gnome.gtk.Scale] that allows to select a numeric value with a slider control.
+ *
+ * @param value The value of the scale.
+ * @param onChange Callback triggered when [value] changes.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param orientation The orientation of the scale.
+ * @param lower The maximum value of the scale.
+ * @param upper The minimum value of the scale.
+ * @param digits The number of decimal places that are displayed in the value.
+ * @param drawValue Whether the current value is displayed as a string next to the slider.
+ * @param hasOrigin Whether the scale has an origin.
+ * @param valuePosition The position of the displayed value.
+ * @param fillLevel The value of the fill level indicator.
+ * @param flippable Makes the scale respect text direction.
+ * @param stepIncrements The value of a step increment (changing the value with the keyboard).
+ * @param pageIncrements The value of a page increment (changing the value by scrolling).
+ * @param inverted Whether the scale is inverted.
+ * @param showFillLevel Whether the fill level is displayed.
+ * @param marks A list of [Mark] to display next to the scale.
+ */
 @Composable
 fun Scale(
     value: Double,

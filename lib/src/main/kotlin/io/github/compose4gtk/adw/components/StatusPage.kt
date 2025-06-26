@@ -11,7 +11,7 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.StatusPage
 
 /**
- * A page used for empty/error states and similar use-cases.
+ * Creates a [org.gnome.adw.StatusPage] used for empty/error states and similar use-cases.
  *
  * @param title The title to be displayed below the icon.
  * @param modifier Compose [Modifier] for layout and styling.

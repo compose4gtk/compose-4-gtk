@@ -16,7 +16,7 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.BottomSheet
 
 /**
- * A bottom sheet with an optional bottom bar.
+ * Creates a [org.gnome.adw.BottomSheet] which displays a bottom sheet with an optional bottom bar.
  *
  * @param open Whether the sheet is currently opened.
  * @param modifier Compose [Modifier] for layout and styling.

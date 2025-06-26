@@ -18,6 +18,30 @@ private class GtkLabelComposeNode(gObject: Label) : LeafComposeNode<Label>(gObje
     var onCopyClipboard: SignalConnection<Label.CopyClipboardCallback>? = null
 }
 
+/**
+ * Creates a [org.gnome.gtk.Label] that displays text.
+ *
+ * @param text The displayed text.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param ellipsize The mode used to ellipsize the text if it does not have enough space.
+ * @param justify The alignment of the lines in the text.
+ * @param lines The number of lines to which an ellipsized, wrapping label should display before it gets ellipsized.
+ * @param maxWidthChars The desired maximum width of the label, in characters.
+ * @param naturalWrapMode Selects the line wrapping for the natural size request.
+ * @param selectable Whether the text can be selected.
+ * @param singleLineMode Whether the label is in single line mode.
+ * @param useMarkup Whether the text uses Pango markup.
+ * @param useUnderline Whether to use an underscore in the label for mnemonic activation.
+ * @param widthChars The desired width of the label, in characters.
+ * @param wrap Whether the text wraps if it's too long.
+ * @param wrapMode The mode used to wrap the text.
+ * @param xAlign The horizontal alignment of the text.
+ * @param yAlign The vertical alignment of the text.
+ * @param onActivateCurrentLink Callback triggered when a link inside the text is activated using keyboard
+ * navigation or accessibility tools.
+ * @param onActivateLink Callback triggered when the link is activated. Return `true` to handle the event manually.
+ * @param onCopyClipboard Callback triggered when the text is copied.
+ */
 @Composable
 fun Label(
     text: String,

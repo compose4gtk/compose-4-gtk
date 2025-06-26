@@ -15,7 +15,7 @@ import org.gnome.adw.ToolbarView
 import org.gnome.gtk.Widget
 
 /**
- * A widget containing a page, as well as top and/or bottom bars.
+ * Creates a [org.gnome.adw.ToolbarView] that contains a page, as well as top and/or bottom bars.
  *
  * @param modifier Compose [Modifier] for layout and styling.
  * @param topBarStyle Appearance of the top bars.

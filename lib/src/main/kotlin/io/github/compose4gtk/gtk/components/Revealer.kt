@@ -9,6 +9,15 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.gtk.Revealer
 import org.gnome.gtk.RevealerTransitionType
 
+/**
+ * Creates a [org.gnome.gtk.Revealer] that animates the transition of its child's visibility.
+ *
+ * @param reveal Whether the child is visible or invisible.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param transitionType The type of animation that will be used.
+ * @param transitionDuration The duration, in milliseconds, of the animation.
+ * @param content The composable content to display.
+ */
 @Composable
 fun Revealer(
     reveal: Boolean,

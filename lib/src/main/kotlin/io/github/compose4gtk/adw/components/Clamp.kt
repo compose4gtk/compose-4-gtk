@@ -27,7 +27,6 @@ fun VerticalClamp(
     Clamp(modifier, Orientation.VERTICAL, maximumSize, tighteningThreshold, content)
 }
 
-
 /**
  * A horizontally oriented [Clamp]
  *
@@ -47,7 +46,7 @@ fun HorizontalClamp(
 }
 
 /**
- * A widget constraining its child to a given size.
+ * Creates a [org.gnome.adw.Clamp] that constrains its child to a given size.
  *
  * @param modifier Compose [Modifier] for layout and styling.
  * @param orientation The axis in which clamping is applied.

@@ -24,8 +24,11 @@ sealed interface ImageSize {
 }
 
 /**
- * Composable for GTK's [org.gnome.gtk.Image].
- * Generally used to display an icon.
+ * Creates a [org.gnome.gtk.Image] that displays an image. Generally used to display an icon.
+ *
+ * @param image The image to display.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param iconSize The size of the image.
  */
 @Composable
 fun Image(

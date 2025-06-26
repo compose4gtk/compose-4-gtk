@@ -29,7 +29,7 @@ fun main(args: Array<String>) {
                 Overlay(
                     mainChild = {
                         Picture(
-                            ImageSource.forFile(File.newForPath("src/test/gresources/images/lulu.jpg")),
+                            ImageSource.forFile(File.newForPath("lib/src/test/gresources/images/lulu.jpg")),
                             contentFit = ContentFit.COVER,
                             modifier = Modifier.expandVertically(),
                         )

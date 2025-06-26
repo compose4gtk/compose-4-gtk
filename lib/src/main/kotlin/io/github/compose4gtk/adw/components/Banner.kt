@@ -15,7 +15,7 @@ private class AdwBannerComposeNode(
 }
 
 /**
- * A bar with contextual information.
+ * Creates a [org.gnome.adw.Banner], a bar with contextual information.
  *
  * @param modifier Compose [Modifier] for layout and styling.
  * @param title Text displayed on the [Banner].

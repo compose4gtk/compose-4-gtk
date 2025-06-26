@@ -53,7 +53,7 @@ private class OverlaySplitViewImpl : OverlaySplitViewScope {
 }
 
 /**
- * A widget presenting sidebar and content side by side or as an overlay.
+ * Creates a [org.gnome.adw.OverlaySplitView] that presents a sidebar and content side by side or as an overlay.
  *
  * @param sidebar Composable widget displayed as the sidebar.
  * @param modifier Compose [Modifier] for layout and styling.

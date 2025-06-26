@@ -9,6 +9,9 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.gtk.Orientation
 import org.gnome.gtk.Separator
 
+/**
+ * A vertically aligned [Separator].
+ */
 @Composable
 fun VerticalSeparator(
     modifier: Modifier = Modifier,
@@ -16,6 +19,9 @@ fun VerticalSeparator(
     Separator(modifier, Orientation.VERTICAL)
 }
 
+/**
+ * A horizontally aligned [Separator].
+ */
 @Composable
 fun HorizontalSeparator(
     modifier: Modifier = Modifier,
@@ -23,6 +29,12 @@ fun HorizontalSeparator(
     Separator(modifier, Orientation.HORIZONTAL)
 }
 
+/**
+ * Creates a [org.gnome.gtk.Separator] that draws a line to separate other widgets.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param orientation The separator orientation.
+ */
 @Composable
 fun Separator(
     modifier: Modifier = Modifier,

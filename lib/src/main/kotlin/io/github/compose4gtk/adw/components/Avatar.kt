@@ -11,7 +11,7 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.Avatar
 
 /**
- * A widget displaying an image, with a generated fallback.
+ * Creates a [org.gnome.adw.Avatar] that displays an image, with a generated fallback.
  *
  * @param image The image used as the avatar.
  * @param text Fallback source string for initials when [image] is `null`.

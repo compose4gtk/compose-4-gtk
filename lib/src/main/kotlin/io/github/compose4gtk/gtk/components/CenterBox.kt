@@ -14,6 +14,18 @@ import org.gnome.gtk.CenterBox
 import org.gnome.gtk.Orientation
 import org.gnome.gtk.Widget
 
+/**
+ * Creates a [org.gnome.gtk.CenterBox] that arranges three children in a row,
+ * keeping the middle child centered as well as possible.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param orientation The axis on which the children are aligned.
+ * @param start The start composable widget.
+ * @param end The end composable widget.
+ * @param baselinePosition The baseline position of the center box.
+ * @param shrinkCenterLast Whether to shrink the center widget after other children.
+ * @param center The center composable widget.
+ */
 @Composable
 fun CenterBox(
     modifier: Modifier = Modifier,

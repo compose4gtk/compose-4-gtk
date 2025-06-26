@@ -9,7 +9,7 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.WindowTitle
 
 /**
- * A helper widget for setting a window’s title and subtitle.
+ * Creates a [org.gnome.adw.WindowTitle] that helps to set a window’s title and subtitle.
  *
  * @param title The title to display.
  * @param modifier Compose [Modifier] for layout and styling.

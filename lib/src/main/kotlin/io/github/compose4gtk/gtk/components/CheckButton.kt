@@ -130,7 +130,7 @@ private fun BaseCheckButton(
 }
 
 /**
- * Creates a [CheckButton] without a label or custom child content.
+ * Creates a [org.gnome.gtk.CheckButton] without a label or custom child content.
  *
  * @param active Whether the check button is currently active.
  * @param onActiveRequest Callback invoked when the check button is toggled.
@@ -156,7 +156,7 @@ fun CheckButton(
 }
 
 /**
- * Creates a [RadioButton] without a label or custom child content.
+ * Creates a [org.gnome.gtk.CheckButton] as a radio button without a label or custom child content.
  *
  * @param state Shared radio group state for grouping buttons.
  * @param active Whether the check button is currently active.
@@ -189,7 +189,7 @@ fun RadioButton(
 }
 
 /**
- * Creates a [CheckButton] with a simple text [label].
+ * Creates a [org.gnome.gtk.CheckButton] with a simple text [label].
  *
  * @param active Whether the check button is currently active.
  * @param label Text label.
@@ -218,7 +218,7 @@ fun CheckButton(
 }
 
 /**
- * Creates a [RadioButton] with a simple text [label].
+ * Creates a [org.gnome.gtk.CheckButton] as a radio button with a simple text [label].
  *
  * @param state Shared radio group state for grouping buttons.
  * @param active Whether the check button is currently active.
@@ -254,7 +254,7 @@ fun RadioButton(
 }
 
 /**
- * Creates a [CheckButton] with a custom child composable as its content.
+ * Creates a [org.gnome.gtk.CheckButton] with a custom child composable as its content.
  *
  * @param active Whether the check button is currently active.
  * @param onActiveRequest Callback invoked when the check button is toggled.
@@ -283,7 +283,7 @@ fun CheckButton(
 }
 
 /**
- * Creates a [RadioButton] with a custom child composable as its content.
+ * Creates a [org.gnome.gtk.CheckButton] as a radio button with a custom child composable as its content.
  *
  * @param modifier The modifier to apply to the widget.
  * @param state Shared radio group state for grouping buttons.
