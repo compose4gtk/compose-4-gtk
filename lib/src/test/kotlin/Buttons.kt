@@ -32,12 +32,12 @@ fun main(args: Array<String>) {
                         Label("Button (custom child)")
                     }
                     Button(onClick = { println("Clicked!") }) {
-                        ButtonContent(null, iconName = ImageSource.Icon("media-playback-start-symbolic"))
+                        ButtonContent("", icon = ImageSource.Icon("media-playback-start-symbolic"))
                     }
                     Button(onClick = { println("Clicked!") }) {
                         ButtonContent(
                             label = "Button",
-                            iconName = ImageSource.Icon("media-playback-start-symbolic"),
+                            icon = ImageSource.Icon("media-playback-start-symbolic"),
                         )
                     }
                     var active by remember { mutableStateOf(false) }
