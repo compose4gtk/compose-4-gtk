@@ -8,6 +8,12 @@ import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
 import org.gnome.gtk.Spinner
 
+/**
+ * Creates a [org.gnome.gtk.Spinner] that displays an icon-size spinning animation.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param spinning Whether the spinner should be spinning.
+ */
 @Composable
 fun Spinner(
     modifier: Modifier = Modifier,

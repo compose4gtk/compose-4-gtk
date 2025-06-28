@@ -35,6 +35,11 @@ private class ProgressBarStateImpl : ProgressBarState {
     }
 }
 
+/**
+ * Creates and remembers a [ProgressBarState] for controlling a [ProgressBar] composable.
+ *
+ * @param fraction The level to which the progress bar is filled.
+ */
 @Composable
 fun rememberProgressBarState(fraction: Double): ProgressBarState {
     val state = remember { ProgressBarStateImpl() }
@@ -42,6 +47,18 @@ fun rememberProgressBarState(fraction: Double): ProgressBarState {
     return state
 }
 
+/**
+ * Creates a [org.gnome.gtk.ProgressBar] that displays the progress of a long-running operation.
+ *
+ * @param state The shared [ProgressBarState] instance.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param ellipsize The mode used to ellipsize the text.
+ * @param inverted Whether the progress bar is inverted.
+ * @param pulseStep The fraction of total progress bar length
+ * to move the bouncing block when [ProgressBarState.pulse] is called.
+ * @param showText Whether the progress bar will show text next to the bar.
+ * @param text The text showed next to the progress bar.
+ */
 @Composable
 fun ProgressBar(
     state: ProgressBarState,

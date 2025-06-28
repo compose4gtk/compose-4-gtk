@@ -31,6 +31,20 @@ private class GtkFlowBoxComposeNode(gObject: FlowBox) : GtkContainerComposeNode<
 private val nullAdjustment = Adjustment.builder().build()
 
 /**
+ * Creates a [org.gnome.gtk.FlowBox] that arranges its children in a reflowing grid.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param orientation The axis on which the children are aligned.
+ * @param activateOnSingleClick Whether children can be activated with a single click instead of a double click.
+ * @param columnSpacing The horizontal space between two children.
+ * @param rowSpacing The vertical space between two children.
+ * @param horizontalAdjustment An [Adjustment] used to change the horizontal handling of the children.
+ * @param verticalAdjustment An [Adjustment] used to change the vertical handling of the children.
+ * @param homogeneous Whether all children should be allocated the same size.
+ * @param maxChildrenPerLine The maximum amount of children on a line.
+ * @param minChildrenPerLine The minimum amount of children on a line.
+ * @param content The composable children.
+ *
  * TODO:
  *  - model
  *  - select

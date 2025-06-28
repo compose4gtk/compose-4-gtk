@@ -10,11 +10,18 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.Toast
 import org.gnome.adw.ToastOverlay
 
+/**
+ * Receiver scope for the content lambda of [ToastOverlay].
+ */
 interface ToastOverlayScope {
     /**
-     * Shows a Toast
+     * Shows a toast.
      */
     fun addToast(toast: Toast)
+
+    /**
+     * Dismisses all displayed toasts.
+     */
     fun dismissAllToasts()
 }
 
@@ -29,6 +36,18 @@ private class ToastOverlayScopeImpl : ToastOverlayScope {
     }
 }
 
+/**
+ * Creates a [org.gnome.adw.ToastOverlay] that shows toasts above its content.
+ *
+ * This composable introduces a [ToastOverlayScope] as the receiver in its `content` lambda,
+ * giving access to the following functions:
+ *
+ * - [ToastOverlayScope.addToast]
+ * - [ToastOverlayScope.dismissAllToasts]
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param content The composable content to display.
+ */
 @Composable
 fun ToastOverlay(
     modifier: Modifier = Modifier,

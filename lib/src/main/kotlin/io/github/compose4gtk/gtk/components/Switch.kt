@@ -18,6 +18,13 @@ private class GtkSwitchComposeNode(
     var onStateSet: SignalConnection<Switch.StateSetCallback>? = null
 }
 
+/**
+ * Creates a [org.gnome.gtk.Switch] used for toggle states.
+ *
+ * @param active The state of the switch.
+ * @param onToggle Callback triggered when the switch is toggled.
+ * @param modifier Compose [Modifier] for layout and styling.
+ */
 @Composable
 fun Switch(
     active: Boolean,

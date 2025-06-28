@@ -12,6 +12,12 @@ import org.gnome.gtk.LevelBarMode
 import org.gnome.gtk.Orientation
 import kotlin.collections.mutableListOf
 
+/**
+ * A mark that can be used on [LevelBar] to give it a style based on its current value.
+ *
+ * @param name The name of the offset.
+ * @param value The value at which the offset is applied.
+ */
 data class Offset(val name: String, val value: Double)
 
 private fun LevelBar.syncOffsets(
@@ -32,6 +38,18 @@ private fun LevelBar.syncOffsets(
     }
 }
 
+/**
+ * Creates a [org.gnome.gtk.LevelBar] that shows a level indicator.
+ *
+ * @param value The level at which the level bar is filled.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param orientation The orientation of the level bar.
+ * @param inverted Whether the level bar is inverted.
+ * @param maxValue The maximum value that can be reached.
+ * @param minValue The minimum value.
+ * @param mode The level bar mode.
+ * @param offsets A list of [Offset] used to apply styles on the level bar.
+ */
 @Composable
 fun LevelBar(
     value: Double,

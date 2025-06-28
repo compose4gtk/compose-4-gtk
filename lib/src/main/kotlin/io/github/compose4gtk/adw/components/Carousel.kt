@@ -58,14 +58,6 @@ sealed interface CarouselState {
     fun scrollTo(pageNumber: Int, animate: Boolean = true)
 }
 
-@Composable
-fun rememberCarouselState(pageCount: Int, orientation: Orientation = Orientation.HORIZONTAL): CarouselState {
-    val state = remember { CarouselStateImpl() }
-    state.pageCount = pageCount
-    state.orientation = orientation
-    return state
-}
-
 private class CarouselStateImpl : CarouselState {
     override var carousel: Carousel? = null
         set(value) {
@@ -92,6 +84,35 @@ private class CarouselStateImpl : CarouselState {
     }
 }
 
+/**
+ * Creates and remembers a [CarouselState] for controlling a [Carousel] composable.
+ *
+ * @param pageCount Total number of pages in the carousel.
+ * @param orientation The scrolling direction.
+ */
+@Composable
+fun rememberCarouselState(pageCount: Int, orientation: Orientation = Orientation.HORIZONTAL): CarouselState {
+    val state = remember { CarouselStateImpl() }
+    state.pageCount = pageCount
+    state.orientation = orientation
+    return state
+}
+
+/**
+ * Creates a [org.gnome.adw.Carousel], a paginated scrolling widget.
+ *
+ * @param state The shared [CarouselState] instance.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param allowLongSwipes Whether swipes can navigate across multiple pages at once.
+ * @param allowMouseDrag Whether the carousel can be dragged with the mouse pointer.
+ * @param allowScrollWheel Enables scrolling between pages with the mouse wheel.
+ * @param interactive Whether the carousel can be navigated.
+ * @param revealDuration Duration in milliseconds for page transition animations.
+ * @param scrollParams The parameters for animating the carousel's scroll.
+ * @param spacing The space between each page.
+ * @param onPageChange Callback triggered when the current page changes.
+ * @param content Composable widget that represents the pages.
+ */
 @Composable
 fun Carousel(
     state: CarouselState,
@@ -148,6 +169,12 @@ fun Carousel(
     )
 }
 
+/**
+ * Creates a [org.gnome.adw.CarouselIndicatorDots], a dots indicator for [Carousel].
+ *
+ * @param carouselState The [CarouselState] used by the carousel.
+ * @param modifier Compose [Modifier] for layout and styling.
+ */
 @Composable
 fun CarouselIndicatorDots(
     carouselState: CarouselState,
@@ -162,6 +189,12 @@ fun CarouselIndicatorDots(
     }
 }
 
+/**
+ * Creates a [org.gnome.adw.CarouselIndicatorLines], a lines indicator for [Carousel].
+ *
+ * @param carouselState The [CarouselState] used by the carousel.
+ * @param modifier Compose [Modifier] for layout and styling.
+ */
 @Composable
 fun CarouselIndicatorLines(
     carouselState: CarouselState,

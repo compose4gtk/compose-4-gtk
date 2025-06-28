@@ -10,6 +10,15 @@ import io.github.compose4gtk.gtk.setImage
 import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.StatusPage
 
+/**
+ * Creates a [org.gnome.adw.StatusPage] used for empty/error states and similar use-cases.
+ *
+ * @param title The title to be displayed below the icon.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param description The description markup to be displayed below the title.
+ * @param icon The icon to be used.
+ * @param content The composable content to display.
+ */
 @Composable
 fun StatusPage(
     title: String,

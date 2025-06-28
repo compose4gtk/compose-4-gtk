@@ -71,6 +71,14 @@ private fun BaseButton(
     )
 }
 
+/**
+ * Creates a [org.gnome.gtk.Button] that triggers a callback when clicked.
+ *
+ * @param label The text displayed in the button.
+ * @param onClick Callback triggered when the button is clicked.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param hasFrame Whether the button has a frame.
+ */
 @Composable
 fun Button(
     label: String,
@@ -79,6 +87,13 @@ fun Button(
     hasFrame: Boolean = true,
 ) = BaseButton(label, onClick, modifier, hasFrame, child = {})
 
+/**
+ * Creates a [org.gnome.gtk.Button] that triggers a callback when clicked.
+ *
+ * @param onClick Callback triggered when the button is clicked.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param hasFrame Whether the button has a frame.
+ */
 @Composable
 fun Button(
     onClick: () -> Unit,
@@ -124,6 +139,15 @@ private fun BaseToggleButton(
     )
 }
 
+/**
+ * Creates a [org.gnome.gtk.ToggleButton] used for toggle states.
+ *
+ * @param label The text displayed in the button.
+ * @param active Whether the button is toggled.
+ * @param onToggle Callback triggered when the button is toggled.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param hasFrame Whether the button has a frame.
+ */
 @Composable
 fun ToggleButton(
     label: String,
@@ -133,6 +157,14 @@ fun ToggleButton(
     hasFrame: Boolean = true,
 ) = BaseToggleButton(label, active, onToggle, modifier, hasFrame, child = {})
 
+/**
+ * Creates a [org.gnome.gtk.ToggleButton] used for toggle states.
+ *
+ * @param active Whether the button is toggled.
+ * @param onToggle Callback triggered when the button is toggled.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param hasFrame Whether the button has a frame.
+ */
 @Composable
 fun ToggleButton(
     active: Boolean,
@@ -142,6 +174,14 @@ fun ToggleButton(
     child: @Composable () -> Unit = {},
 ) = BaseToggleButton(label = null, active, onToggle, modifier, hasFrame, child)
 
+/**
+ * Creates a [org.gnome.gtk.Button] with a single icon.
+ *
+ * @param icon The icon displayed in the button.
+ * @param onClick Callback triggered when the button is clicked.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param hasFrame Whether the button has a frame.
+ */
 @Composable
 fun IconButton(
     icon: ImageSource.Icon,
@@ -165,6 +205,15 @@ fun IconButton(
     )
 }
 
+/**
+ * Creates a [org.gnome.gtk.LinkButton] that opens a URI.
+ *
+ * @param label The text displayed in the button.
+ * @param uri The URI that the button should open when activated.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param visited Indicates whether the URI has already been visited.
+ * @param onActivateLink Callback triggered when the link is activated. Return `true` to handle the event manually.
+ */
 @Composable
 fun LinkButton(
     label: String,

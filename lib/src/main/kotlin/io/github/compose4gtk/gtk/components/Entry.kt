@@ -57,6 +57,29 @@ private data class PendingDelete(val startPos: Int, val endPos: Int) {
 }
 
 /**
+ * Creates a [org.gnome.gtk.Entry] used to input text.
+ *
+ * @param text The text in the entry.
+ * @param onTextChange Callback triggered when the text is changed.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param attributes A list of Pango attributes to apply to the text of the entry.
+ * @param placeholderText The text displayed when the entry is empty and unfocused.
+ * @param editable Whether the text can be edited.
+ * @param visibility Whether the contents of the entry are visible.
+ * @param activatesDefault Whether pressing `Enter` in will activate the default widget
+ * for the window containing the entry.
+ * @param alignment The alignment for the contents of the entry.
+ * @param hasFrame Whether the entry has a frame.
+ * @param inputHints Additional hints which allow input methods to fine-tune their behavior.
+ * @param inputPurpose The input purpose which can be used by input methods to adjust their behavior.
+ * @param invisibleChar The character to use in place of the actual text when visibility is `false`.
+ * @param maxLength The maximum allowed length of the contents.
+ * @param progressFraction The level at which the progress indicator of the entry is filled.
+ * @param tabs A list of tabstops to apply to the text of the entry.
+ * @param enableUndo Whether changes to this entry will be saved for undo/redo actions.
+ * @param maxWidthChars The desired maximum width of the entry, in characters.
+ * @param widthChars Number of characters to leave space for in the entry.
+ *
  * TODO:
  *  - setExtraMenu
  *  - Icons

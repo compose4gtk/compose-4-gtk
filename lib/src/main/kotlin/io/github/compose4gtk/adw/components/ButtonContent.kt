@@ -9,6 +9,15 @@ import io.github.compose4gtk.gtk.ImageSource
 import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.ButtonContent
 
+/**
+ * Creates a [org.gnome.adw.ButtonContent], a container used to display a label and an icon inside buttons.
+ *
+ * @param label Text displayed inside the button.
+ * @param iconName The icon displayed inside the button.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param useUnderline Whether an underline in the text indicates a mnemonic.
+ * @param canShrink Whether the button can be smaller than the natural size of its contents.
+ */
 @Composable
 fun ButtonContent(
     label: String,

@@ -12,6 +12,13 @@ import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.modifier.Modifier
 import org.gnome.gtk.Overlay
 
+/**
+ * Creates a [org.gnome.gtk.Overlay] that places widgets on top of a single main child.
+ *
+ * @param mainChild The child underneath the overlay.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param overlays The composable content to display on top of [mainChild].
+ */
 @Composable
 fun Overlay(
     mainChild: @Composable () -> Unit,

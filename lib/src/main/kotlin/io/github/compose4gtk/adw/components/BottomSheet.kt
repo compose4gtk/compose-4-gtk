@@ -15,6 +15,23 @@ import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.BottomSheet
 
+/**
+ * Creates a [org.gnome.adw.BottomSheet] which displays a bottom sheet with an optional bottom bar.
+ *
+ * @param open Whether the sheet is currently opened.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param align Determines where the sheet is placed along the bottom edge.
+ * @param canClose Whether it can be closed by clicking outside the sheet or by dragging the handle.
+ * @param canOpen Whether it can be opened by clicking or dragging the handle.
+ * @param fullWidth Takes the whole width of its container.
+ * @param modal Dims the background and makes it inaccessible while the sheet is opened.
+ * @param showDragHandle Whether the drag handle is currently shown.
+ * @param onClose Callback triggered when the sheet is closed.
+ * @param onOpen Callback triggered when the sheet is opened.
+ * @param bottomBar A composable widget displayed as the drag handle.
+ * @param sheet A composable widget displayed inside the sheet.
+ * @param content A composable widget that's displayed underneath the sheet.
+ */
 @Composable
 fun BottomSheet(
     open: Boolean,

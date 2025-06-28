@@ -9,6 +9,14 @@ import io.github.compose4gtk.modifier.Modifier
 import org.gnome.gtk.Orientation
 import org.gnome.adw.Clamp as GtkClamp
 
+/**
+ * A vertically oriented [Clamp].
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param maximumSize The maximum size allocated to the child.
+ * @param tighteningThreshold The size above which the child is clamped.
+ * @param content The composable content to display inside the clamp.
+ */
 @Composable
 fun VerticalClamp(
     modifier: Modifier = Modifier,
@@ -19,6 +27,14 @@ fun VerticalClamp(
     Clamp(modifier, Orientation.VERTICAL, maximumSize, tighteningThreshold, content)
 }
 
+/**
+ * A horizontally oriented [Clamp]
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param maximumSize The maximum size allocated to the child.
+ * @param tighteningThreshold The size above which the child is clamped.
+ * @param content The composable content to display inside the clamp.
+ */
 @Composable
 fun HorizontalClamp(
     modifier: Modifier = Modifier,
@@ -29,6 +45,15 @@ fun HorizontalClamp(
     Clamp(modifier, Orientation.HORIZONTAL, maximumSize, tighteningThreshold, content)
 }
 
+/**
+ * Creates a [org.gnome.adw.Clamp] that constrains its child to a given size.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param orientation The axis in which clamping is applied.
+ * @param maximumSize The maximum size allocated to the child.
+ * @param tighteningThreshold The size above which the child is clamped.
+ * @param content The composable content to display inside the clamp.
+ */
 @Composable
 fun Clamp(
     modifier: Modifier = Modifier,

@@ -7,10 +7,18 @@ import io.github.compose4gtk.GtkComposeWidget
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.gtk.ImageSource
 import io.github.compose4gtk.gtk.setImage
-import io.github.compose4gtk.gtk.setPaintable
 import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.Avatar
 
+/**
+ * Creates a [org.gnome.adw.Avatar] that displays an image, with a generated fallback.
+ *
+ * @param image The image used as the avatar.
+ * @param text Fallback source string for initials when [image] is `null`.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param showInitials Replaces the initials with the default symbolic icon
+ * @param size The size of the avatar
+ */
 @Composable
 fun Avatar(
     image: ImageSource?,

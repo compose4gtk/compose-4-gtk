@@ -32,6 +32,14 @@ private class GtkBoxComposeNode(gObject: GtkBox) : GtkContainerComposeNode<GtkBo
     }
 }
 
+/**
+ * A vertically aligned [Box]
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param spacing The space between the child widgets.
+ * @param homogeneous Whether all children are given equal space in the box.
+ * @param content The composable content to display.
+ */
 @Composable
 fun VerticalBox(
     modifier: Modifier = Modifier,
@@ -42,6 +50,14 @@ fun VerticalBox(
     Box(modifier, Orientation.VERTICAL, spacing, homogeneous, content)
 }
 
+/**
+ * A horizontally aligned [Box]
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param spacing The space between the child widgets.
+ * @param homogeneous Whether all children are given equal space in the box.
+ * @param content The composable content to display.
+ */
 @Composable
 fun HorizontalBox(
     modifier: Modifier = Modifier,
@@ -52,6 +68,15 @@ fun HorizontalBox(
     Box(modifier, Orientation.HORIZONTAL, spacing, homogeneous, content)
 }
 
+/**
+ * Creates a [org.gnome.gtk.Box] that arranges child widgets into a single row or column.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param orientation The axis on which the children are aligned.
+ * @param spacing The space between the child widgets.
+ * @param homogeneous Whether all children are given equal space in the box.
+ * @param content The composable content to display.
+ */
 @Composable
 fun Box(
     modifier: Modifier = Modifier,
