@@ -54,6 +54,6 @@ fun ButtonRow(
                 this.activated?.disconnect()
                 this.activated = this.widget.onActivated(it)
             }
-        }
+        },
     )
 }

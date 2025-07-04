@@ -35,7 +35,7 @@ fun main(args: Array<String>) {
                         endIcon = ImageSource.Icon("edit-delete-symbolic"),
                         onActivate = {
                             logger.info { "I deleted stuff" }
-                        }
+                        },
                     )
                 }
             }
