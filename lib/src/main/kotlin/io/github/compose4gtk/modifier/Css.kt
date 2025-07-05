@@ -6,7 +6,11 @@ fun Modifier.cssClasses(vararg classes: String) = combine(
             it.addCssClass(cssClass)
         }
     },
-    undo = { it.cssClasses = emptyArray() },
+    undo = {
+        for (cssClass in classes) {
+            it.removeCssClass(cssClass)
+        }
+    },
 )
 
 fun Modifier.cssClasses(classes: List<String>) = combine(
@@ -15,5 +19,9 @@ fun Modifier.cssClasses(classes: List<String>) = combine(
             it.addCssClass(cssClass)
         }
     },
-    undo = { it.cssClasses = emptyArray() },
+    undo = {
+        for (cssClass in classes) {
+            it.removeCssClass(cssClass)
+        }
+    },
 )
