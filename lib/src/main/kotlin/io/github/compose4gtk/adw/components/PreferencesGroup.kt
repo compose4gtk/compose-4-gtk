@@ -11,6 +11,16 @@ import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.PreferencesGroup
 
+/**
+ * Creates a [org.gnome.adw.PreferencesGroup] used to group [org.gnome.adw.PreferencesRow] widgets.
+ *
+ * @param title The title of the group.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param description The description of the group.
+ * @param headerSuffix Composable component displayed after the title and description.
+ * @param separateRows Whether the rows are separated.
+ * @param content The composable components used as rows inside the group.
+ */
 @Composable
 fun PreferencesGroup(
     title: String,
