@@ -31,6 +31,7 @@ fun HeaderBar(
     centeringPolicy: CenteringPolicy = CenteringPolicy.LOOSE,
     showEndTitleButtons: Boolean = true,
     showStartTitleButtons: Boolean = true,
+    showTitle: Boolean = true,
     title: (@Composable () -> Unit)? = null,
     startWidgets: @Composable () -> Unit = {},
     endWidgets: @Composable () -> Unit = {},
@@ -44,6 +45,7 @@ fun HeaderBar(
             set(centeringPolicy) { this.widget.centeringPolicy = it }
             set(showEndTitleButtons) { this.widget.showEndTitleButtons = it }
             set(showStartTitleButtons) { this.widget.showStartTitleButtons = it }
+            set(showTitle) { this.widget.showTitle = it }
         },
         content = {
             Pack({ packStart(it) }, startWidgets)
