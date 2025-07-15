@@ -55,11 +55,26 @@ private class NavigationSplitViewStateImpl : NavigationSplitViewState {
     }
 }
 
+/**
+ * Creates and remembers a [NavigationSplitViewState] for controlling a navigation split view.
+ */
 @Composable
 fun rememberNavigationSplitViewState(): NavigationSplitViewState {
     return remember { NavigationSplitViewStateImpl() }
 }
 
+/**
+ * Creates a [org.gnome.adw.NavigationSplitView] that displays a sidebar and content side by side.
+ *
+ * @param state A [NavigationSplitViewState] used to control the split view.
+ * @param sidebar A composable widget used as the sidebar. Needs to be a [NavigationPage].
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param maxSidebarWidth The maximum width of the sidebar.
+ * @param minSidebarWidth The minimum width of the sidebar.
+ * @param sidebarWidthFraction The preferred sidebar width as a fraction of the total width.
+ * @param sidebarWidthUnit The length unit for minimum and maximum sidebar widths.
+ * @param content A composable widget used as the content. Needs to be a [NavigationPage].
+ */
 @Composable
 fun NavigationSplitView(
     state: NavigationSplitViewState,

@@ -21,6 +21,7 @@ import org.gnome.gtk.Widget
  * @param centeringPolicy The policy for aligning the center widget.
  * @param showEndTitleButtons Whether to show title buttons at the end of the header bar.
  * @param showStartTitleButtons Whether to show title buttons at the start of the header bar.
+ * @param showTitle Whether the title is shown.
  * @param title Composable widget to display as the title.
  * @param startWidgets Composable widget displayed at the start of the header.
  * @param endWidgets Composable widget displayed at the end of the header.

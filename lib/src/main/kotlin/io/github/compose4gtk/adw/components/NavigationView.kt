@@ -93,11 +93,25 @@ private class NavigationViewStateImpl : NavigationViewState {
     }
 }
 
+/**
+ * Creates and remembers a [NavigationViewState] for controlling a navigation stack.
+ */
 @Composable
 fun rememberNavigationViewState(): NavigationViewState {
     return remember { NavigationViewStateImpl() }
 }
 
+/**
+ * Creates a [org.gnome.adw.NavigationView] used to display navigation pages.
+ *
+ * @param state A [NavigationViewState] used to control navigation pages.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param animateTransitions Whether page transitions are animated.
+ * @param horizontallyHomogenous Whether the view is horizontally homogeneous.
+ * @param popOnEscape Whether pressing `Escape` pops the current page.
+ * @param verticallyHomogenous Whether the view is vertically homogeneous.
+ * @param content Composable [NavigationPage] widgets.
+ */
 @Composable
 fun NavigationView(
     state: NavigationViewState,
