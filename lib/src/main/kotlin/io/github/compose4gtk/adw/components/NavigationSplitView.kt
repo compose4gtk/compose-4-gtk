@@ -13,9 +13,12 @@ import io.github.compose4gtk.SingleChildComposeNode
 import io.github.compose4gtk.VirtualComposeNode
 import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.modifier.Modifier
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.gnome.adw.LengthUnit
 import org.gnome.adw.NavigationPage as AdwNavigationPage
 import org.gnome.adw.NavigationSplitView as AdwNavigationSplitView
+
+private val logger = KotlinLogging.logger {}
 
 sealed interface NavigationSplitViewState {
     var navigationSplitView: AdwNavigationSplitView?
@@ -107,9 +110,7 @@ private fun Sidebar(
                             if (it is AdwNavigationPage) {
                                 navigationSplitView.sidebar = it
                             } else {
-                                val navigationPage = AdwNavigationPage()
-                                navigationPage.child = it
-                                navigationSplitView.sidebar = navigationPage
+                                logger.error { "Sidebar must be inside a NavigationPage" }
                             }
                         }
                     },
@@ -135,9 +136,7 @@ private fun Content(
                             if (it is AdwNavigationPage) {
                                 navigationSplitView.content = it
                             } else {
-                                val navigationPage = AdwNavigationPage()
-                                navigationPage.child = it
-                                navigationSplitView.content = navigationPage
+                                logger.error { "Content must be inside a NavigationPage" }
                             }
                         }
                     },
