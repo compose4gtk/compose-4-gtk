@@ -8,16 +8,21 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.github.compose4gtk.GtkApplier
+import io.github.compose4gtk.GtkComposeNode
 import io.github.compose4gtk.GtkComposeWidget
+import io.github.compose4gtk.GtkContainerComposeNode
 import io.github.compose4gtk.LeafComposeNode
+import io.github.compose4gtk.VirtualComposeNode
+import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gobject.SignalConnection
-import org.gnome.adw.ActionRow
-import org.gnome.adw.SwitchRow
-import org.gnome.gtk.Switch
+import org.gnome.gtk.Widget
+import org.gnome.adw.ActionRow as AdwActionRow
+import org.gnome.adw.SwitchRow as AdwSwitchRow
+import org.gnome.gtk.Switch as GtkSwitch
 
 @Composable
-private fun <W : GtkComposeWidget<ActionRow>> GenericActionRow(
+private fun <W : GtkComposeWidget<AdwActionRow>> GenericActionRow(
     creator: () -> W,
     updater: Updater<W>.() -> Unit,
     title: String,
@@ -29,6 +34,7 @@ private fun <W : GtkComposeWidget<ActionRow>> GenericActionRow(
     subtitleLines: Int = 0,
     subtitleSelectable: Boolean = false,
     titleLines: Int = 0,
+    content: @Composable () -> Unit = {},
 ) {
     ComposeNode<W, GtkApplier>(
         factory = creator,
@@ -44,11 +50,147 @@ private fun <W : GtkComposeWidget<ActionRow>> GenericActionRow(
             set(titleLines) { this.widget.titleLines = it }
             updater()
         },
+        content = content,
     )
 }
 
-private class AdwSwitchRowComposeNode(gObject: SwitchRow) : LeafComposeNode<SwitchRow>(gObject) {
-    var activated: SignalConnection<Switch.StateSetCallback>? = null
+private class AdwActionRowPrefixContainer(
+    private val actionRow: AdwActionRow,
+) : GtkContainerComposeNode<AdwActionRow>(actionRow) {
+    private val currentlyAdded = mutableListOf<Widget>()
+
+    private fun syncChildren() {
+        currentlyAdded.forEach { widget.remove(it) }
+        currentlyAdded.clear()
+
+        children.forEach { child ->
+            widget.addPrefix(child)
+            widget.activatableWidget = child
+            currentlyAdded.add(child)
+        }
+    }
+
+    override fun addNode(index: Int, child: GtkComposeWidget<Widget>) {
+        super.addNode(index, child)
+        syncChildren()
+    }
+
+    override fun removeNode(index: Int) {
+        super.removeNode(index)
+        syncChildren()
+    }
+
+    override fun clearNodes() {
+        currentlyAdded.forEach { widget.remove(it) }
+        currentlyAdded.clear()
+        super.clearNodes()
+    }
+}
+
+@Composable
+private fun Prefix(
+    content: @Composable () -> Unit,
+) {
+    ComposeNode<GtkComposeNode, GtkApplier>(
+        factory = {
+            VirtualComposeNode<AdwActionRow> { actionRow ->
+                AdwActionRowPrefixContainer(actionRow)
+            }
+        },
+        update = {},
+        content = content,
+    )
+}
+
+private class AdwActionRowSuffixContainer(
+    private val actionRow: AdwActionRow,
+) : GtkContainerComposeNode<AdwActionRow>(actionRow) {
+    private val currentlyAdded = mutableListOf<Widget>()
+
+    private fun syncChildren() {
+        currentlyAdded.forEach { widget.remove(it) }
+        currentlyAdded.clear()
+
+        children.forEach { child ->
+            widget.addSuffix(child)
+            widget.activatableWidget = child
+            currentlyAdded.add(child)
+        }
+    }
+
+    override fun addNode(index: Int, child: GtkComposeWidget<Widget>) {
+        super.addNode(index, child)
+        syncChildren()
+    }
+
+    override fun removeNode(index: Int) {
+        super.removeNode(index)
+        syncChildren()
+    }
+
+    override fun clearNodes() {
+        currentlyAdded.forEach { widget.remove(it) }
+        currentlyAdded.clear()
+        super.clearNodes()
+    }
+}
+
+@Composable
+private fun Suffix(
+    content: @Composable () -> Unit,
+) {
+    ComposeNode<GtkComposeNode, GtkApplier>(
+        factory = {
+            VirtualComposeNode<AdwActionRow> { actionRow ->
+                AdwActionRowSuffixContainer(actionRow)
+            }
+        },
+        update = {},
+        content = content,
+    )
+}
+
+@Composable
+fun ActionRow(
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    prefix: @Composable () -> Unit = {},
+    suffix: @Composable () -> Unit = {},
+    titleSelectable: Boolean = false,
+    useMarkup: Boolean = true,
+    useUnderline: Boolean = false,
+    subtitleLines: Int = 0,
+    subtitleSelectable: Boolean = false,
+    titleLines: Int = 0,
+) {
+    val actionRow = remember { AdwActionRow() }
+
+    GenericActionRow(
+        creator = { VirtualComposeNodeContainer(actionRow) },
+        updater = {},
+        title = title,
+        subtitle = subtitle,
+        modifier = modifier,
+        titleSelectable = titleSelectable,
+        useMarkup = useMarkup,
+        useUnderline = useUnderline,
+        subtitleLines = subtitleLines,
+        subtitleSelectable = subtitleSelectable,
+        titleLines = titleLines,
+        content = {
+            Prefix {
+                prefix()
+            }
+            Suffix {
+                suffix()
+            }
+        },
+    )
+}
+
+private class AdwSwitchRowComposeNode(gObject: AdwSwitchRow) : LeafComposeNode<AdwSwitchRow>(gObject) {
+    var activated: SignalConnection<GtkSwitch.StateSetCallback>? = null
 }
 
 /**
@@ -83,8 +225,8 @@ fun SwitchRow(
     subtitleSelectable: Boolean = false,
     titleLines: Int = 0,
 ) {
-    val switchRow = remember { SwitchRow.builder().build() }
-    val switch = remember { switchRow.firstChild.lastChild.firstChild as Switch }
+    val switchRow = remember { AdwSwitchRow() }
+    val switch = remember { switchRow.firstChild.lastChild.firstChild as GtkSwitch }
     var pendingChange by remember { mutableIntStateOf(0) }
 
     GenericActionRow(

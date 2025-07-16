@@ -5,11 +5,36 @@ import androidx.compose.runtime.ComposeNode
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.GtkComposeNode
 import io.github.compose4gtk.GtkComposeWidget
+import io.github.compose4gtk.GtkContainerComposeNode
 import io.github.compose4gtk.SingleChildComposeNode
 import io.github.compose4gtk.VirtualComposeNode
 import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.modifier.Modifier
-import org.gnome.adw.PreferencesGroup
+import org.gnome.gtk.Widget
+import org.gnome.adw.PreferencesGroup as AdwPreferencesGroup
+
+private class AdwPreferencesGroupContentComposeNode(gObject: AdwPreferencesGroup) :
+    GtkContainerComposeNode<AdwPreferencesGroup>(gObject) {
+    override fun addNode(index: Int, child: GtkComposeWidget<Widget>) {
+        when (index) {
+            children.size -> widget.add(child.widget)
+            0 -> widget.insertAfter(child.widget, null)
+            else -> widget.insertAfter(child.widget, children[index - 1])
+        }
+        super.addNode(index, child)
+    }
+
+    override fun removeNode(index: Int) {
+        val child = children[index]
+        widget.remove(child)
+        super.removeNode(index)
+    }
+
+    override fun clearNodes() {
+        children.forEach { widget.remove(it) }
+        super.clearNodes()
+    }
+}
 
 /**
  * Creates a [org.gnome.adw.PreferencesGroup] used to group [org.gnome.adw.PreferencesRow] widgets.
@@ -30,9 +55,9 @@ fun PreferencesGroup(
     separateRows: Boolean = false,
     content: @Composable () -> Unit = {},
 ) {
-    ComposeNode<GtkComposeWidget<PreferencesGroup>, GtkApplier>(
+    ComposeNode<GtkComposeWidget<AdwPreferencesGroup>, GtkApplier>(
         factory = {
-            VirtualComposeNodeContainer(PreferencesGroup.builder().build())
+            VirtualComposeNodeContainer(AdwPreferencesGroup())
         },
         update = {
             set(title) { this.widget.title = it }
@@ -57,7 +82,7 @@ private fun HeaderSuffix(
 ) {
     ComposeNode<GtkComposeNode, GtkApplier>(
         factory = {
-            VirtualComposeNode<PreferencesGroup> { preferencesGroup ->
+            VirtualComposeNode<AdwPreferencesGroup> { preferencesGroup ->
                 SingleChildComposeNode(
                     preferencesGroup,
                     set = { headerSuffix = it },
@@ -75,10 +100,9 @@ private fun Content(
 ) {
     ComposeNode<GtkComposeNode, GtkApplier>(
         factory = {
-            VirtualComposeNode<PreferencesGroup> { preferencesGroup ->
-                SingleChildComposeNode(
+            VirtualComposeNode<AdwPreferencesGroup> { preferencesGroup ->
+                AdwPreferencesGroupContentComposeNode(
                     preferencesGroup,
-                    set = { add(it) },
                 )
             }
         },
