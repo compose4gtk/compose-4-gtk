@@ -150,6 +150,23 @@ private fun Suffix(
     )
 }
 
+/**
+ * Creates a [org.gnome.adw.ActionRow], a list box row that presents actions.
+ *
+ * [org.gnome.adw.ActionRow] is a child of [org.gnome.adw.PreferencesRow] which is usually used for
+ * preferences/settings inside and application.
+ *
+ * @param title The title for this row.
+ * @param subtitle The subtitle for this row.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param prefix Composable components displayed at the start of the row.
+ * @param suffix Composable components displayed at the end of the row.
+ * @param useMarkup Whether to use Pango markup for the title and subtitle.
+ * @param useUnderline Whether an embedded underline in the title or subtitle indicates a mnemonic.
+ * @param subtitleLines The number of lines at the end of which the subtitle label will be ellipsized.
+ * @param subtitleSelectable Whether the subtitle is selectable.
+ * @param titleLines The number of lines at the end of which the title label will be ellipsized.
+ */
 @Composable
 fun ActionRow(
     title: String,
