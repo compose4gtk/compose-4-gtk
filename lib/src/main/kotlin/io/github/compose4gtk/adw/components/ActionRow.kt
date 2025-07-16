@@ -54,9 +54,8 @@ private fun <W : GtkComposeWidget<AdwActionRow>> GenericActionRow(
     )
 }
 
-private class AdwActionRowPrefixContainer(
-    private val actionRow: AdwActionRow,
-) : GtkContainerComposeNode<AdwActionRow>(actionRow) {
+private class AdwActionRowPrefixContainer(actionRow: AdwActionRow) :
+    GtkContainerComposeNode<AdwActionRow>(actionRow) {
     private val currentlyAdded = mutableListOf<Widget>()
 
     private fun syncChildren() {
@@ -102,9 +101,8 @@ private fun Prefix(
     )
 }
 
-private class AdwActionRowSuffixContainer(
-    private val actionRow: AdwActionRow,
-) : GtkContainerComposeNode<AdwActionRow>(actionRow) {
+private class AdwActionRowSuffixContainer(actionRow: AdwActionRow) :
+    GtkContainerComposeNode<AdwActionRow>(actionRow) {
     private val currentlyAdded = mutableListOf<Widget>()
 
     private fun syncChildren() {
