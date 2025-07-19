@@ -7,12 +7,9 @@ import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.GtkComposeWidget
 import io.github.compose4gtk.GtkContainerComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import io.github.oshai.kotlinlogging.KotlinLogging
 import org.gnome.gtk.Widget
 import org.gnome.adw.NavigationPage as AdwNavigationPage
 import org.gnome.adw.NavigationView as AdwNavigationView
-
-private val logger = KotlinLogging.logger {}
 
 private class AdwNavigationViewComposeNode(gObject: AdwNavigationView) :
     GtkContainerComposeNode<AdwNavigationView>(gObject) {
@@ -25,30 +22,25 @@ private class AdwNavigationViewComposeNode(gObject: AdwNavigationView) :
             }
             super.addNode(index, child)
         } else {
-            logger.warn { "Only navigation pages can be added to a navigation view." }
+            error("Only navigation pages can be added to a navigation view.")
         }
     }
 
     override fun removeNode(index: Int) {
-        val child = children[index]
-        if (child is AdwNavigationPage) {
-            widget.remove(child)
-            super.removeNode(index)
-        }
+        val child = children[index] as AdwNavigationPage
+        widget.remove(child)
+        super.removeNode(index)
     }
 
     override fun clearNodes() {
         children.forEach {
-            if (it is AdwNavigationPage) {
-                widget.remove(it)
-            }
+            widget.remove(it as AdwNavigationPage)
         }
         super.clearNodes()
     }
 }
 
 sealed interface NavigationViewState {
-    var navigationView: AdwNavigationView?
     var visiblePage: AdwNavigationPage?
     var visiblePageTag: String?
     fun findPage(tag: String): AdwNavigationPage?
@@ -60,7 +52,7 @@ sealed interface NavigationViewState {
 }
 
 private class NavigationViewStateImpl : NavigationViewState {
-    override var navigationView: AdwNavigationView? = null
+    var navigationView: AdwNavigationView? = null
         set(value) {
             check(field == null) { "NavigationViewState can be associated to a single NavigationView" }
             requireNotNull(value)
@@ -122,10 +114,13 @@ fun NavigationView(
     verticallyHomogenous: Boolean = false,
     content: @Composable () -> Unit = {},
 ) {
+    val stateImpl: NavigationViewStateImpl = when (state) {
+        is NavigationViewStateImpl -> state
+    }
     ComposeNode<GtkComposeWidget<AdwNavigationView>, GtkApplier>(
         factory = {
             val gObject = AdwNavigationView()
-            state.navigationView = gObject
+            stateImpl.navigationView = gObject
             AdwNavigationViewComposeNode(gObject)
         },
         update = {

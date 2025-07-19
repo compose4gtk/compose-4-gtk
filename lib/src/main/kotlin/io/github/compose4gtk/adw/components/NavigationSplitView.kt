@@ -13,22 +13,18 @@ import io.github.compose4gtk.SingleChildComposeNode
 import io.github.compose4gtk.VirtualComposeNode
 import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.modifier.Modifier
-import io.github.oshai.kotlinlogging.KotlinLogging
 import org.gnome.adw.LengthUnit
 import org.gnome.adw.NavigationPage as AdwNavigationPage
 import org.gnome.adw.NavigationSplitView as AdwNavigationSplitView
 
-private val logger = KotlinLogging.logger {}
-
 sealed interface NavigationSplitViewState {
-    var navigationSplitView: AdwNavigationSplitView?
     var collapsed: Boolean
     fun showContent()
     fun hideContent()
 }
 
 private class NavigationSplitViewStateImpl : NavigationSplitViewState {
-    override var navigationSplitView: AdwNavigationSplitView? = null
+    var navigationSplitView: AdwNavigationSplitView? = null
         set(value) {
             check(field == null) { "NavigationSplitViewState can be associated to a single NavigationSplitView" }
             requireNotNull(value)
@@ -86,10 +82,13 @@ fun NavigationSplitView(
     sidebarWidthUnit: LengthUnit = LengthUnit.SP,
     content: @Composable () -> Unit,
 ) {
+    val stateImpl: NavigationSplitViewStateImpl = when (state) {
+        is NavigationSplitViewStateImpl -> state
+    }
     ComposeNode<GtkComposeWidget<AdwNavigationSplitView>, GtkApplier>(
         factory = {
             val gObject = AdwNavigationSplitView()
-            state.navigationSplitView = gObject
+            stateImpl.navigationSplitView = gObject
             VirtualComposeNodeContainer(gObject)
         },
         update = {
@@ -125,7 +124,7 @@ private fun Sidebar(
                             if (it is AdwNavigationPage) {
                                 navigationSplitView.sidebar = it
                             } else {
-                                logger.error { "Sidebar must be inside a NavigationPage" }
+                                error("Sidebar must be inside a NavigationPage")
                             }
                         }
                     },
@@ -151,7 +150,7 @@ private fun Content(
                             if (it is AdwNavigationPage) {
                                 navigationSplitView.content = it
                             } else {
-                                logger.error { "Content must be inside a NavigationPage" }
+                                error("Content must be inside a NavigationPage")
                             }
                         }
                     },
