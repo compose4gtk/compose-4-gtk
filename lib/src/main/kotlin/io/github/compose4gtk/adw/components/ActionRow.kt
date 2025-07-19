@@ -21,6 +21,11 @@ import org.gnome.adw.ActionRow as AdwActionRow
 import org.gnome.adw.SwitchRow as AdwSwitchRow
 import org.gnome.gtk.Switch as GtkSwitch
 
+enum class ActionRowSlot {
+    PREFIX,
+    SUFFIX,
+}
+
 @Composable
 private fun <W : GtkComposeWidget<AdwActionRow>> GenericActionRow(
     creator: () -> W,
@@ -54,16 +59,20 @@ private fun <W : GtkComposeWidget<AdwActionRow>> GenericActionRow(
     )
 }
 
-private class AdwActionRowPrefixContainer(actionRow: AdwActionRow) :
+private class AdwActionRowSlotContainer(actionRow: AdwActionRow, private val slot: ActionRowSlot) :
     GtkContainerComposeNode<AdwActionRow>(actionRow) {
     private val currentlyAdded = mutableListOf<Widget>()
 
     private fun syncChildren() {
         currentlyAdded.forEach { widget.remove(it) }
+        widget.activatableWidget = null
         currentlyAdded.clear()
 
         children.forEach { child ->
-            widget.addPrefix(child)
+            when (slot) {
+                ActionRowSlot.PREFIX -> widget.addPrefix(child)
+                ActionRowSlot.SUFFIX -> widget.addSuffix(child)
+            }
             widget.activatableWidget = child
             currentlyAdded.add(child)
         }
@@ -83,6 +92,7 @@ private class AdwActionRowPrefixContainer(actionRow: AdwActionRow) :
         currentlyAdded.forEach { widget.remove(it) }
         currentlyAdded.clear()
         super.clearNodes()
+        syncChildren()
     }
 }
 
@@ -93,44 +103,12 @@ private fun Prefix(
     ComposeNode<GtkComposeNode, GtkApplier>(
         factory = {
             VirtualComposeNode<AdwActionRow> { actionRow ->
-                AdwActionRowPrefixContainer(actionRow)
+                AdwActionRowSlotContainer(actionRow, ActionRowSlot.PREFIX)
             }
         },
         update = {},
         content = content,
     )
-}
-
-private class AdwActionRowSuffixContainer(actionRow: AdwActionRow) :
-    GtkContainerComposeNode<AdwActionRow>(actionRow) {
-    private val currentlyAdded = mutableListOf<Widget>()
-
-    private fun syncChildren() {
-        currentlyAdded.forEach { widget.remove(it) }
-        currentlyAdded.clear()
-
-        children.forEach { child ->
-            widget.addSuffix(child)
-            widget.activatableWidget = child
-            currentlyAdded.add(child)
-        }
-    }
-
-    override fun addNode(index: Int, child: GtkComposeWidget<Widget>) {
-        super.addNode(index, child)
-        syncChildren()
-    }
-
-    override fun removeNode(index: Int) {
-        super.removeNode(index)
-        syncChildren()
-    }
-
-    override fun clearNodes() {
-        currentlyAdded.forEach { widget.remove(it) }
-        currentlyAdded.clear()
-        super.clearNodes()
-    }
 }
 
 @Composable
@@ -140,7 +118,7 @@ private fun Suffix(
     ComposeNode<GtkComposeNode, GtkApplier>(
         factory = {
             VirtualComposeNode<AdwActionRow> { actionRow ->
-                AdwActionRowSuffixContainer(actionRow)
+                AdwActionRowSlotContainer(actionRow, ActionRowSlot.SUFFIX)
             }
         },
         update = {},
