@@ -60,6 +60,7 @@ private fun <W : GtkComposeWidget<AdwActionRow>> BaseActionRow(
     title: String,
     subtitle: String,
     modifier: Modifier = Modifier,
+    activatable: Boolean = true,
     titleSelectable: Boolean = false,
     useMarkup: Boolean = true,
     useUnderline: Boolean = false,
@@ -74,6 +75,7 @@ private fun <W : GtkComposeWidget<AdwActionRow>> BaseActionRow(
             set(title) { this.widget.title = it }
             set(subtitle) { this.widget.subtitle = it }
             set(modifier) { applyModifier(it) }
+            set(activatable) { this.widget.activatable = it }
             set(titleSelectable) { this.widget.titleSelectable = it }
             set(useMarkup) { this.widget.useMarkup = it }
             set(useUnderline) { this.widget.useUnderline = it }
@@ -179,6 +181,8 @@ fun ActionRow(
     modifier: Modifier = Modifier,
     prefix: @Composable ActionRowSlotScope.() -> Unit = {},
     suffix: @Composable ActionRowSlotScope.() -> Unit = {},
+    onActivate: () -> Unit = {},
+    activatable: Boolean = true,
     titleSelectable: Boolean = false,
     useMarkup: Boolean = true,
     useUnderline: Boolean = false,
@@ -190,10 +194,13 @@ fun ActionRow(
 
     BaseActionRow(
         creator = { VirtualComposeNodeContainer(actionRow) },
-        updater = {},
+        updater = {
+            set(onActivate) { this.widget.onActivated { onActivate() } }
+        },
         title = title,
         subtitle = subtitle,
         modifier = modifier,
+        activatable = activatable,
         titleSelectable = titleSelectable,
         useMarkup = useMarkup,
         useUnderline = useUnderline,
@@ -240,6 +247,7 @@ fun SwitchRow(
     subtitle: String,
     modifier: Modifier = Modifier,
     onActivate: () -> Unit = {},
+    activatable: Boolean = true,
     titleSelectable: Boolean = false,
     useMarkup: Boolean = true,
     useUnderline: Boolean = false,
@@ -273,6 +281,7 @@ fun SwitchRow(
         title = title,
         subtitle = subtitle,
         modifier = modifier,
+        activatable = activatable,
         titleSelectable = titleSelectable,
         useMarkup = useMarkup,
         useUnderline = useUnderline,

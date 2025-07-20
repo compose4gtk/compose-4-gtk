@@ -105,6 +105,13 @@ fun main(args: Array<String>) {
                                     )
                                 },
                             )
+                            ActionRow(
+                                title = "Additional Preferences",
+                                subtitle = "Navigates to another page",
+                                onActivate = {
+                                    logger.info { "Will navigate to another page in the future." }
+                                },
+                            )
                         }
                     }
                 }
