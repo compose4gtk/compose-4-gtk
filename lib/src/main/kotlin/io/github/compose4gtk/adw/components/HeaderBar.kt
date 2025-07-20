@@ -21,6 +21,7 @@ import org.gnome.gtk.Widget
  * @param centeringPolicy The policy for aligning the center widget.
  * @param showEndTitleButtons Whether to show title buttons at the end of the header bar.
  * @param showStartTitleButtons Whether to show title buttons at the start of the header bar.
+ * @param showTitle Whether the title is shown.
  * @param title Composable widget to display as the title.
  * @param startWidgets Composable widget displayed at the start of the header.
  * @param endWidgets Composable widget displayed at the end of the header.
@@ -31,6 +32,7 @@ fun HeaderBar(
     centeringPolicy: CenteringPolicy = CenteringPolicy.LOOSE,
     showEndTitleButtons: Boolean = true,
     showStartTitleButtons: Boolean = true,
+    showTitle: Boolean = true,
     title: (@Composable () -> Unit)? = null,
     startWidgets: @Composable () -> Unit = {},
     endWidgets: @Composable () -> Unit = {},
@@ -44,6 +46,7 @@ fun HeaderBar(
             set(centeringPolicy) { this.widget.centeringPolicy = it }
             set(showEndTitleButtons) { this.widget.showEndTitleButtons = it }
             set(showStartTitleButtons) { this.widget.showStartTitleButtons = it }
+            set(showTitle) { this.widget.showTitle = it }
         },
         content = {
             Pack({ packStart(it) }, startWidgets)
