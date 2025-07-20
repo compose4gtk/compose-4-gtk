@@ -79,10 +79,19 @@ fun main(args: Array<String>) {
                             ActionRow(
                                 title = "Toast",
                                 subtitle = "Launches a toast",
+                                prefix = {
+                                    IconButton(
+                                        icon = ImageSource.Icon("system-search-symbolic"),
+                                        onClick = {
+                                            logger.info { "Searching" }
+                                        },
+                                        modifier = Modifier.alignment(Align.CENTER),
+                                    )
+                                },
                                 suffix = {
                                     IconButton(
                                         ImageSource.Icon("bread-symbolic"),
-                                        modifier = Modifier.alignment(Align.CENTER),
+                                        modifier = Modifier.alignment(Align.CENTER).activateWithActionRow(),
                                         onClick = {
                                             logger.info { "Launch a toast" }
 

@@ -15,6 +15,7 @@ import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.VirtualComposeNode
 import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.modifier.Modifier
+import io.github.compose4gtk.modifier.combine
 import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.Widget
 import org.gnome.adw.ActionRow as AdwActionRow
@@ -26,8 +27,34 @@ enum class ActionRowSlot {
     SUFFIX,
 }
 
+@DslMarker
+annotation class ActionRowSlotScopeMarker
+
+@ActionRowSlotScopeMarker
+interface ActionRowSlotScope {
+    /**
+     * A custom modifier to set the activatable child in an action row.
+     */
+    fun Modifier.activateWithActionRow(): Modifier = combine(
+        apply = {
+            val parent = it.parent.parent.parent as AdwActionRow
+            if (parent.activatableWidget == null) {
+                parent.activatableWidget = it
+            } else {
+                error("Action row can only have one activatable widget.")
+            }
+        },
+        undo = {
+            val parent = it.parent.parent.parent as AdwActionRow
+            if (parent.activatableWidget == it) {
+                parent.activatableWidget = null
+            }
+        },
+    )
+}
+
 @Composable
-private fun <W : GtkComposeWidget<AdwActionRow>> GenericActionRow(
+private fun <W : GtkComposeWidget<AdwActionRow>> BaseActionRow(
     creator: () -> W,
     updater: Updater<W>.() -> Unit,
     title: String,
@@ -65,7 +92,6 @@ private class AdwActionRowSlotContainer(actionRow: AdwActionRow, private val slo
 
     private fun syncChildren() {
         currentlyAdded.forEach { widget.remove(it) }
-        widget.activatableWidget = null
         currentlyAdded.clear()
 
         children.forEach { child ->
@@ -73,7 +99,6 @@ private class AdwActionRowSlotContainer(actionRow: AdwActionRow, private val slo
                 ActionRowSlot.PREFIX -> widget.addPrefix(child)
                 ActionRowSlot.SUFFIX -> widget.addSuffix(child)
             }
-            widget.activatableWidget = child
             currentlyAdded.add(child)
         }
     }
@@ -98,8 +123,9 @@ private class AdwActionRowSlotContainer(actionRow: AdwActionRow, private val slo
 
 @Composable
 private fun Prefix(
-    content: @Composable () -> Unit,
+    content: @Composable ActionRowSlotScope.() -> Unit,
 ) {
+    val scope = object : ActionRowSlotScope {}
     ComposeNode<GtkComposeNode, GtkApplier>(
         factory = {
             VirtualComposeNode<AdwActionRow> { actionRow ->
@@ -107,14 +133,17 @@ private fun Prefix(
             }
         },
         update = {},
-        content = content,
+        content = {
+            with(scope) { content() }
+        },
     )
 }
 
 @Composable
 private fun Suffix(
-    content: @Composable () -> Unit,
+    content: @Composable ActionRowSlotScope.() -> Unit,
 ) {
+    val scope = object : ActionRowSlotScope {}
     ComposeNode<GtkComposeNode, GtkApplier>(
         factory = {
             VirtualComposeNode<AdwActionRow> { actionRow ->
@@ -122,7 +151,7 @@ private fun Suffix(
             }
         },
         update = {},
-        content = content,
+        content = { with(scope) { content() } },
     )
 }
 
@@ -148,8 +177,8 @@ fun ActionRow(
     title: String,
     subtitle: String,
     modifier: Modifier = Modifier,
-    prefix: @Composable () -> Unit = {},
-    suffix: @Composable () -> Unit = {},
+    prefix: @Composable ActionRowSlotScope.() -> Unit = {},
+    suffix: @Composable ActionRowSlotScope.() -> Unit = {},
     titleSelectable: Boolean = false,
     useMarkup: Boolean = true,
     useUnderline: Boolean = false,
@@ -159,7 +188,7 @@ fun ActionRow(
 ) {
     val actionRow = remember { AdwActionRow() }
 
-    GenericActionRow(
+    BaseActionRow(
         creator = { VirtualComposeNodeContainer(actionRow) },
         updater = {},
         title = title,
@@ -222,7 +251,7 @@ fun SwitchRow(
     val switch = remember { switchRow.firstChild.lastChild.firstChild as GtkSwitch }
     var pendingChange by remember { mutableIntStateOf(0) }
 
-    GenericActionRow(
+    BaseActionRow(
         creator = { AdwSwitchRowComposeNode(switchRow) },
         updater = {
             set(active to pendingChange) { (active, _) ->
