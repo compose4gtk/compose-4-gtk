@@ -22,7 +22,7 @@ import org.gnome.adw.ActionRow as AdwActionRow
 import org.gnome.adw.SwitchRow as AdwSwitchRow
 import org.gnome.gtk.Switch as GtkSwitch
 
-enum class ActionRowSlot {
+private enum class ActionRowSlot {
     PREFIX,
     SUFFIX,
 }
@@ -32,22 +32,22 @@ annotation class ActionRowSlotScopeMarker
 
 @ActionRowSlotScopeMarker
 interface ActionRowSlotScope {
+    val actionRow: AdwActionRow
+
     /**
      * A custom modifier to set the activatable child in an action row.
      */
     fun Modifier.activateWithActionRow(): Modifier = combine(
         apply = {
-            val parent = it.parent.parent.parent as AdwActionRow
-            if (parent.activatableWidget == null) {
-                parent.activatableWidget = it
+            if (actionRow.activatableWidget == null) {
+                actionRow.activatableWidget = it
             } else {
                 error("Action row can only have one activatable widget.")
             }
         },
         undo = {
-            val parent = it.parent.parent.parent as AdwActionRow
-            if (parent.activatableWidget == it) {
-                parent.activatableWidget = null
+            if (actionRow.activatableWidget == it) {
+                actionRow.activatableWidget = null
             }
         },
     )
@@ -116,8 +116,6 @@ private class AdwActionRowSlotContainer(actionRow: AdwActionRow, private val slo
     }
 
     override fun clearNodes() {
-        currentlyAdded.forEach { widget.remove(it) }
-        currentlyAdded.clear()
         super.clearNodes()
         syncChildren()
     }
@@ -125,9 +123,12 @@ private class AdwActionRowSlotContainer(actionRow: AdwActionRow, private val slo
 
 @Composable
 private fun Prefix(
+    actionRow: AdwActionRow,
     content: @Composable ActionRowSlotScope.() -> Unit,
 ) {
-    val scope = object : ActionRowSlotScope {}
+    val scope = object : ActionRowSlotScope {
+        override val actionRow: AdwActionRow = actionRow
+    }
     ComposeNode<GtkComposeNode, GtkApplier>(
         factory = {
             VirtualComposeNode<AdwActionRow> { actionRow ->
@@ -143,9 +144,12 @@ private fun Prefix(
 
 @Composable
 private fun Suffix(
+    actionRow: AdwActionRow,
     content: @Composable ActionRowSlotScope.() -> Unit,
 ) {
-    val scope = object : ActionRowSlotScope {}
+    val scope = object : ActionRowSlotScope {
+        override val actionRow: AdwActionRow = actionRow
+    }
     ComposeNode<GtkComposeNode, GtkApplier>(
         factory = {
             VirtualComposeNode<AdwActionRow> { actionRow ->
@@ -208,10 +212,10 @@ fun ActionRow(
         subtitleSelectable = subtitleSelectable,
         titleLines = titleLines,
         content = {
-            Prefix {
+            Prefix(actionRow) {
                 prefix()
             }
-            Suffix {
+            Suffix(actionRow) {
                 suffix()
             }
         },
