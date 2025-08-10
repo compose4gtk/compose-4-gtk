@@ -27,27 +27,31 @@ private enum class ActionRowSlot {
     SUFFIX,
 }
 
-@DslMarker
-annotation class ActionRowSlotScopeMarker
-
-@ActionRowSlotScopeMarker
-interface ActionRowSlotScope {
-    val actionRow: AdwActionRow
-
+sealed interface ActionRowSlotScope {
     /**
      * A custom modifier to set the activatable child in an action row.
      */
-    fun Modifier.activateWithActionRow(): Modifier = combine(
-        apply = {
-            if (actionRow.activatableWidget == null) {
-                actionRow.activatableWidget = it
-            } else {
-                error("Action row can only have one activatable widget.")
+    fun Modifier.activateWithActionRow(): Modifier
+}
+
+private class ActionRowSlotScopeImpl : ActionRowSlotScope {
+    var actionRow: AdwActionRow? = null
+
+    override fun Modifier.activateWithActionRow(): Modifier = combine(
+        apply = { widget ->
+            actionRow?.let { actionRow ->
+                if (actionRow.activatableWidget == null) {
+                    actionRow.activatableWidget = widget
+                } else {
+                    error("Action row can only have one activatable widget.")
+                }
             }
         },
-        undo = {
-            if (actionRow.activatableWidget == it) {
-                actionRow.activatableWidget = null
+        undo = { widget ->
+            actionRow?.let { actionRow ->
+                if (actionRow.activatableWidget == widget) {
+                    actionRow.activatableWidget = null
+                }
             }
         },
     )
@@ -126,9 +130,8 @@ private fun Prefix(
     actionRow: AdwActionRow,
     content: @Composable ActionRowSlotScope.() -> Unit,
 ) {
-    val scope = object : ActionRowSlotScope {
-        override val actionRow: AdwActionRow = actionRow
-    }
+    val scope = ActionRowSlotScopeImpl()
+    scope.actionRow = actionRow
     ComposeNode<GtkComposeNode, GtkApplier>(
         factory = {
             VirtualComposeNode<AdwActionRow> { actionRow ->
@@ -147,9 +150,8 @@ private fun Suffix(
     actionRow: AdwActionRow,
     content: @Composable ActionRowSlotScope.() -> Unit,
 ) {
-    val scope = object : ActionRowSlotScope {
-        override val actionRow: AdwActionRow = actionRow
-    }
+    val scope = ActionRowSlotScopeImpl()
+    scope.actionRow = actionRow
     ComposeNode<GtkComposeNode, GtkApplier>(
         factory = {
             VirtualComposeNode<AdwActionRow> { actionRow ->
