@@ -1,4 +1,5 @@
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -8,6 +9,7 @@ import io.github.compose4gtk.adw.components.ApplicationWindow
 import io.github.compose4gtk.adw.components.ButtonRow
 import io.github.compose4gtk.adw.components.HeaderBar
 import io.github.compose4gtk.adw.components.PreferencesGroup
+import io.github.compose4gtk.adw.components.SpinRow
 import io.github.compose4gtk.adw.components.SwitchRow
 import io.github.compose4gtk.adw.components.ToastOverlay
 import io.github.compose4gtk.gtk.ImageSource
@@ -111,6 +113,19 @@ fun main(args: Array<String>) {
                                 onActivate = {
                                     logger.info { "Will navigate to another page in the future." }
                                 },
+                            )
+
+                            var spinRowValue by remember { mutableDoubleStateOf(35.0) }
+                            SpinRow(
+                                value = spinRowValue,
+                                title = "A Spin Row",
+                                subtitle = "Helps select numerical values",
+                                onActivate = { logger.info { "Spin row activated" } },
+                                onValueChange = {
+                                    spinRowValue = it
+                                },
+                                upper = 100.0,
+                                stepIncrement = 1.0,
                             )
                         }
                     }
