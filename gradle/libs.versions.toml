@@ -1,15 +1,15 @@
 [versions]
-kotlin = "2.1.21"
-compose = "1.8.1"
+kotlin = "2.2.20"
+compose = "1.9.0"
 javagi = "0.12.2"
 dokka = "2.0.0"
-kotlin-logging = "7.0.7"
-kotlinx-datetime = "0.6.2"
+kotlin-logging = "7.0.13"
+kotlinx-datetime = "0.7.1"
 slf4j = "2.0.17"
 versioning = "6.4.4"
 detekt = "1.23.8"
 detekt-formatting = "1.23.8"
-detekt-compose = "0.4.22"
+detekt-compose = "0.4.27"
 
 [libraries]
 javagi-gtk = { group = "io.github.jwharm.javagi", name = "gtk", version.ref = "javagi" }
