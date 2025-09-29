@@ -20,6 +20,7 @@ private class AdwButtonRowComposeNode(gObject: ButtonRow) : LeafComposeNode<Butt
  * preferences/settings inside an application.
  *
  * @param title The text shown in the button.
+ * @param modifier Compose [Modifier] for layout and styling.
  * @param titleSelectable Whether the title can be selected.
  * @param useMarkup Whether to use Pango markup for the title.
  * @param useUnderline Whether an embedded underline in the title indicates a mnemonic.
