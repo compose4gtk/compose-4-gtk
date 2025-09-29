@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.dokka)
     `maven-publish`
-    id("org.jreleaser") version "1.18.0"
+    id("org.jreleaser") version "1.20.0"
     alias(libs.plugins.versioning)
     alias(libs.plugins.detekt)
 }
@@ -22,14 +22,14 @@ version = "0.0-SNAPSHOT"
 gitVersioning.apply {
     refs {
         tag("v(?<version>.*)") {
-            version = "\${ref.version}"
+            version = $$"${ref.version}"
         }
         branch(".+") {
-            version = "\${ref}-SNAPSHOT"
+            version = $$"${ref}-SNAPSHOT"
         }
     }
     rev {
-        version = "\${commit}"
+        version = $$"${commit}"
     }
 }
 

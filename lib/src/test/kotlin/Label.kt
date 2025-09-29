@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
                             .alignment(Align.START),
                     )
                     Label(
-                        "Internally handled <a href=\"http://example.org\">link</a>.",
+                        "Internally handled <a href=\"https://example.org\">link</a>.",
                         onActivateLink = { uri ->
                             logger.info { "link clicked: $uri" }
                             true
@@ -41,7 +41,7 @@ fun main(args: Array<String>) {
                             .alignment(Align.START),
                     )
                     Label(
-                        "Externally handled <a href=\"http://example.org\">link</a>.",
+                        "Externally handled <a href=\"https://example.org\">link</a>.",
                         onActivateLink = { uri ->
                             logger.info { "link clicked: $uri" }
                             false
