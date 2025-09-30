@@ -8,6 +8,7 @@ import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gobject.SignalConnection
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import kotlinx.datetime.number
 import org.gnome.glib.DateTime
 import org.gnome.gtk.Calendar
 
@@ -100,7 +101,7 @@ fun Calendar(
 @Composable
 fun Calendar(
     modifier: Modifier = Modifier,
-    date: LocalDate = LocalDate(year = DateTime.nowLocal().year, month = Month.JANUARY, dayOfMonth = 1),
+    date: LocalDate = LocalDate(year = DateTime.nowLocal().year, month = Month.JANUARY, day = 1),
     showDayNames: Boolean = true,
     showHeading: Boolean = true,
     showWeekNumber: Boolean = false,
@@ -112,14 +113,14 @@ fun Calendar(
 ) {
     Calendar(
         modifier = modifier,
-        day = date.dayOfMonth,
-        month = date.monthNumber - 1,
+        day = date.day,
+        month = date.month.number - 1,
         showDayNames = showDayNames,
         showHeading = showHeading,
         showWeekNumber = showWeekNumber,
         year = date.year,
         onDaySelect = if (onDaySelect != null) {
-            { day, month, year -> onDaySelect(LocalDate(year = year, monthNumber = month + 1, dayOfMonth = day)) }
+            { day, month, year -> onDaySelect(LocalDate(year = year, month = month + 1, day = day)) }
         } else {
             null
         },
