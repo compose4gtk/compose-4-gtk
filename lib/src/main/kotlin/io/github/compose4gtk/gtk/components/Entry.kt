@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import io.github.compose4gtk.Gtk
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
+import io.github.compose4gtk.gtk.ImageSource
 import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gobject.SignalConnection
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,8 @@ import org.gnome.gobject.GObject
 import org.gnome.gobject.GObjects
 import org.gnome.gtk.Editable
 import org.gnome.gtk.Entry
+import org.gnome.gtk.EntryIconPosition
+import org.gnome.gtk.Image
 import org.gnome.gtk.InputHints
 import org.gnome.gtk.InputPurpose
 import org.gnome.pango.AttrList
@@ -28,7 +31,11 @@ private class GtkEntryComposeNode(
     gObject: Entry,
     val onDeleteSignalHandler: SignalConnection<Editable.DeleteTextCallback>,
     val onInsertSignalHandler: SignalConnection<Editable.InsertTextCallback>,
-) : LeafComposeNode<Entry>(gObject)
+) : LeafComposeNode<Entry>(gObject) {
+    var onActivate: SignalConnection<Entry.ActivateCallback>? = null
+    var onPrimaryIconPress: SignalConnection<Entry.IconPressCallback>? = null
+    var onSecondaryIconPress: SignalConnection<Entry.IconPressCallback>? = null
+}
 
 private data class TentativeCursorPosition(
     val position: Int,
@@ -82,7 +89,6 @@ private data class PendingDelete(val startPos: Int, val endPos: Int) {
  *
  * TODO:
  *  - setExtraMenu
- *  - Icons
  *  - overwriteMode
  *  - pulse
  */
@@ -92,6 +98,13 @@ fun Entry(
     onTextChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     attributes: AttrList = emptyAttributes,
+    onActivate: () -> Unit = {},
+    primaryIcon: ImageSource.Icon? = null,
+    primaryIconSensitive: Boolean = true,
+    onPrimaryIconPress: () -> Unit = {},
+    secondaryIcon: ImageSource.Icon? = null,
+    secondaryIconSensitive: Boolean = true,
+    onSecondaryIconPress: () -> Unit = {},
     placeholderText: String? = null,
     editable: Boolean = true,
     visibility: Boolean = true,
@@ -178,6 +191,20 @@ fun Entry(
             tentativeCursorPosition = null
         }
         set(attributes) { this.widget.attributes = it }
+        set(onActivate) {
+            this.onActivate?.disconnect()
+            this.onActivate = this.widget.onActivate {
+                this.onActivate?.block()
+                onActivate()
+                this.onActivate?.unblock()
+            }
+        }
+        set(primaryIcon to primaryIconSensitive to onPrimaryIconPress) {
+            applyIcon(primaryIcon, primaryIconSensitive, onPrimaryIconPress, EntryIconPosition.PRIMARY)
+        }
+        set(secondaryIcon to secondaryIconSensitive to onSecondaryIconPress) {
+            applyIcon(secondaryIcon, secondaryIconSensitive, onSecondaryIconPress, EntryIconPosition.SECONDARY)
+        }
         set(placeholderText) { this.widget.placeholderText = it }
         set(editable) { this.widget.editable = it }
         set(visibility) { this.widget.visibility = it }
@@ -199,5 +226,45 @@ fun Entry(
         set(enableUndo) { this.widget.enableUndo = it }
         set(maxWidthChars) { this.widget.maxWidthChars = it }
         set(widthChars) { this.widget.widthChars = it }
+    }
+}
+
+private fun GtkEntryComposeNode.applyIcon(
+    icon: ImageSource.Icon?,
+    sensitive: Boolean,
+    onPress: () -> Unit,
+    entryIconPosition: EntryIconPosition,
+) {
+    val child = if (entryIconPosition == EntryIconPosition.PRIMARY) this.widget.firstChild else this.widget.lastChild
+    if (icon != null) {
+        if (child is Image) child.visible = true
+        widget.setIconFromIconName(entryIconPosition, icon.iconName)
+    } else {
+        if (child is Image) child.visible = false
+        widget.setIconFromIconName(entryIconPosition, null)
+    }
+    widget.setIconSensitive(entryIconPosition, sensitive)
+
+    when (entryIconPosition) {
+        EntryIconPosition.PRIMARY -> {
+            onPrimaryIconPress?.disconnect()
+            onPrimaryIconPress = widget.onIconPress { position ->
+                if (position == EntryIconPosition.PRIMARY) {
+                    onPrimaryIconPress?.block()
+                    onPress()
+                    onPrimaryIconPress?.unblock()
+                }
+            }
+        }
+        EntryIconPosition.SECONDARY -> {
+            onSecondaryIconPress?.disconnect()
+            onSecondaryIconPress = widget.onIconPress { position ->
+                if (position == EntryIconPosition.SECONDARY) {
+                    onSecondaryIconPress?.block()
+                    onPress()
+                    onSecondaryIconPress?.unblock()
+                }
+            }
+        }
     }
 }
