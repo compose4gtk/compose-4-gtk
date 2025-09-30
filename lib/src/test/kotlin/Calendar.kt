@@ -23,7 +23,7 @@ fun main(args: Array<String>) {
                         .margin(16),
                 ) {
                     Calendar(
-                        date = LocalDate(year = 1989, month = Month.JANUARY, dayOfMonth = 1),
+                        date = LocalDate(year = 1989, month = Month.JANUARY, day = 1),
                         onDaySelect = { date ->
                             logger.info { "selected $date" }
                         },
