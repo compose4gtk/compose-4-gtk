@@ -40,6 +40,11 @@ fun main(args: Array<String>) {
                             ListView(
                                 items = itemSize,
                                 selectionMode = SelectionMode.Single,
+                                onSelectionChanges = {
+                                    for (position in it) {
+                                        println("Selected: ${items[position].name}")
+                                    }
+                                },
                                 onActivate = { position -> logger.info { "activated item #$position" } },
                             ) { index ->
                                 Label("Item #$index")
@@ -48,6 +53,11 @@ fun main(args: Array<String>) {
                         Panel("Custom model (multiple selection)") {
                             ListView(
                                 model = rememberMultiSelectionModel(items),
+                                onSelectionChanges = {
+                                    for (position in it) {
+                                        println("Selected: ${items[position].name}")
+                                    }
+                                },
                                 onActivate = { position -> logger.info { "activated item #$position" } },
                             ) { customItem ->
                                 Label(customItem.name)

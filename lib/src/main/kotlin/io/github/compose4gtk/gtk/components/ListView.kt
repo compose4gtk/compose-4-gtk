@@ -19,6 +19,7 @@ internal class BaseListComposeNode<W : Widget, C : FunctionPointer>(
     gObject: W,
 ) : LeafComposeNode<W>(gObject) {
     var onActivate: SignalConnection<C>? = null
+    var onSelectionChanges: SignalConnection<SelectionModel.SelectionChangedCallback>? = null
 }
 
 /**
@@ -54,6 +55,7 @@ fun <M : SelectionModel<ListIndexModel.ListIndex>> ListView(
     showSeparators: Boolean = false,
     tabBehaviour: ListTabBehavior = ListTabBehavior.ALL,
     onActivate: ((position: Int) -> Unit)? = null,
+    onSelectionChanges: ((positions: Array<Int>) -> Unit)? = null,
     child: @Composable (index: Int) -> Unit,
 ): M {
     val selectionModel = rememberSelectionModel(itemsCount = items, selectionMode = selectionMode)
@@ -64,6 +66,7 @@ fun <M : SelectionModel<ListIndexModel.ListIndex>> ListView(
         singleClickActivate = singleClickActivate,
         showSeparators = showSeparators,
         tabBehaviour = tabBehaviour,
+        onSelectionChanges = onSelectionChanges,
         onActivate = onActivate,
     ) {
         child(it.index)
@@ -87,6 +90,7 @@ fun <T : GObject> ListView(
     showSeparators: Boolean = false,
     tabBehaviour: ListTabBehavior = ListTabBehavior.ALL,
     onActivate: ((position: Int) -> Unit)? = null,
+    onSelectionChanges: ((positions: Array<Int>) -> Unit)? = null,
     child: @Composable (item: T) -> Unit,
 ) {
     val compositionContext = rememberCompositionContext()
@@ -104,6 +108,22 @@ fun <T : GObject> ListView(
             set(showSeparators) { this.widget.showSeparators = it }
             set(singleClickActivate) { this.widget.singleClickActivate = it }
             set(tabBehaviour) { this.widget.tabBehavior = it }
+            set(onSelectionChanges) {
+                this.onSelectionChanges?.disconnect()
+                if (onSelectionChanges != null) {
+                    this.onSelectionChanges = model.onSelectionChanged { _, _ ->
+                        this.onSelectionChanges?.block()
+                        val positions = mutableListOf<Int>()
+                        for (position in 0 until model.size) {
+                            if (model.isSelected(position)) {
+                                positions.add(position)
+                            }
+                        }
+                        onSelectionChanges(positions.toTypedArray())
+                        this.onSelectionChanges?.unblock()
+                    }
+                }
+            }
             set(onActivate) {
                 this.onActivate?.disconnect()
                 if (onActivate != null) {
