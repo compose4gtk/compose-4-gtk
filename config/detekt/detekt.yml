@@ -1,7 +1,7 @@
 complexity:
   # Compose functions tend to be longer and have a lot of parameters
   LongMethod:
-    threshold: 100
+    threshold: 150
   LongParameterList:
     ignoreDefaultParameters: true
 

@@ -6,6 +6,7 @@ import androidx.compose.runtime.Updater
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCompositionContext
 import androidx.compose.runtime.setValue
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.GtkComposeNode
@@ -14,12 +15,18 @@ import io.github.compose4gtk.GtkContainerComposeNode
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.VirtualComposeNode
 import io.github.compose4gtk.VirtualComposeNodeContainer
+import io.github.compose4gtk.gtk.components.createListItemFactory
 import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.modifier.combine
 import io.github.jwharm.javagi.gobject.SignalConnection
+import org.gnome.gobject.GObject
+import org.gnome.gobject.ParamSpec
 import org.gnome.gtk.Adjustment
+import org.gnome.gtk.SingleSelection
+import org.gnome.gtk.StringList
 import org.gnome.gtk.Widget
 import org.gnome.adw.ActionRow as AdwActionRow
+import org.gnome.adw.ComboRow as AdwComboRow
 import org.gnome.adw.SpinRow as AdwSpinRow
 import org.gnome.adw.SwitchRow as AdwSwitchRow
 import org.gnome.gtk.SpinButton as GtkSpinButton
@@ -287,6 +294,130 @@ fun SwitchRow(
                     pendingChange += 1
                     onActivate()
                     true
+                }
+            }
+        },
+        title = title,
+        subtitle = subtitle,
+        modifier = modifier,
+        activatable = activatable,
+        titleSelectable = titleSelectable,
+        useMarkup = useMarkup,
+        useUnderline = useUnderline,
+        subtitleLines = subtitleLines,
+        subtitleSelectable = subtitleSelectable,
+        titleLines = titleLines,
+    )
+}
+
+private class AdwComboRowComposeNode(gObject: AdwComboRow) : LeafComposeNode<AdwComboRow>(gObject) {
+    var onSelected: SignalConnection<*>? = null
+}
+
+@Composable
+fun ComboRow(
+    items: List<String>,
+    selectedIndex: Int,
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    onSelectedChange: (Int) -> Unit = {},
+    activatable: Boolean = true,
+    titleSelectable: Boolean = false,
+    useMarkup: Boolean = true,
+    useUnderline: Boolean = false,
+    subtitleLines: Int = 0,
+    subtitleSelectable: Boolean = false,
+    titleLines: Int = 0,
+) {
+    val comboRow = remember { AdwComboRow() }
+    var pendingChange by remember { mutableIntStateOf(0) }
+    val model = remember(items) { StringList(items.toTypedArray()) }
+
+    BaseActionRow(
+        creator = { AdwComboRowComposeNode(comboRow) },
+        updater = {
+            set(items) {
+                this.widget.setModel(model)
+                if (this.widget.selected >= items.size) {
+                    this.widget.selected = (items.size - 1).coerceAtLeast(0)
+                }
+            }
+            set(selectedIndex to pendingChange) { (selected, _) ->
+                this.onSelected?.block()
+                if (selected < (this.widget.model?.nItems ?: 0)) {
+                    comboRow.selected = selected
+                }
+                this.onSelected?.unblock()
+            }
+            set(onSelectedChange) { onSelectionChanges ->
+                this.onSelected?.disconnect()
+                println(this.onSelected)
+                // Observe property changes for "selected" (since it's not a proper signal)
+                // https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1.8/property.ComboRow.selected.html
+                this.onSelected = this.widget.connect("notify::selected") { _: ParamSpec ->
+                    pendingChange += 1
+                    onSelectionChanges(this.widget.selected)
+                }
+            }
+        },
+        title = title,
+        subtitle = subtitle,
+        modifier = modifier,
+        activatable = activatable,
+        titleSelectable = titleSelectable,
+        useMarkup = useMarkup,
+        useUnderline = useUnderline,
+        subtitleLines = subtitleLines,
+        subtitleSelectable = subtitleSelectable,
+        titleLines = titleLines,
+    )
+}
+
+@Composable
+fun <T : GObject> ComboRow(
+    model: SingleSelection<T>,
+    onSelectedChange: (selectedItem: T) -> Unit,
+    item: @Composable (T) -> Unit,
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    activatable: Boolean = true,
+    titleSelectable: Boolean = false,
+    useMarkup: Boolean = true,
+    useUnderline: Boolean = false,
+    subtitleLines: Int = 0,
+    subtitleSelectable: Boolean = false,
+    titleLines: Int = 0,
+    selectedItem: @Composable (T) -> Unit = { item(it) },
+) {
+    val compositionContext = rememberCompositionContext()
+    val comboRow = remember {
+        AdwComboRow.builder()
+            .setListFactory(createListItemFactory(compositionContext, item))
+            .setFactory(createListItemFactory(compositionContext, selectedItem))
+            .build()
+    }
+    var pendingChange by remember { mutableIntStateOf(0) }
+
+    BaseActionRow(
+        creator = { AdwComboRowComposeNode(comboRow) },
+        updater = {
+            set(model to pendingChange) {
+                this.onSelected?.block()
+                this.widget.model = it.first
+                this.onSelected?.unblock()
+            }
+            set(onSelectedChange) { callback ->
+                this.onSelected?.disconnect()
+                // Observe property changes for "selected" (since it's not a proper signal)
+                this.onSelected = this.widget.connect("notify::selected-item") { _: ParamSpec ->
+                    pendingChange += 1
+                    val selection = widget.selectedItem
+                    if (selection != null) {
+                        @Suppress("UNCHECKED_CAST")
+                        callback(selection as T)
+                    }
                 }
             }
         },
