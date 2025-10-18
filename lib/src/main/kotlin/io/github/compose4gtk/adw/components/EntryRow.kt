@@ -13,8 +13,8 @@ import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.adw.PreferencesRow
-import org.gnome.adw.EntryRow as AdwEntryRow
 import org.gnome.gtk.Editable
+import org.gnome.adw.EntryRow as AdwEntryRow
 
 private class AdwEntryRowComposeNode(gObject: AdwEntryRow) : LeafComposeNode<AdwEntryRow>(gObject) {
     var onApply: SignalConnection<AdwEntryRow.ApplyCallback>? = null

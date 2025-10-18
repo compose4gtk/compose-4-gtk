@@ -9,18 +9,19 @@ import io.github.compose4gtk.adw.adwApplication
 import io.github.compose4gtk.adw.components.ActionRow
 import io.github.compose4gtk.adw.components.ApplicationWindow
 import io.github.compose4gtk.adw.components.ButtonRow
+import io.github.compose4gtk.adw.components.ComboRow
+import io.github.compose4gtk.adw.components.EntryRow
 import io.github.compose4gtk.adw.components.HeaderBar
 import io.github.compose4gtk.adw.components.PreferencesGroup
-import io.github.compose4gtk.adw.components.EntryRow
 import io.github.compose4gtk.adw.components.SpinRow
 import io.github.compose4gtk.adw.components.SwitchRow
-import io.github.compose4gtk.adw.components.ComboRow
-
 import io.github.compose4gtk.adw.components.ToastOverlay
 import io.github.compose4gtk.gtk.ImageSource
 import io.github.compose4gtk.gtk.components.IconButton
+import io.github.compose4gtk.gtk.components.Label
 import io.github.compose4gtk.gtk.components.ListBox
 import io.github.compose4gtk.gtk.components.VerticalBox
+import io.github.compose4gtk.gtk.components.rememberSelectionModel
 import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.modifier.alignment
 import io.github.compose4gtk.modifier.cssClasses
@@ -32,8 +33,6 @@ import org.gnome.adw.StyleManager
 import org.gnome.adw.Toast
 import org.gnome.gtk.Align
 import org.gnome.gtk.SelectionMode
-import io.github.compose4gtk.gtk.components.Label
-import io.github.compose4gtk.gtk.components.rememberSelectionModel
 import io.github.compose4gtk.gtk.components.SelectionMode as ListSelectionMode
 
 private val logger = KotlinLogging.logger {}

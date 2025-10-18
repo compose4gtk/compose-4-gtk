@@ -6,6 +6,7 @@ import androidx.compose.runtime.Updater
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCompositionContext
 import androidx.compose.runtime.setValue
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.GtkComposeNode
@@ -14,10 +15,9 @@ import io.github.compose4gtk.GtkContainerComposeNode
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.VirtualComposeNode
 import io.github.compose4gtk.VirtualComposeNodeContainer
+import io.github.compose4gtk.gtk.components.createListItemFactory
 import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.modifier.combine
-import androidx.compose.runtime.rememberCompositionContext
-import io.github.compose4gtk.gtk.components.createListItemFactory
 import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gobject.GObject
 import org.gnome.gobject.ParamSpec
@@ -25,11 +25,6 @@ import org.gnome.gtk.Adjustment
 import org.gnome.gtk.SingleSelection
 import org.gnome.gtk.StringList
 import org.gnome.gtk.Widget
-import kotlin.collections.List
-import kotlin.collections.forEach
-import kotlin.collections.mutableListOf
-import kotlin.collections.toTypedArray
-import kotlin.ranges.coerceAtLeast
 import org.gnome.adw.ActionRow as AdwActionRow
 import org.gnome.adw.ComboRow as AdwComboRow
 import org.gnome.adw.SpinRow as AdwSpinRow
