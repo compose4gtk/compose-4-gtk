@@ -17,13 +17,23 @@ import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.modifier.combine
 import io.github.jwharm.javagi.gobject.SignalConnection
+import org.gnome.adw.PreferencesRow
+import org.gnome.gobject.ParamSpec
 import org.gnome.gtk.Adjustment
 import org.gnome.gtk.Widget
 import org.gnome.adw.ActionRow as AdwActionRow
 import org.gnome.adw.SpinRow as AdwSpinRow
 import org.gnome.adw.SwitchRow as AdwSwitchRow
+import org.gnome.adw.ComboRow as AdwComboRow
+import org.gnome.adw.EntryRow as AdwEntryRow
 import org.gnome.gtk.SpinButton as GtkSpinButton
 import org.gnome.gtk.Switch as GtkSwitch
+import org.gnome.gtk.StringList
+import androidx.compose.runtime.rememberCompositionContext
+import io.github.compose4gtk.gtk.components.createListItemFactory
+import org.gnome.gobject.GObject
+import org.gnome.gtk.Editable
+import org.gnome.gtk.SingleSelection
 
 private enum class ActionRowSlot {
     PREFIX,
@@ -94,6 +104,34 @@ private fun <W : GtkComposeWidget<AdwActionRow>> BaseActionRow(
         content = content,
     )
 }
+
+@Composable
+private fun <W : GtkComposeWidget<PreferencesRow>> BasePreferenceRow(
+    creator: () -> W,
+    updater: Updater<W>.() -> Unit,
+    title: String,
+    modifier: Modifier = Modifier,
+    activatable: Boolean = true,
+    titleSelectable: Boolean = false,
+    useMarkup: Boolean = true,
+    useUnderline: Boolean = false,
+    content: @Composable () -> Unit = {},
+) {
+    ComposeNode<W, GtkApplier>(
+        factory = creator,
+        update = {
+            set(title) { this.widget.title = it }
+            set(modifier) { applyModifier(it) }
+            set(activatable) { this.widget.activatable = it }
+            set(titleSelectable) { this.widget.titleSelectable = it }
+            set(useMarkup) { this.widget.useMarkup = it }
+            set(useUnderline) { this.widget.useUnderline = it }
+            updater()
+        },
+        content = content,
+    )
+}
+
 
 private class AdwActionRowSlotContainer(actionRow: AdwActionRow, private val slot: ActionRowSlot) :
     GtkContainerComposeNode<AdwActionRow>(actionRow) {
@@ -303,6 +341,170 @@ fun SwitchRow(
     )
 }
 
+
+/**
+ * @param onApply Emitted when the apply button is pressed.
+ * @param onEntryActivated Emitted when the embedded entry is activated.
+ * @param onTextChanged Emitted when text changed in the embedded entry.
+ */
+private class AdwEntryRowComposeNode(gObject: AdwEntryRow) : LeafComposeNode<AdwEntryRow>(gObject) {
+    var onApply: SignalConnection<AdwEntryRow.ApplyCallback>? = null
+    var onEntryActivated: SignalConnection<AdwEntryRow.EntryActivatedCallback>? = null
+    var onTextChanged: SignalConnection<Editable.ChangedCallback>? = null
+}
+
+/**
+ * Creates a [org.gnome.adw.EntryRow], a list box row that contains a text entry.
+ *
+ * [org.gnome.adw.EntryRow] is a child of [org.gnome.adw.PreferencesRow]
+ * which are usually used for preferences/settings inside an application.
+ *
+ * @param text The text displayed in the entry.
+ * @param title The title for this row.
+ * @param subtitle The subtitle for this row.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param onEntryActivated Callback triggered when the entry is activated (pressing Enter).
+ * @param onApply Callback triggered when the apply button is pressed.
+ * @param activatable Whether the component can be activated.
+ * @param titleSelectable Whether the title is selectable.
+ * @param useMarkup Whether to use Pango markup for the title and subtitle.
+ * @param useUnderline Whether an embedded underline in the title or subtitle indicates a mnemonic.
+ * @param subtitleLines The number of lines at the end of which the subtitle label will be ellipsized.
+ * @param subtitleSelectable Whether the subtitle is selectable.
+ * @param titleLines The number of lines at the end of which the title label will be ellipsized.
+ */
+@Composable
+fun EntryRow(
+    text: String,
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    onEntryActivated: () -> Unit = {},
+    onApply: () -> Unit = {},
+    onTextChanged: (String) -> Unit = {},
+    activatable: Boolean = true,
+    titleSelectable: Boolean = false,
+    useMarkup: Boolean = true,
+    useUnderline: Boolean = false,
+    subtitleLines: Int = 0,
+    subtitleSelectable: Boolean = false,
+    titleLines: Int = 0,
+    showApplyButton: Boolean = true,
+) {
+
+    val entryRow = remember { AdwEntryRow() }
+    var pendingChange by remember { mutableIntStateOf(0) }
+
+    BasePreferenceRow(
+        creator = {
+            AdwEntryRowComposeNode(entryRow)
+        },
+        updater = {
+            set(text to pendingChange) { (t, _) ->
+                this.onTextChanged?.block()
+                if (entryRow.text != t)
+                    entryRow.text = t
+                this.onTextChanged?.unblock()
+            }
+            set(onEntryActivated) {
+                this.onEntryActivated?.disconnect()
+                this.onEntryActivated = entryRow.onEntryActivated {
+                    onEntryActivated()
+                }
+            }
+            set(onTextChanged) {
+                this.onTextChanged?.disconnect()
+                this.onTextChanged = entryRow.onChanged {
+                    pendingChange += 1
+                    onTextChanged(entryRow.text)
+                }
+            }
+            set(showApplyButton) {
+                if (entryRow.showApplyButton != it)
+                    entryRow.showApplyButton = it
+            }
+            set(onApply) {
+                this.onApply?.disconnect()
+                this.onApply = entryRow.onApply {
+                    onApply()
+                }
+            }
+        },
+        title = title,
+        modifier = modifier,
+        activatable = activatable,
+        titleSelectable = titleSelectable,
+        useMarkup = useMarkup,
+        useUnderline = useUnderline,
+    )
+}
+
+
+
+private class AdwComboRowComposeNode(gObject: AdwComboRow) : LeafComposeNode<AdwComboRow>(gObject) {
+    var onSelected: SignalConnection<*>? = null
+}
+
+@Composable
+fun ComboRow(
+    items: List<String>,
+    selectedIndex: Int,
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    onSelectedChange: (Int) -> Unit = {},
+    activatable: Boolean = true,
+    titleSelectable: Boolean = false,
+    useMarkup: Boolean = true,
+    useUnderline: Boolean = false,
+    subtitleLines: Int = 0,
+    subtitleSelectable: Boolean = false,
+    titleLines: Int = 0,
+) {
+    val comboRow = remember { AdwComboRow() }
+    var pendingChange by remember { mutableIntStateOf(0) }
+    val model = remember(items) { StringList(items.toTypedArray()) }
+
+
+    BaseActionRow(
+        creator = { AdwComboRowComposeNode(comboRow) },
+        updater = {
+            set(items) {
+                this.widget.setModel(model)
+                if (this.widget.selected >= items.size) {
+                    this.widget.selected = (items.size - 1).coerceAtLeast(0)
+                }
+            }
+            set(selectedIndex to pendingChange) { (selected, _) ->
+                this.onSelected?.block()
+                if (selected < (this.widget.model?.nItems ?: 0))
+                    comboRow.selected = selected
+                this.onSelected?.unblock()
+            }
+            set(onSelectedChange) { onSelectionChanges ->
+                this.onSelected?.disconnect()
+                println(this.onSelected)
+                // Observe property changes for "selected" (since it's not a proper signal)
+                // https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1.8/property.ComboRow.selected.html
+                this.onSelected = this.widget.connect("notify::selected") { _: ParamSpec ->
+                    pendingChange += 1
+                    onSelectionChanges(this.widget.selected)
+                }
+            }
+        },
+        title = title,
+        subtitle = subtitle,
+        modifier = modifier,
+        activatable = activatable,
+        titleSelectable = titleSelectable,
+        useMarkup = useMarkup,
+        useUnderline = useUnderline,
+        subtitleLines = subtitleLines,
+        subtitleSelectable = subtitleSelectable,
+        titleLines = titleLines,
+    )
+}
+
 private class AdwSpinRowComposeNode(gObject: AdwSpinRow) : LeafComposeNode<AdwSpinRow>(gObject) {
     var valueChanged: SignalConnection<GtkSpinButton.ValueChangedCallback>? = null
     var onActivate: SignalConnection<GtkSpinButton.ActivateCallback>? = null
@@ -400,6 +602,67 @@ fun SpinRow(
             set(climbRate) { this.widget.climbRate = it }
             set(digits) { this.widget.digits = it }
             set(numeric) { this.widget.numeric = it }
+        },
+        title = title,
+        subtitle = subtitle,
+        modifier = modifier,
+        activatable = activatable,
+        titleSelectable = titleSelectable,
+        useMarkup = useMarkup,
+        useUnderline = useUnderline,
+        subtitleLines = subtitleLines,
+        subtitleSelectable = subtitleSelectable,
+        titleLines = titleLines,
+    )
+}
+
+
+@Composable
+fun <T : GObject> ComboRow(
+    model: SingleSelection<T>,
+    onSelectedChange: (selectedItem: T) -> Unit,
+    item: @Composable (T) -> Unit,
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    activatable: Boolean = true,
+    titleSelectable: Boolean = false,
+    useMarkup: Boolean = true,
+    useUnderline: Boolean = false,
+    subtitleLines: Int = 0,
+    subtitleSelectable: Boolean = false,
+    titleLines: Int = 0,
+    selectedItem: @Composable (T) -> Unit = { item(it) },
+) {
+    val compositionContext = rememberCompositionContext()
+    val comboRow = remember {
+        AdwComboRow.builder()
+            .setListFactory(createListItemFactory(compositionContext, item))
+            .setFactory(createListItemFactory(compositionContext, selectedItem))
+            .build()
+    }
+    var pendingChange by remember { mutableIntStateOf(0) }
+
+    BaseActionRow(
+        creator = { AdwComboRowComposeNode(comboRow) },
+        updater = {
+            set(model to pendingChange) {
+                this.onSelected?.block()
+                this.widget.model = it.first
+                this.onSelected?.unblock()
+            }
+            set(onSelectedChange) { callback ->
+                this.onSelected?.disconnect()
+                // selected-item is an observable property; watch for changes
+                this.onSelected = this.widget.connect("notify::selected-item") { _: ParamSpec ->
+                    pendingChange += 1
+                    val selection = widget.selectedItem
+                    if (selection != null) {
+                        @Suppress("UNCHECKED_CAST")
+                        callback(selection as T)
+                    }
+                }
+            }
         },
         title = title,
         subtitle = subtitle,
