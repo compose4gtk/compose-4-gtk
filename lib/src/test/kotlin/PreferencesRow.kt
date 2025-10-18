@@ -1,5 +1,7 @@
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,21 +50,7 @@ fun main(args: Array<String>) {
                             selectionMode = SelectionMode.NONE,
                             modifier = Modifier.margin(16).cssClasses("boxed-list"),
                         ) {
-                            ButtonRow(
-                                title = "Search",
-                                startIcon = ImageSource.Icon("system-search-symbolic"),
-                                onActivate = {
-                                    logger.info { "I added stuff" }
-                                },
-                            )
-                            ButtonRow(
-                                title = "Delete",
-                                modifier = Modifier.cssClasses("destructive-action"),
-                                endIcon = ImageSource.Icon("edit-delete-symbolic"),
-                                onActivate = {
-                                    logger.info { "I deleted stuff" }
-                                },
-                            )
+                            ButtonRows()
                         }
 
                         val styleManager = remember { StyleManager.getDefault() }
@@ -92,58 +80,22 @@ fun main(args: Array<String>) {
                             EntryRow(
                                 text = username,
                                 title = "Username",
-                                subtitle = "Enter your username",
                                 showApplyButton = false,
                                 // "check" button pressed
                                 onApply = {
                                     logger.info { "Apply btn: Username entered: $username" }
                                 },
                                 // won't work while showApplyButton = true
-                                onEntryActivated = {
+                                onEntryActivate = {
                                     logger.info { "Enter key: Username entered: $username" }
                                 },
-                                onTextChanged = {
+                                onTextChange = {
                                     logger.info { "changed signal: EntryRow text changed: $it" }
                                     username = it
                                 },
 
                             )
-
-                            var selectedIndex by remember { mutableStateOf(0) }
-                            val items = remember { listOf("One", "Two", "Three") }
-                            ComboRow(
-                                items = items,
-                                selectedIndex = selectedIndex,
-                                title = "Favorite number",
-                                subtitle = "Pick one",
-                                onSelectedChange = { idx ->
-                                    selectedIndex = idx
-                                    logger.info { "ComboRow selected index: $idx, value: ${items[idx]}" }
-                                },
-                            )
-
-
-                            val comboRowSelectModel = rememberSelectionModel(
-                                itemsCount = items.size,
-                                selectionMode = ListSelectionMode.Single,
-                            )
-                            ComboRow(
-                                model = comboRowSelectModel,
-                                onSelectedChange = { selected ->
-                                    val idx = selected.index
-                                    logger.info { "Model ComboRow selected index: $idx, value: ${items[idx]}" }
-                                },
-                                item = { idxObj ->
-                                    Label(text = items[idxObj.index])
-                                },
-                                selectedItem = { idxObj ->
-                                    Label(text = "Selected: ${items[idxObj.index]}")
-                                },
-                                title = "Favorite number (model)",
-                                subtitle = "Pick one (custom render)",
-                            )
-
-
+                            ComboRows()
                             ActionRow(
                                 title = "Toast",
                                 subtitle = "Launches a toast",
@@ -199,4 +151,59 @@ fun main(args: Array<String>) {
             }
         }
     }
+}
+
+@Composable
+fun ButtonRows() {
+    ButtonRow(
+        title = "Search",
+        startIcon = ImageSource.Icon("system-search-symbolic"),
+        onActivate = {
+            logger.info { "I added stuff" }
+        },
+    )
+    ButtonRow(
+        title = "Delete",
+        modifier = Modifier.cssClasses("destructive-action"),
+        endIcon = ImageSource.Icon("edit-delete-symbolic"),
+        onActivate = {
+            logger.info { "I deleted stuff" }
+        },
+    )
+}
+
+@Composable
+fun ComboRows() {
+    var selectedIndex by remember { mutableIntStateOf(0) }
+    val items = remember { listOf("One", "Two", "Three") }
+    ComboRow(
+        items = items,
+        selectedIndex = selectedIndex,
+        title = "Favorite number",
+        subtitle = "Pick one",
+        onSelectedChange = { idx ->
+            selectedIndex = idx
+            logger.info { "ComboRow selected index: $idx, value: ${items[idx]}" }
+        },
+    )
+
+    val comboRowSelectModel = rememberSelectionModel(
+        itemsCount = items.size,
+        selectionMode = ListSelectionMode.Single,
+    )
+    ComboRow(
+        model = comboRowSelectModel,
+        onSelectedChange = { selected ->
+            val idx = selected.index
+            logger.info { "Model ComboRow selected index: $idx, value: ${items[idx]}" }
+        },
+        item = { idxObj ->
+            Label(text = items[idxObj.index])
+        },
+        selectedItem = { idxObj ->
+            Label(text = "Selected: ${items[idxObj.index]}")
+        },
+        title = "Favorite number (model)",
+        subtitle = "Pick one (custom render)",
+    )
 }
