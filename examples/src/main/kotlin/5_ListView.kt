@@ -1,3 +1,7 @@
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import io.github.compose4gtk.adw.adwApplication
 import io.github.compose4gtk.adw.components.ApplicationWindow
 import io.github.compose4gtk.adw.components.HeaderBar
@@ -15,9 +19,13 @@ fun main(args: Array<String>) {
             VerticalBox {
                 HeaderBar(title = { Label("ListView with 10 thousand items") })
                 ScrolledWindow(Modifier.expand()) {
+                    var value by remember { mutableStateOf(emptySet<Int>()) }
+
                     ListView(
+                        value = value,
                         items = 10000,
                         selectionMode = SelectionMode.Multiple,
+                        onSelectionChanges = { value = it },
                     ) { index ->
                         Label("Item #$index")
                     }
