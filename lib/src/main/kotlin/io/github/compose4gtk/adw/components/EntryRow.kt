@@ -72,7 +72,7 @@ private fun <W : GtkComposeWidget<PreferencesRow>> BasePreferenceRow(
 fun EntryRow(
     text: String,
     title: String,
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     onEntryActivate: () -> Unit = {},
     onApply: () -> Unit = {},
     onTextChange: (String) -> Unit = {},

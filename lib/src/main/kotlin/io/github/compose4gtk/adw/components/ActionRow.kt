@@ -314,14 +314,29 @@ private class AdwComboRowComposeNode(gObject: AdwComboRow) : LeafComposeNode<Adw
     var onSelected: SignalConnection<*>? = null
 }
 
+/**
+ * @param items The list of string options to display in the combo box.
+ * @param selectedIndex The index of the currently selected item.
+ * @param title The title displayed on the row.
+ * @param subtitle Optional subtitle displayed below the title.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param onSelectedChange Callback invoked when the selected item changes, providing the new index.
+ * @param activatable Whether the row can be activated (affects focus and accessibility).
+ * @param titleSelectable Whether the user can select the title text.
+ * @param useMarkup Whether the title and subtitle use Pango markup.
+ * @param useUnderline Whether an underscore in the title or subtitle indicates a mnemonic.
+ * @param subtitleLines The number of lines after which the subtitle is ellipsized (0 = no limit).
+ * @param subtitleSelectable Whether the user can select the subtitle text.
+ * @param titleLines The number of lines after which the title is ellipsized (0 = no limit).
+ */
 @Composable
 fun ComboRow(
     items: List<String>,
     selectedIndex: Int,
     title: String,
     subtitle: String,
+    onSelectedChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    onSelectedChange: (Int) -> Unit = {},
     activatable: Boolean = true,
     titleSelectable: Boolean = false,
     useMarkup: Boolean = true,
@@ -374,6 +389,24 @@ fun ComboRow(
     )
 }
 
+/**
+ * @param T The [org.gnome.gobject.GObject] type used by the model.
+ * @param model A [SingleSelection] wrapping the list model containing the available items.
+ * @param onSelectedChange Callback invoked when the selected item changes, providing the new [T] instance.
+ * @param item Composable used to render each item in the dropdown list.
+ * @param title The title displayed on the row.
+ * @param subtitle Optional subtitle displayed below the title.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param activatable Whether the row can be activated (affects focus and accessibility).
+ * @param titleSelectable Whether the user can select the title text.
+ * @param useMarkup Whether the title and subtitle use Pango markup.
+ * @param useUnderline Whether an underscore in the title or subtitle indicates a mnemonic.
+ * @param subtitleLines The number of lines after which the subtitle is ellipsized (0 = no limit).
+ * @param subtitleSelectable Whether the user can select the subtitle text.
+ * @param titleLines The number of lines after which the title is ellipsized (0 = no limit).
+ * @param selectedItem Optional composable used to render the currently selected item in the collapsed state,
+ * by default, it reuses [item].
+ */
 @Composable
 fun <T : GObject> ComboRow(
     model: SingleSelection<T>,
