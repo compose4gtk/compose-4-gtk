@@ -367,7 +367,6 @@ fun ComboRow(
             }
             set(onSelectedChange) { onSelectionChanges ->
                 this.onSelected?.disconnect()
-                println(this.onSelected)
                 // Observe property changes for "selected" (since it's not a proper signal)
                 // https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1.8/property.ComboRow.selected.html
                 this.onSelected = this.widget.connect("notify::selected") { _: ParamSpec ->
