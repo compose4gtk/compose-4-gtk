@@ -34,25 +34,13 @@ fun main(args: Array<String>) {
                     }
                 }
 
-                var singleSelectionValue by remember { mutableStateOf(setOf(2)) }
-                var multipleSelectionValue by remember { mutableStateOf(setOf(1, 3)) }
-
                 var show by remember { mutableStateOf(true) }
                 HorizontalBox(Modifier.expand()) {
                     if (show) {
                         Panel("Base model (single selection)") {
                             ListView(
-                                value = singleSelectionValue,
                                 items = itemSize,
                                 selectionMode = SelectionMode.Single,
-                                onSelectionChanges = {
-                                    if (it.isNotEmpty()) {
-                                        singleSelectionValue = it
-                                    }
-                                    for (position in it) {
-                                        println("Selected: ${items[position].name}")
-                                    }
-                                },
                                 onActivate = { position -> logger.info { "activated item #$position" } },
                             ) { index ->
                                 Label("Item #$index")
@@ -60,14 +48,7 @@ fun main(args: Array<String>) {
                         }
                         Panel("Custom model (multiple selection)") {
                             ListView(
-                                value = multipleSelectionValue,
                                 model = rememberMultiSelectionModel(items),
-                                onSelectionChanges = {
-                                    multipleSelectionValue = it
-                                    for (position in it) {
-                                        println("Selected: ${items[position].name}")
-                                    }
-                                },
                                 onActivate = { position -> logger.info { "activated item #$position" } },
                             ) { customItem ->
                                 Label(customItem.name)

@@ -240,13 +240,9 @@ fun main(args: Array<String>) {
             VerticalBox {
                 HeaderBar(title = { Label("ListView with 10 thousand items") })
                 ScrolledWindow(Modifier.expand()) {
-                    var value by remember { mutableStateOf(emptySet<Int>()) }
-                    
                     ListView(
-                        value = value,
                         items = 10000,
                         selectionMode = SelectionMode.Multiple,
-                        onSelectionChanges = { value = it },
                     ) { index ->
                         Label("Item #$index")
                     }

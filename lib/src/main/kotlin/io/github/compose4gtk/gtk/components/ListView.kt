@@ -2,6 +2,7 @@ package io.github.compose4gtk.gtk.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -17,7 +18,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import org.gnome.gobject.GObject
 import org.gnome.gtk.ListTabBehavior
 import org.gnome.gtk.SelectionModel
-import org.gnome.gtk.SingleSelection
 import org.gnome.gtk.Widget
 import org.gnome.gtk.ListView as GTKListView
 
@@ -57,7 +57,6 @@ internal class BaseListComposeNode<W : Widget, C : FunctionPointer>(
 @Suppress("ComposableNaming", "ContentEmitterReturningValues")
 @Composable
 fun <M : SelectionModel<ListIndexModel.ListIndex>> ListView(
-    value: Set<Int>,
     items: Int,
     selectionMode: SelectionMode<M>,
     modifier: Modifier = Modifier,
@@ -66,19 +65,16 @@ fun <M : SelectionModel<ListIndexModel.ListIndex>> ListView(
     showSeparators: Boolean = false,
     tabBehaviour: ListTabBehavior = ListTabBehavior.ALL,
     onActivate: ((position: Int) -> Unit)? = null,
-    onSelectionChanges: ((positions: Set<Int>) -> Unit)? = null,
     child: @Composable (index: Int) -> Unit,
 ): M {
     val selectionModel = rememberSelectionModel(itemsCount = items, selectionMode = selectionMode)
     ListView(
-        value = value,
         model = selectionModel,
         modifier = modifier,
         enableRubberband = enableRubberband,
         singleClickActivate = singleClickActivate,
         showSeparators = showSeparators,
         tabBehaviour = tabBehaviour,
-        onSelectionChanges = onSelectionChanges,
         onActivate = onActivate,
     ) {
         child(it.index)
@@ -95,7 +91,6 @@ fun <M : SelectionModel<ListIndexModel.ListIndex>> ListView(
  */
 @Composable
 fun <T : GObject> ListView(
-    value: Set<Int>,
     model: SelectionModel<T>,
     modifier: Modifier = Modifier,
     enableRubberband: Boolean = false,
@@ -103,7 +98,46 @@ fun <T : GObject> ListView(
     showSeparators: Boolean = false,
     tabBehaviour: ListTabBehavior = ListTabBehavior.ALL,
     onActivate: ((position: Int) -> Unit)? = null,
-    onSelectionChanges: ((positions: Set<Int>) -> Unit)? = null,
+    child: @Composable (item: T) -> Unit,
+) {
+    val compositionContext = rememberCompositionContext()
+
+    ComposeNode<BaseListComposeNode<GTKListView, GTKListView.ActivateCallback>, GtkApplier>(
+        factory = {
+            BaseListComposeNode(
+                gObject = GTKListView.builder().setFactory(createListItemFactory(compositionContext, child)).build(),
+            )
+        },
+        update = {
+            set(modifier) { applyModifier(it) }
+            set(model) { this.widget.model = it }
+            set(enableRubberband) { this.widget.enableRubberband = it }
+            set(showSeparators) { this.widget.showSeparators = it }
+            set(singleClickActivate) { this.widget.singleClickActivate = it }
+            set(tabBehaviour) { this.widget.tabBehavior = it }
+            set(onActivate) {
+                this.onActivate?.disconnect()
+                if (onActivate != null) {
+                    this.onActivate = this.widget.onActivate(it)
+                } else {
+                    this.onActivate = null
+                }
+            }
+        },
+    )
+}
+
+@Composable
+private fun <T : GObject> BaseControlledListView(
+    model: SelectionModel<T>,
+    modifier: Modifier = Modifier,
+    selectedItems: Set<Int>? = null,
+    enableRubberband: Boolean = false,
+    singleClickActivate: Boolean = false,
+    showSeparators: Boolean = false,
+    tabBehaviour: ListTabBehavior = ListTabBehavior.ALL,
+    onActivate: ((position: Int) -> Unit)? = null,
+    onSelectionChange: ((positions: Set<Int>) -> Unit)? = null,
     child: @Composable (item: T) -> Unit,
 ) {
     val compositionContext = rememberCompositionContext()
@@ -117,39 +151,12 @@ fun <T : GObject> ListView(
         },
         update = {
             set(modifier) { applyModifier(it) }
-            set(model) {
-                if (model is SingleSelection) {
-                    model.autoselect = false
-                    model.canUnselect = true
-                }
-                this.widget.model = it
-            }
-            // Ensures that when items are removed and re-added,
-            // they are reselected to keep the UI in sync with the state.
-            set(model.size) {
-                pendingChange++
-            }
+            set(model) { this.widget.model = it }
+            set(model.size) { pendingChange++ }
             set(enableRubberband) { this.widget.enableRubberband = it }
             set(showSeparators) { this.widget.showSeparators = it }
             set(singleClickActivate) { this.widget.singleClickActivate = it }
             set(tabBehaviour) { this.widget.tabBehavior = it }
-            set(onSelectionChanges) {
-                this.onSelectionChanges?.disconnect()
-                if (onSelectionChanges != null) {
-                    this.onSelectionChanges = model.onSelectionChanged { _, _ ->
-                        pendingChange++
-                        val positions = mutableListOf<Int>()
-                        for (position in 0 until model.size) {
-                            if (model.isSelected(position)) {
-                                positions.add(position)
-                            }
-                        }
-                        onSelectionChanges(positions.toSet())
-                    }
-                } else {
-                    this.onSelectionChanges = null
-                }
-            }
             set(onActivate) {
                 this.onActivate?.disconnect()
                 if (onActivate != null) {
@@ -158,18 +165,168 @@ fun <T : GObject> ListView(
                     this.onActivate = null
                 }
             }
-            set(value to pendingChange) {
+            set(onSelectionChange) {
+                this.onSelectionChanges?.disconnect()
+                this.onSelectionChanges = model.onSelectionChanged { _, _ ->
+                    pendingChange++
+                    val positions = mutableListOf<Int>()
+                    for (position in 0 until model.size) {
+                        if (model.isSelected(position)) {
+                            positions.add(position)
+                        }
+                    }
+                    onSelectionChange?.invoke(positions.toSet())
+                }
+            }
+            set(selectedItems to selectedItems?.size to pendingChange) {
                 this.onSelectionChanges?.block()
                 model.unselectAll()
-                for (position in value) {
-                    if (position < model.size) {
-                        model.selectItem(position, false)
-                    } else {
-                        logger.warn { "Position $position is out of range" }
+                println("IM STILL HERE")
+                if (selectedItems != null && selectedItems.isNotEmpty()) {
+                    for (position in selectedItems) {
+                        if (position < model.size) {
+                            model.selectItem(position, false)
+                        } else {
+                            logger.warn { "Position $position is out of range" }
+                        }
                     }
                 }
                 this.onSelectionChanges?.unblock()
             }
         },
+    )
+}
+
+/**
+ * Creates a controlled multiple selection [org.gnome.gtk.ListView].
+ *
+ * @param selectedItems Selected indexes in the list.
+ * @param items The items to be listed.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param enableRubberband Whether selection can be changed by dragging with the mouse.
+ * @param singleClickActivate Whether rows should be activated on single click and selected on hover.
+ * @param showSeparators Show separators between rows.
+ * @param tabBehaviour How the `Tab` key behaves.
+ * @param onActivate Callback triggered when a row is activated.
+ * @param onSelectionChange Callback triggered when selections are made.
+ * @param child Composable child representing a row.
+ */
+@Composable
+fun <T : GObject> ControlledListView(
+    selectedItems: Set<Int>,
+    items: List<T>,
+    modifier: Modifier = Modifier,
+    enableRubberband: Boolean = false,
+    singleClickActivate: Boolean = false,
+    showSeparators: Boolean = false,
+    tabBehaviour: ListTabBehavior = ListTabBehavior.ALL,
+    onActivate: ((position: Int) -> Unit)? = null,
+    onSelectionChange: ((positions: Set<Int>) -> Unit)? = null,
+    child: @Composable (item: T) -> Unit,
+) {
+    val model = rememberMultiSelectionModel(items)
+
+    BaseControlledListView(
+        model = model,
+        selectedItems = selectedItems,
+        modifier = modifier,
+        enableRubberband = enableRubberband,
+        singleClickActivate = singleClickActivate,
+        showSeparators = showSeparators,
+        tabBehaviour = tabBehaviour,
+        onActivate = onActivate,
+        onSelectionChange = onSelectionChange,
+        child = child,
+    )
+}
+
+/**
+ * Creates a controlled single selection [org.gnome.gtk.ListView].
+ *
+ * @param selectedItem Selected index in the list.
+ * @param items The items to be listed.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param enableRubberband Whether selection can be changed by dragging with the mouse.
+ * @param singleClickActivate Whether rows should be activated on single click and selected on hover.
+ * @param showSeparators Show separators between rows.
+ * @param tabBehaviour How the `Tab` key behaves.
+ * @param onActivate Callback triggered when a row is activated.
+ * @param onSelectionChange Callback triggered when a selection is made.
+ * @param child Composable child representing a row.
+ */
+@Composable
+fun <T : GObject> ControlledListView(
+    selectedItem: Int?,
+    items: List<T>,
+    modifier: Modifier = Modifier,
+    enableRubberband: Boolean = false,
+    singleClickActivate: Boolean = false,
+    showSeparators: Boolean = false,
+    tabBehaviour: ListTabBehavior = ListTabBehavior.ALL,
+    onActivate: ((position: Int) -> Unit)? = null,
+    onSelectionChange: ((positions: Int?) -> Unit)? = null,
+    child: @Composable (item: T) -> Unit,
+) {
+    val model = rememberSingleSelectionModel(items)
+
+    LaunchedEffect(model) {
+        model.autoselect = false
+        model.canUnselect = true
+    }
+
+    BaseControlledListView(
+        model = model,
+        selectedItems = if (selectedItem != null) setOf(selectedItem) else emptySet(),
+        modifier = modifier,
+        enableRubberband = enableRubberband,
+        singleClickActivate = singleClickActivate,
+        showSeparators = showSeparators,
+        tabBehaviour = tabBehaviour,
+        onActivate = onActivate,
+        onSelectionChange = { positions ->
+            if (positions.isNotEmpty()) {
+                onSelectionChange?.invoke(positions.first())
+            } else {
+                onSelectionChange?.invoke(null)
+            }
+        },
+        child = child,
+    )
+}
+
+/**
+ * Creates a controlled no selection [org.gnome.gtk.ListView].
+ *
+ * @param items The items to be listed.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param enableRubberband Whether selection can be changed by dragging with the mouse.
+ * @param singleClickActivate Whether rows should be activated on single click and selected on hover.
+ * @param showSeparators Show separators between rows.
+ * @param tabBehaviour How the `Tab` key behaves.
+ * @param onActivate Callback triggered when a row is activated.
+ * @param child Composable child representing a row.
+ */
+@Composable
+fun <T : GObject> ControlledListView(
+    items: List<T>,
+    modifier: Modifier = Modifier,
+    enableRubberband: Boolean = false,
+    singleClickActivate: Boolean = false,
+    showSeparators: Boolean = false,
+    tabBehaviour: ListTabBehavior = ListTabBehavior.ALL,
+    onActivate: ((position: Int) -> Unit)? = null,
+    child: @Composable (item: T) -> Unit,
+) {
+    val model = rememberNoSelectionModel(items)
+
+    BaseControlledListView(
+        model = model,
+        modifier = modifier,
+        enableRubberband = enableRubberband,
+        singleClickActivate = singleClickActivate,
+        showSeparators = showSeparators,
+        tabBehaviour = tabBehaviour,
+        onActivate = onActivate,
+        child = child,
     )
 }
