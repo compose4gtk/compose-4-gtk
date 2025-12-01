@@ -27,7 +27,8 @@ fun main(args: Array<String>) {
             title = "Controlled ListView",
             onClose = ::exitApplication,
             defaultWidth = 800,
-            defaultHeight = 800) {
+            defaultHeight = 800,
+        ) {
             VerticalBox {
                 HeaderBar(modifier = Modifier.cssClasses("flat"))
 
@@ -41,7 +42,7 @@ fun main(args: Array<String>) {
                 }
 
                 val selectedItems = remember { mutableStateSetOf(2, 4) }
-                var selectedItem by remember { mutableStateOf<Int?>(1) }
+                var selectedItem by remember { mutableStateOf<Int?>(null) }
 
                 HorizontalBox(modifier = Modifier.expand()) {
                     Panel("Single Selection") {
@@ -67,7 +68,7 @@ fun main(args: Array<String>) {
                                     selectedItems.clear()
                                     selectedItems.addAll(it)
                                 }
-                            }
+                            },
                         ) { item ->
                             Label(text = item.name)
                         }
