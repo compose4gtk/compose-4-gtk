@@ -13,6 +13,7 @@ import io.github.compose4gtk.SingleChildComposeNode
 import io.github.compose4gtk.VirtualComposeNode
 import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.modifier.Modifier
+import org.gnome.adw.LengthUnit
 import org.gnome.adw.OverlaySplitView
 import org.gnome.gtk.PackType
 
@@ -61,21 +62,24 @@ private class OverlaySplitViewImpl : OverlaySplitViewScope {
  * @param pinSidebar Whether the sidebar widget is pinned.
  * @param sidebarPosition The sidebar position.
  * @param sidebarWidthFraction The preferred sidebar width as a fraction of the total width.
+ * @param maxSidebarWidth The maximum sidebar width.
+ * @param minSidebarWidth The minimum sidebar width.
+ * @param sidebarWidthUnit The length unit for minimum and maximum sidebar widths.
  * @param enableHideGesture Whether the sidebar can be closed with a swipe gesture.
  * @param enableShowGesture Whether the sidebar can be opened with an edge swipe gesture.
  * @param content The composable content to display inside the view.
- *
- * TODO:
- *  - min/max sidebar width
  */
 @Composable
 fun OverlaySplitView(
-    sidebar: @Composable () -> Unit,
+    sidebar: @Composable OverlaySplitViewScope.() -> Unit,
     modifier: Modifier = Modifier,
     collapsed: Boolean = false,
     pinSidebar: Boolean = false,
     sidebarPosition: PackType = PackType.START,
     sidebarWidthFraction: Double = 0.25,
+    maxSidebarWidth: Double = 280.0,
+    minSidebarWidth: Double = 180.0,
+    sidebarWidthUnit: LengthUnit = LengthUnit.SP,
     enableHideGesture: Boolean = true,
     enableShowGesture: Boolean = true,
     content: @Composable OverlaySplitViewScope.() -> Unit,
@@ -94,13 +98,18 @@ fun OverlaySplitView(
             set(pinSidebar) { this.widget.pinSidebar = it }
             set(sidebarPosition) { this.widget.sidebarPosition = it }
             set(sidebarWidthFraction) { this.widget.sidebarWidthFraction = it }
+            set(maxSidebarWidth) { this.widget.maxSidebarWidth = it }
+            set(minSidebarWidth) { this.widget.minSidebarWidth = it }
+            set(sidebarWidthUnit) { this.widget.sidebarWidthUnit = it }
             set(enableHideGesture) { this.widget.enableHideGesture = it }
             set(enableShowGesture) { this.widget.enableShowGesture = it }
             set(scope) { scope.overlaySplitView = this.widget }
         },
         content = {
             Sidebar {
-                sidebar()
+                scope.apply {
+                    sidebar()
+                }
             }
             Content {
                 scope.apply {
