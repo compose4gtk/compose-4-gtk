@@ -33,6 +33,7 @@ fun main(args: Array<String>) {
                         ListItem("Custom item #$index")
                     }
                 }
+
                 var show by remember { mutableStateOf(true) }
                 HorizontalBox(Modifier.expand()) {
                     if (show) {
