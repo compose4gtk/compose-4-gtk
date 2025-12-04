@@ -27,6 +27,11 @@ fun main(args: Array<String>) {
                         HeaderBar(
                             title = { Label("Sidebar") },
                         )
+                        Button(
+                            label = "Hide sidebar",
+                            modifier = Modifier.margin(8),
+                            onClick = { hideSidebar() },
+                        )
                     }
                 },
                 collapsed = !isBig,
