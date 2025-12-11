@@ -1,18 +1,13 @@
 package io.github.compose4gtk.adw.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ComposeNode
-import androidx.compose.runtime.Updater
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.github.compose4gtk.GtkApplier
-import io.github.compose4gtk.GtkComposeWidget
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gobject.SignalConnection
-import org.gnome.adw.PreferencesRow
 import org.gnome.gtk.Editable
 import org.gnome.adw.EntryRow as AdwEntryRow
 
@@ -20,33 +15,6 @@ private class AdwEntryRowComposeNode(gObject: AdwEntryRow) : LeafComposeNode<Adw
     var onApply: SignalConnection<AdwEntryRow.ApplyCallback>? = null
     var onEntryActivated: SignalConnection<AdwEntryRow.EntryActivatedCallback>? = null
     var onTextChanged: SignalConnection<Editable.ChangedCallback>? = null
-}
-
-@Composable
-private fun <W : GtkComposeWidget<PreferencesRow>> BasePreferenceRow(
-    creator: () -> W,
-    updater: Updater<W>.() -> Unit,
-    title: String,
-    modifier: Modifier = Modifier,
-    activatable: Boolean = true,
-    titleSelectable: Boolean = false,
-    useMarkup: Boolean = true,
-    useUnderline: Boolean = false,
-    content: @Composable () -> Unit = {},
-) {
-    ComposeNode<W, GtkApplier>(
-        factory = creator,
-        update = {
-            set(title) { this.widget.title = it }
-            set(modifier) { applyModifier(it) }
-            set(activatable) { this.widget.activatable = it }
-            set(titleSelectable) { this.widget.titleSelectable = it }
-            set(useMarkup) { this.widget.useMarkup = it }
-            set(useUnderline) { this.widget.useUnderline = it }
-            updater()
-        },
-        content = content,
-    )
 }
 
 /**
@@ -57,16 +25,16 @@ private fun <W : GtkComposeWidget<PreferencesRow>> BasePreferenceRow(
  *
  * @param text The text displayed in the entry.
  * @param title The title for this row.
- * @param subtitle The subtitle for this row.
  * @param modifier Compose [io.github.compose4gtk.modifier.Modifier] for layout and styling.
  * @param onEntryActivate Callback triggered when the entry is activated (pressing Enter).
  * @param onApply Callback triggered when the apply button is pressed.
+ * @param selectable Whether the row can be selected.
  * @param activatable Whether the component can be activated.
  * @param titleSelectable Whether the title is selectable.
  * @param useMarkup Whether to use Pango markup for the title and subtitle.
  * @param useUnderline Whether an embedded underline in the title or subtitle indicates a mnemonic.
- * @param subtitleLines The number of lines at the end of which the subtitle label will be ellipsized.
- * @param subtitleSelectable Whether the subtitle is selectable.
+ *
+ * TODO: Prefix/suffix
  */
 @Composable
 fun EntryRow(
@@ -76,6 +44,7 @@ fun EntryRow(
     onEntryActivate: () -> Unit = {},
     onApply: () -> Unit = {},
     onTextChange: (String) -> Unit = {},
+    selectable: Boolean = true,
     activatable: Boolean = true,
     titleSelectable: Boolean = false,
     useMarkup: Boolean = true,
@@ -85,7 +54,7 @@ fun EntryRow(
     val entryRow = remember { AdwEntryRow() }
     var pendingChange by remember { mutableIntStateOf(0) }
 
-    BasePreferenceRow(
+    PreferencesRow(
         creator = {
             AdwEntryRowComposeNode(entryRow)
         },
@@ -124,6 +93,7 @@ fun EntryRow(
         },
         title = title,
         modifier = modifier,
+        selectable = selectable,
         activatable = activatable,
         titleSelectable = titleSelectable,
         useMarkup = useMarkup,
