@@ -141,6 +141,6 @@ fun TextView(
                     onTextChange(buffer.getText(startIter, endIter, false))
                 }
             }
-        }
+        },
     )
 }
