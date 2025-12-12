@@ -22,12 +22,35 @@ private class GtkTextViewComposeNode(gObject: GtkTextView) : LeafComposeNode<Gtk
     var onTextChange: SignalConnection<TextBuffer.ChangedCallback>? = null
 }
 
-
-// TODO: extra-menu, im-module, overwrite?, tabs
+// TODO: extra-menu, im-module, overwrite? (insert), tabs
+/**
+ * Creates a [org.gnome.gtk.TextView], useful for entering large amounts of text.
+ *
+ * @param text The text content.
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param enableUndo Whether support for undoing and redoing changes is allowed.
+ * @param acceptsTab Whether `Tab` will result in a tab character being entered.
+ * @param bottomMargin The bottom margin for text in the text view.
+ * @param cursorVisible If the insertion cursor is shown.
+ * @param editable Whether the text can be modified by the user.
+ * @param indent Amount to indent the paragraph, in pixels.
+ * @param inputHints Additional hints (beyond [inputPurpose]) that allow input methods to fine-tune their behaviour.
+ * @param inputPurpose The purpose of this text field.
+ * @param justification Left, right, or center justification.
+ * @param leftMargin The default left margin for text in the text view.
+ * @param monospace Whether text should be displayed in a monospace font.
+ * @param pixelsAboveLines Pixels of blank space above paragraphs.
+ * @param pixelsBelowLines Pixels of blank space below paragraphs.
+ * @param pixelsInsideWrap Pixels of blank space between wrapped lines in a paragraph.
+ * @param rightMargin The default right margin for text in the text view.
+ * @param topMargin The top margin for text in the text view.
+ * @param wrapMode Whether to wrap lines never, at word boundaries, or at character boundaries.
+ */
 @Composable
 fun TextView(
     text: String,
     modifier: Modifier = Modifier,
+    enableUndo: Boolean = true,
     acceptsTab: Boolean = true,
     bottomMargin: Int = 0,
     cursorVisible: Boolean = true,
@@ -56,29 +79,32 @@ fun TextView(
         },
         update = {
             set(text to pendingChange) {
-                this.onTextChange?.block()
                 val buffer = this.widget.buffer
-                buffer.beginUserAction()
 
                 val startIter = TextIter()
                 val endIter = TextIter()
-
                 buffer.getStartIter(startIter)
                 buffer.getEndIter(endIter)
 
-                buffer.delete(startIter, endIter)
-                buffer.insert(startIter, text, text.length)
+                val current = buffer.getText(startIter, endIter, false)
 
-                // Place the cursor where text was added/removed
-                val newOffset = cursorOffset.coerceAtMost(text.length)
-                val textIter = TextIter()
-                buffer.getIterAtOffset(textIter, newOffset)
-                buffer.placeCursor(textIter)
+                if (current != text) {
+                    this.onTextChange?.block()
 
-                buffer.endUserAction()
-                this.onTextChange?.unblock()
+                    buffer.delete(startIter, endIter)
+                    buffer.insert(startIter, text, text.length)
+
+                    // Place the cursor where text was added/removed
+                    val newOffset = cursorOffset.coerceAtMost(text.length)
+                    val textIter = TextIter()
+                    buffer.getIterAtOffset(textIter, newOffset)
+                    buffer.placeCursor(textIter)
+
+                    this.onTextChange?.unblock()
+                }
             }
             set(modifier) { applyModifier(it) }
+            set(enableUndo) { this.widget.buffer.enableUndo = it }
             set(acceptsTab) { this.widget.acceptsTab = it }
             set(bottomMargin) { this.widget.bottomMargin = it }
             set(cursorVisible) { this.widget.cursorVisible = it }
