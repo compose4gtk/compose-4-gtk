@@ -10,17 +10,19 @@ import io.github.compose4gtk.modifier.Modifier
 import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.Editable
 import org.gnome.adw.EntryRow as AdwEntryRow
+import org.gnome.adw.PasswordEntryRow as AdwPasswordEntryRow
 
-private class AdwEntryRowComposeNode(gObject: AdwEntryRow) : LeafComposeNode<AdwEntryRow>(gObject) {
+private class AdwPasswordEntryRowComposeNode(gObject: AdwPasswordEntryRow) :
+    LeafComposeNode<AdwPasswordEntryRow>(gObject) {
     var onApply: SignalConnection<AdwEntryRow.ApplyCallback>? = null
     var onEntryActivated: SignalConnection<AdwEntryRow.EntryActivatedCallback>? = null
     var onTextChanged: SignalConnection<Editable.ChangedCallback>? = null
 }
 
 /**
- * Creates a [org.gnome.adw.EntryRow], a list box row that contains a text entry.
+ * Creates a [org.gnome.adw.PasswordEntryRow], an entry row that hides its content.
  *
- * [org.gnome.adw.EntryRow] is a child of [org.gnome.adw.PreferencesRow]
+ * [org.gnome.adw.PasswordEntryRow] is a child of [org.gnome.adw.EntryRow] and [org.gnome.adw.PreferencesRow]
  * which are usually used for preferences/settings inside an application.
  *
  * @param text The text displayed in the entry.
@@ -39,7 +41,7 @@ private class AdwEntryRowComposeNode(gObject: AdwEntryRow) : LeafComposeNode<Adw
  * TODO: Prefix/suffix
  */
 @Composable
-fun EntryRow(
+fun PasswordEntryRow(
     text: String,
     title: String,
     modifier: Modifier = Modifier,
@@ -53,42 +55,42 @@ fun EntryRow(
     useUnderline: Boolean = false,
     showApplyButton: Boolean = true,
 ) {
-    val entryRow = remember { AdwEntryRow() }
+    val passwordEntryRow = remember { AdwPasswordEntryRow() }
     var pendingChange by remember { mutableIntStateOf(0) }
 
     PreferencesRow(
         creator = {
-            AdwEntryRowComposeNode(entryRow)
+            AdwPasswordEntryRowComposeNode(passwordEntryRow)
         },
         updater = {
             set(text to pendingChange) { (text, _) ->
                 this.onTextChanged?.block()
-                if (entryRow.text != text) {
-                    entryRow.text = text
+                if (passwordEntryRow.text != text) {
+                    passwordEntryRow.text = text
                 }
                 this.onTextChanged?.unblock()
             }
             set(onEntryActivate) {
                 this.onEntryActivated?.disconnect()
-                this.onEntryActivated = entryRow.onEntryActivated {
+                this.onEntryActivated = passwordEntryRow.onEntryActivated {
                     onEntryActivate()
                 }
             }
             set(onTextChange) {
                 this.onTextChanged?.disconnect()
-                this.onTextChanged = entryRow.onChanged {
+                this.onTextChanged = passwordEntryRow.onChanged {
                     pendingChange += 1
-                    onTextChange(entryRow.text)
+                    onTextChange(passwordEntryRow.text)
                 }
             }
             set(showApplyButton) {
-                if (entryRow.showApplyButton != it) {
-                    entryRow.showApplyButton = it
+                if (passwordEntryRow.showApplyButton != it) {
+                    passwordEntryRow.showApplyButton = it
                 }
             }
             set(onApply) {
                 this.onApply?.disconnect()
-                this.onApply = entryRow.onApply {
+                this.onApply = passwordEntryRow.onApply {
                     onApply()
                 }
             }
