@@ -14,12 +14,13 @@ detekt-compose = "0.4.27"
 [libraries]
 javagi-gtk = { group = "io.github.jwharm.javagi", name = "gtk", version.ref = "javagi" }
 javagi-adw = { group = "io.github.jwharm.javagi", name = "adw", version.ref = "javagi" }
-kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlin-logging"}
-kotlinx-datetime = { group = "org.jetbrains.kotlinx", name="kotlinx-datetime", version.ref = "kotlinx-datetime" }
-slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j"}
-slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j"}
-detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt-formatting"}
-detekt-compose = { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "detekt-compose"}
+javagi-webkit = { group = "io.github.jwharm.javagi", name = "webkit", version.ref = "javagi" }
+kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlin-logging" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
+slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
+slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
+detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt-formatting" }
+detekt-compose = { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "detekt-compose" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
