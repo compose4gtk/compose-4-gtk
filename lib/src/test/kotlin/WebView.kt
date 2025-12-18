@@ -37,7 +37,7 @@ fun main(args: Array<String>) {
                 title = "Web View - ${webViewState.title}",
                 onClose = ::exitApplication,
                 defaultWidth = 1200,
-                defaultHeight = 800
+                defaultHeight = 800,
             ) {
                 VerticalBox {
                     HeaderBar()
@@ -91,7 +91,7 @@ fun main(args: Array<String>) {
                                 .sensitive(!webViewState.isLoading),
                             onTextChange = { uri = it },
                             onActivate = { webViewState.loadUri(uri) },
-                            progressFraction = if (webViewState.isLoading) webViewState.estimatedLoadProgress else 0.0
+                            progressFraction = if (webViewState.isLoading) webViewState.estimatedLoadProgress else 0.0,
                         )
                         IconButton(
                             icon = ImageSource.Icon("minus-symbolic"),
@@ -111,7 +111,7 @@ fun main(args: Array<String>) {
                     }
 
                     Frame(
-                        modifier = Modifier.margin(16)
+                        modifier = Modifier.margin(16),
                     ) {
                         WebView(state = webViewState, modifier = Modifier.expand(), zoomLevel = zoomLevel)
                     }

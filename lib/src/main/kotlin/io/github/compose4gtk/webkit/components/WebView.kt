@@ -56,9 +56,9 @@ private class WebViewStateImpl : WebViewState {
             }
             value.onLoadChanged { loadEvent ->
                 when (loadEvent) {
-                    LoadEvent.STARTED,
-                    LoadEvent.COMMITTED,
-                    LoadEvent.REDIRECTED,
+                    LoadEvent.STARTED -> {}
+                    LoadEvent.COMMITTED -> {}
+                    LoadEvent.REDIRECTED -> {}
                     LoadEvent.FINISHED -> {
                         _canGoBack = value.canGoBack()
                         _canGoForward = value.canGoForward()
