@@ -235,13 +235,13 @@ private fun GtkEntryComposeNode.applyIcon(
     onPress: () -> Unit,
     entryIconPosition: EntryIconPosition,
 ) {
+    widget.setIconFromIconName(entryIconPosition, null)
     val child = if (entryIconPosition == EntryIconPosition.PRIMARY) this.widget.firstChild else this.widget.lastChild
+    if (child is Image) child.visible = false
+
     if (icon != null) {
         if (child is Image) child.visible = true
         widget.setIconFromIconName(entryIconPosition, icon.iconName)
-    } else {
-        if (child is Image) child.visible = false
-        widget.setIconFromIconName(entryIconPosition, null)
     }
     widget.setIconSensitive(entryIconPosition, sensitive)
 
