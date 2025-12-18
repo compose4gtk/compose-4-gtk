@@ -5,10 +5,10 @@ import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.rememberCompositionContext
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gio.ListIndexModel
 import org.gnome.gobject.GObject
 import org.gnome.gtk.ListTabBehavior
 import org.gnome.gtk.SelectionModel
+import org.javagi.gio.ListIndexModel
 import org.gnome.gtk.GridView as GTKGridView
 
 /**

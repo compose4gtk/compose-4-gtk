@@ -13,7 +13,6 @@ import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.gtk.ImageSource
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.gnome.gobject.GObject
@@ -26,6 +25,7 @@ import org.gnome.gtk.InputHints
 import org.gnome.gtk.InputPurpose
 import org.gnome.pango.AttrList
 import org.gnome.pango.TabArray
+import org.javagi.gobject.SignalConnection
 
 private class GtkEntryComposeNode(
     gObject: Entry,

@@ -8,10 +8,10 @@ import io.github.compose4gtk.GtkComposeWidget
 import io.github.compose4gtk.SingleChildComposeNode
 import io.github.compose4gtk.gtk.ImageSource
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.Button
 import org.gnome.gtk.LinkButton
 import org.gnome.gtk.ToggleButton
+import org.javagi.gobject.SignalConnection
 
 private class GtkButtonComposeNode(gObject: Button) : SingleChildComposeNode<Button>(gObject, { child = it }) {
     var onClick: SignalConnection<Button.ClickedCallback>? = null

@@ -5,12 +5,12 @@ import androidx.compose.runtime.ComposeNode
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.number
 import org.gnome.glib.DateTime
 import org.gnome.gtk.Calendar
+import org.javagi.gobject.SignalConnection
 
 private class GtkCalendarComposeNode(gObject: Calendar) : LeafComposeNode<Calendar>(gObject) {
     var onDaySelect: SignalConnection<Calendar.DaySelectedCallback>? = null

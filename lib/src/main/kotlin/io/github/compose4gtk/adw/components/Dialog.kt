@@ -10,7 +10,6 @@ import io.github.compose4gtk.SingleChildComposeNode
 import io.github.compose4gtk.gtkSubComposition
 import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.shared.components.LocalApplicationWindow
-import io.github.jwharm.javagi.gobject.SignalConnection
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.gnome.adw.AboutDialog
 import org.gnome.adw.AlertDialog
@@ -19,6 +18,7 @@ import org.gnome.adw.DialogPresentationMode
 import org.gnome.adw.ResponseAppearance
 import org.gnome.gobject.GObjects
 import org.gnome.gtk.License
+import org.javagi.gobject.SignalConnection
 
 private val logger = KotlinLogging.logger {}
 

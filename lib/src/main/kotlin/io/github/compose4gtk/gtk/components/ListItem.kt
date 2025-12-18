@@ -7,7 +7,6 @@ import androidx.compose.runtime.remember
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.GtkComposeNode
 import io.github.compose4gtk.GtkComposeWidget
-import io.github.jwharm.javagi.gio.ListIndexModel
 import org.gnome.gio.ListModel
 import org.gnome.gio.ListStore
 import org.gnome.gobject.GObject
@@ -17,6 +16,7 @@ import org.gnome.gtk.NoSelection
 import org.gnome.gtk.SelectionModel
 import org.gnome.gtk.SignalListItemFactory
 import org.gnome.gtk.SingleSelection
+import org.javagi.gio.ListIndexModel
 
 /**
  * The [GtkComposeNode] for each item of a [org.gnome.gtk.ListView].

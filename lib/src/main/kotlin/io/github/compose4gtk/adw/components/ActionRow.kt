@@ -18,13 +18,13 @@ import io.github.compose4gtk.VirtualComposeNodeContainer
 import io.github.compose4gtk.gtk.components.createListItemFactory
 import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.modifier.combine
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gobject.GObject
 import org.gnome.gobject.ParamSpec
 import org.gnome.gtk.Adjustment
 import org.gnome.gtk.SingleSelection
 import org.gnome.gtk.StringList
 import org.gnome.gtk.Widget
+import org.javagi.gobject.SignalConnection
 import org.gnome.adw.ActionRow as AdwActionRow
 import org.gnome.adw.ComboRow as AdwComboRow
 import org.gnome.adw.SpinRow as AdwSpinRow
