@@ -25,6 +25,10 @@ private class ProgressBarStateImpl : ProgressBarState {
         }
 
     override var fraction: Double = 0.0
+        set(value) {
+            progressBar?.fraction = value
+            field = value
+        }
 
     override fun pulse() {
         progressBar?.pulse()
@@ -79,7 +83,6 @@ fun ProgressBar(
             LeafComposeNode(gObject)
         },
         update = {
-            set(state.fraction) { this.widget.fraction = it }
             set(modifier) { applyModifier(it) }
             set(ellipsize) { this.widget.ellipsize = it }
             set(inverted) { this.widget.inverted = it }
