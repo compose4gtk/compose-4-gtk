@@ -11,14 +11,14 @@ import androidx.compose.runtime.setValue
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
+import io.github.jwharm.javagi.base.FunctionPointer
+import io.github.jwharm.javagi.gio.ListIndexModel
+import io.github.jwharm.javagi.gobject.SignalConnection
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.gnome.gobject.GObject
 import org.gnome.gtk.ListTabBehavior
 import org.gnome.gtk.SelectionModel
 import org.gnome.gtk.Widget
-import org.javagi.base.FunctionPointer
-import org.javagi.gio.ListIndexModel
-import org.javagi.gobject.SignalConnection
 import org.gnome.gtk.ListView as GTKListView
 
 private val logger = KotlinLogging.logger {}
