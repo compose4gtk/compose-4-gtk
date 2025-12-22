@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import org.javagi.gobject.SignalConnection
+import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.adw.SwitchRow as AdwSwitchRow
 import org.gnome.gtk.Switch as GtkSwitch
 
