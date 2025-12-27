@@ -140,10 +140,8 @@ fun <T : GObject> ListView(
  * Example:
  * ```kotlin
  * ListView(
- *     value = value,
  *     items = 10000,
  *     selectionMode = SelectionMode.Multiple,
- *     onSelectionChanges = { value = it },
  * ) { index ->
  *     Label("Item #$index")
  * }
