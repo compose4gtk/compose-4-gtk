@@ -9,13 +9,13 @@ import androidx.compose.runtime.setValue
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.InputHints
 import org.gnome.gtk.InputPurpose
 import org.gnome.gtk.Justification
 import org.gnome.gtk.TextBuffer
 import org.gnome.gtk.TextIter
 import org.gnome.gtk.WrapMode
+import org.javagi.gobject.SignalConnection
 import org.gnome.gtk.TextView as GtkTextView
 
 private class GtkTextViewComposeNode(gObject: GtkTextView) : LeafComposeNode<GtkTextView>(gObject) {
