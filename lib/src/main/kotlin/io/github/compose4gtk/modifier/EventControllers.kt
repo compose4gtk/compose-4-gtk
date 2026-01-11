@@ -14,7 +14,7 @@ fun Modifier.eventControllers(vararg eventControllers: EventController) = combin
         for (controller in currentControllers) {
             it.removeController(controller as EventController)
         }
-    }
+    },
 )
 
 fun Modifier.eventControllers(eventControllers: List<EventController>) = combine(
@@ -28,7 +28,7 @@ fun Modifier.eventControllers(eventControllers: List<EventController>) = combine
         for (controller in currentControllers) {
             it.removeController(controller as EventController)
         }
-    }
+    },
 )
 
 fun Modifier.eventControllers(builder: (widget: Widget) -> List<EventController>) = combine(
@@ -43,5 +43,5 @@ fun Modifier.eventControllers(builder: (widget: Widget) -> List<EventController>
         for (controller in currentControllers) {
             widget.removeController(controller as EventController)
         }
-    }
+    },
 )

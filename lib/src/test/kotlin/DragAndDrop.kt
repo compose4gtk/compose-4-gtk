@@ -18,7 +18,6 @@ import io.github.compose4gtk.modifier.eventControllers
 import io.github.compose4gtk.modifier.expand
 import io.github.compose4gtk.modifier.margin
 import io.github.jwharm.javagi.gobject.types.Types
-import org.gnome.adw.ActionRow as AdwActionRow
 import org.gnome.gdk.ContentFormats
 import org.gnome.gdk.ContentProvider
 import org.gnome.gdk.DragAction
@@ -27,8 +26,9 @@ import org.gnome.gobject.Value
 import org.gnome.gtk.DragIcon
 import org.gnome.gtk.DragSource
 import org.gnome.gtk.DropTarget
-import org.gnome.gtk.Frame as GtkFrame
 import org.gnome.gtk.Widget
+import org.gnome.adw.ActionRow as AdwActionRow
+import org.gnome.gtk.Frame as GtkFrame
 import org.gnome.gtk.Image as GtkImage
 import org.gnome.gtk.ListBox as GtkListBox
 
@@ -37,7 +37,7 @@ fun main(args: Array<String>) {
         ApplicationWindow(title = "Drag and Drop", onClose = ::exitApplication) {
             VerticalBox {
                 ToolbarView(
-                    topBar = { HeaderBar() }
+                    topBar = { HeaderBar() },
                 ) {
                     VerticalBox {
                         val leftLabels = remember { mutableStateListOf("Apple", "Banana", "Orange", "Pear", "Melon") }
@@ -58,17 +58,19 @@ fun main(args: Array<String>) {
                                                 leftLabels.add(value.string)
                                             }
                                             true
-                                        }
-                                    )
+                                        },
+                                    ),
                             ) {
                                 VerticalBox(
                                     modifier = Modifier.margin(8),
                                     spacing = 8,
                                 ) {
                                     for (label in leftLabels) {
-                                        Frame(modifier = Modifier.expand().eventControllers { gObject ->
-                                            listOf(generateFruitDragEvent(label, gObject))
-                                        }) {
+                                        Frame(
+                                            modifier = Modifier.expand().eventControllers { gObject ->
+                                                listOf(generateFruitDragEvent(label, gObject))
+                                            },
+                                        ) {
                                             Label(text = label)
                                         }
                                     }
@@ -84,17 +86,19 @@ fun main(args: Array<String>) {
                                                 rightLabels.add(value.string)
                                             }
                                             true
-                                        }
-                                    )
+                                        },
+                                    ),
                             ) {
                                 VerticalBox(
                                     modifier = Modifier.margin(8),
                                     spacing = 8,
                                 ) {
                                     for (label in rightLabels) {
-                                        Frame(modifier = Modifier.expand().eventControllers { gObject ->
-                                            listOf(generateFruitDragEvent(label, gObject))
-                                        }) {
+                                        Frame(
+                                            modifier = Modifier.expand().eventControllers { gObject ->
+                                                listOf(generateFruitDragEvent(label, gObject))
+                                            },
+                                        ) {
                                             Label(text = label)
                                         }
                                     }
@@ -145,9 +149,9 @@ fun main(args: Array<String>) {
                                                     val dragged = value.`object` as OrderRow
                                                     reorderList(dragged, row)
                                                     true
-                                                }
+                                                },
                                             )
-                                        }
+                                        },
                                     )
                                 }
                             }
@@ -186,7 +190,7 @@ private fun generateFruitDragEvent(label: String, gObject: Widget): DragSource {
                 .setWidthRequest(gObject.width)
                 .setHeightRequest(gObject.height)
                 .setChild(
-                    org.gnome.gtk.Label(label)
+                    org.gnome.gtk.Label(label),
                 )
                 .build()
         }
@@ -240,7 +244,7 @@ private fun generateOrderDragEvent(orderRow: OrderRow, gObject: Widget): DragSou
                 GtkImage.builder()
                     .setIconName("list-drag-handle-symbolic")
                     .setCssClasses(arrayOf("dimmed"))
-                    .build()
+                    .build(),
             )
 
             listBox.append(actionRow)
