@@ -17,6 +17,7 @@ import io.github.compose4gtk.modifier.cssClasses
 import io.github.compose4gtk.modifier.eventControllers
 import io.github.compose4gtk.modifier.expand
 import io.github.compose4gtk.modifier.margin
+import io.github.compose4gtk.useGioResource
 import io.github.jwharm.javagi.gobject.types.Types
 import org.gnome.gdk.ContentFormats
 import org.gnome.gdk.ContentProvider
@@ -33,126 +34,129 @@ import org.gnome.gtk.Image as GtkImage
 import org.gnome.gtk.ListBox as GtkListBox
 
 fun main(args: Array<String>) {
-    adwApplication("my.example.hello-app", args) {
-        ApplicationWindow(title = "Drag and Drop", onClose = ::exitApplication) {
-            VerticalBox {
-                ToolbarView(
-                    topBar = { HeaderBar() },
-                ) {
-                    VerticalBox {
-                        val leftLabels = remember { mutableStateListOf("Apple", "Banana", "Orange", "Pear", "Melon") }
-                        val rightLabels = remember { mutableStateListOf<String>() }
+    useGioResource("resources.gresource") {
+        adwApplication("my.example.hello-app", args) {
+            ApplicationWindow(title = "Drag and Drop", onClose = ::exitApplication) {
+                VerticalBox {
+                    ToolbarView(
+                        topBar = { HeaderBar() },
+                    ) {
+                        VerticalBox {
+                            val leftLabels =
+                                remember { mutableStateListOf("Apple", "Banana", "Orange", "Pear", "Melon") }
+                            val rightLabels = remember { mutableStateListOf<String>() }
 
-                        HorizontalBox(
-                            modifier = Modifier.margin(8),
-                            spacing = 8,
-                            homogeneous = true,
-                        ) {
-                            Frame(
-                                modifier = Modifier
-                                    .expand()
-                                    .eventControllers(
-                                        generateFruitDropEvent { value ->
-                                            if (!leftLabels.contains(value.string)) {
-                                                rightLabels.remove(value.string)
-                                                leftLabels.add(value.string)
-                                            }
-                                            true
-                                        },
-                                    ),
+                            HorizontalBox(
+                                modifier = Modifier.margin(8),
+                                spacing = 8,
+                                homogeneous = true,
                             ) {
-                                VerticalBox(
-                                    modifier = Modifier.margin(8),
-                                    spacing = 8,
-                                ) {
-                                    for (label in leftLabels) {
-                                        Frame(
-                                            modifier = Modifier.expand().eventControllers { gObject ->
-                                                listOf(generateFruitDragEvent(label, gObject))
+                                Frame(
+                                    modifier = Modifier
+                                        .expand()
+                                        .eventControllers(
+                                            generateFruitDropEvent { value ->
+                                                if (!leftLabels.contains(value.string)) {
+                                                    rightLabels.remove(value.string)
+                                                    leftLabels.add(value.string)
+                                                }
+                                                true
                                             },
-                                        ) {
-                                            Label(text = label)
-                                        }
-                                    }
-                                }
-                            }
-                            Frame(
-                                modifier = Modifier
-                                    .expand()
-                                    .eventControllers(
-                                        generateFruitDropEvent { value ->
-                                            if (!rightLabels.contains(value.string)) {
-                                                leftLabels.remove(value.string)
-                                                rightLabels.add(value.string)
-                                            }
-                                            true
-                                        },
-                                    ),
-                            ) {
-                                VerticalBox(
-                                    modifier = Modifier.margin(8),
-                                    spacing = 8,
+                                        ),
                                 ) {
-                                    for (label in rightLabels) {
-                                        Frame(
-                                            modifier = Modifier.expand().eventControllers { gObject ->
-                                                listOf(generateFruitDragEvent(label, gObject))
-                                            },
-                                        ) {
-                                            Label(text = label)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        val orderedList = remember {
-                            mutableStateListOf(
-                                OrderRow("Row 1"),
-                                OrderRow("Row 2"),
-                                OrderRow("Row 3"),
-                                OrderRow("Row 4"),
-                                OrderRow("Row 5"),
-                            )
-                        }
-
-                        fun reorderList(draggedRow: OrderRow, dropTargetRow: OrderRow) {
-                            val oldIndex = orderedList.indexOf(draggedRow)
-                            val newIndex = orderedList.indexOf(dropTargetRow)
-
-                            orderedList.removeAt(oldIndex)
-
-                            orderedList.add(newIndex, draggedRow)
-                        }
-
-                        VerticalBox(
-                            modifier = Modifier.margin(8),
-                        ) {
-                            ListBox(
-                                modifier = Modifier.cssClasses("boxed-list"),
-                            ) {
-                                var index = 0
-                                for (row in orderedList) {
-                                    ActionRow(
-                                        title = row.name,
-                                        subtitle = "Index: ${index++}",
-                                        prefix = {
-                                            Image(
-                                                ImageSource.Icon("list-drag-handle-symbolic"),
-                                                modifier = Modifier.cssClasses("dimmed"),
-                                            )
-                                        },
-                                        modifier = Modifier.eventControllers { gObject ->
-                                            listOf(
-                                                generateOrderDragEvent(row, gObject),
-                                                generateOrderDropEvent { value ->
-                                                    val dragged = value.`object` as OrderRow
-                                                    reorderList(dragged, row)
-                                                    true
+                                    VerticalBox(
+                                        modifier = Modifier.margin(8),
+                                        spacing = 8,
+                                    ) {
+                                        for (label in leftLabels) {
+                                            Frame(
+                                                modifier = Modifier.expand().eventControllers { gObject ->
+                                                    listOf(generateFruitDragEvent(label, gObject))
                                                 },
-                                            )
-                                        },
-                                    )
+                                            ) {
+                                                Label(text = label)
+                                            }
+                                        }
+                                    }
+                                }
+                                Frame(
+                                    modifier = Modifier
+                                        .expand()
+                                        .eventControllers(
+                                            generateFruitDropEvent { value ->
+                                                if (!rightLabels.contains(value.string)) {
+                                                    leftLabels.remove(value.string)
+                                                    rightLabels.add(value.string)
+                                                }
+                                                true
+                                            },
+                                        ),
+                                ) {
+                                    VerticalBox(
+                                        modifier = Modifier.margin(8),
+                                        spacing = 8,
+                                    ) {
+                                        for (label in rightLabels) {
+                                            Frame(
+                                                modifier = Modifier.expand().eventControllers { gObject ->
+                                                    listOf(generateFruitDragEvent(label, gObject))
+                                                },
+                                            ) {
+                                                Label(text = label)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            val orderedList = remember {
+                                mutableStateListOf(
+                                    OrderRow("Row 1"),
+                                    OrderRow("Row 2"),
+                                    OrderRow("Row 3"),
+                                    OrderRow("Row 4"),
+                                    OrderRow("Row 5"),
+                                )
+                            }
+
+                            fun reorderList(draggedRow: OrderRow, dropTargetRow: OrderRow) {
+                                val oldIndex = orderedList.indexOf(draggedRow)
+                                val newIndex = orderedList.indexOf(dropTargetRow)
+
+                                orderedList.removeAt(oldIndex)
+
+                                orderedList.add(newIndex, draggedRow)
+                            }
+
+                            VerticalBox(
+                                modifier = Modifier.margin(8),
+                            ) {
+                                ListBox(
+                                    modifier = Modifier.cssClasses("boxed-list"),
+                                ) {
+                                    var index = 0
+                                    for (row in orderedList) {
+                                        ActionRow(
+                                            title = row.name,
+                                            subtitle = "Index: ${index++}",
+                                            prefix = {
+                                                Image(
+                                                    ImageSource.Icon("list-drag-handle-symbolic"),
+                                                    modifier = Modifier.cssClasses("dimmed"),
+                                                )
+                                            },
+                                            modifier = Modifier.eventControllers { gObject ->
+                                                listOf(
+                                                    generateOrderDragEvent(row, gObject),
+                                                    generateOrderDropEvent { value ->
+                                                        val dragged = value.`object` as OrderRow
+                                                        reorderList(dragged, row)
+                                                        true
+                                                    },
+                                                )
+                                            },
+                                        )
+                                    }
                                 }
                             }
                         }
