@@ -10,8 +10,8 @@ import androidx.compose.runtime.setValue
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.SingleChildComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.CheckButton
+import org.javagi.gobject.SignalConnection
 
 private class GtkCheckButtonComposeNode(gObject: CheckButton) :
     SingleChildComposeNode<CheckButton>(gObject, { child = it }) {

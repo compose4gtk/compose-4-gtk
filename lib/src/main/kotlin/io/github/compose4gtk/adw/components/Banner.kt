@@ -5,8 +5,8 @@ import androidx.compose.runtime.ComposeNode
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.adw.Banner
+import org.javagi.gobject.SignalConnection
 
 private class AdwBannerComposeNode(
     gObject: Banner,

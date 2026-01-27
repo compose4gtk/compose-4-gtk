@@ -5,12 +5,12 @@ import androidx.compose.runtime.ComposeNode
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.Justification
 import org.gnome.gtk.Label
 import org.gnome.gtk.NaturalWrapMode
 import org.gnome.pango.EllipsizeMode
 import org.gnome.pango.WrapMode
+import org.javagi.gobject.SignalConnection
 
 private class GtkLabelComposeNode(gObject: Label) : LeafComposeNode<Label>(gObject) {
     var onActivateCurrentLink: SignalConnection<Label.ActivateCurrentLinkCallback>? = null

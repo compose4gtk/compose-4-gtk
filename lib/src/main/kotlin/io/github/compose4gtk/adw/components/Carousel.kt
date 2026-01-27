@@ -13,7 +13,6 @@ import io.github.compose4gtk.GtkContainerComposeNode
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.gtk.components.VerticalBox
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.gnome.adw.Carousel
 import org.gnome.adw.CarouselIndicatorDots
@@ -21,6 +20,7 @@ import org.gnome.adw.CarouselIndicatorLines
 import org.gnome.adw.SpringParams
 import org.gnome.gtk.Orientation
 import org.gnome.gtk.Widget
+import org.javagi.gobject.SignalConnection
 
 @Suppress("MagicNumber")
 private val DEFAULT_SPRING_PARAMS = SpringParams(1.0, 0.5, 500.0)
