@@ -5,6 +5,7 @@ import org.gnome.gtk.PropagationPhase
 
 fun Modifier.click(
     passThrough: Boolean = false,
+    button: Int = 0,
     action: (nPress: Int, x: Double, y: Double) -> Unit,
 ): Modifier {
     val gesture = GestureClick.builder()
@@ -13,6 +14,7 @@ fun Modifier.click(
                 setPropagationPhase(PropagationPhase.TARGET)
             }
         }
+        .setButton(button)
         .build()
     gesture.onPressed(action)
     return combine(
@@ -27,5 +29,6 @@ fun Modifier.click(
 
 fun Modifier.click(
     passThrough: Boolean = false,
+    button: Int = 0,
     action: () -> Unit,
-) = click(passThrough) { _, _, _ -> action() }
+) = click(passThrough, button) { _, _, _ -> action() }
