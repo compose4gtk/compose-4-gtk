@@ -6,11 +6,11 @@ import androidx.compose.runtime.rememberCompositionContext
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gobject.GObject
 import org.gnome.gobject.ParamSpec
 import org.gnome.gtk.DropDown
 import org.gnome.gtk.SingleSelection
+import org.javagi.gobject.SignalConnection
 
 private class GtkDropDownComposeNode(gObject: DropDown) : LeafComposeNode<DropDown>(gObject) {
     var onSelected: SignalConnection<*>? = null

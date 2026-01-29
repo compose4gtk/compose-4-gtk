@@ -6,8 +6,8 @@ import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.gtk.ImageSource
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.adw.ButtonRow
+import org.javagi.gobject.SignalConnection
 
 private class AdwButtonRowComposeNode(gObject: ButtonRow) : LeafComposeNode<ButtonRow>(gObject) {
     var activated: SignalConnection<ButtonRow.ActivatedCallback>? = null

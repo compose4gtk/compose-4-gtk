@@ -6,12 +6,12 @@ import androidx.compose.runtime.remember
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.Orientation
 import org.gnome.gtk.PositionType
 import org.gnome.gtk.Range
 import org.gnome.gtk.Scale
 import org.gnome.gtk.ScrollType
+import org.javagi.gobject.SignalConnection
 
 private class GtkScaleComposeNode(gObject: Scale) : LeafComposeNode<Scale>(gObject) {
     var changeValue: SignalConnection<Range.ChangeValueCallback>? = null

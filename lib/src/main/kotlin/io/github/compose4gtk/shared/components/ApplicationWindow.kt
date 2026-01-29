@@ -9,12 +9,12 @@ import io.github.compose4gtk.LocalApplication
 import io.github.compose4gtk.SingleChildComposeNode
 import io.github.compose4gtk.gtkSubComposition
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.ApplicationWindow
 import org.gnome.gtk.CssProvider
 import org.gnome.gtk.Gtk
 import org.gnome.gtk.Widget
 import org.gnome.gtk.Window
+import org.javagi.gobject.SignalConnection
 
 private class GtkApplicationWindowComposeNode<AW : ApplicationWindow>(
     window: AW,

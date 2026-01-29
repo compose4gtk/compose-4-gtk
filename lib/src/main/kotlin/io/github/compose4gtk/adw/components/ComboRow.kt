@@ -9,11 +9,11 @@ import androidx.compose.runtime.setValue
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.gtk.components.createListItemFactory
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gobject.GObject
 import org.gnome.gobject.ParamSpec
 import org.gnome.gtk.SingleSelection
 import org.gnome.gtk.StringList
+import org.javagi.gobject.SignalConnection
 import org.gnome.adw.ComboRow as AdwComboRow
 
 private class AdwComboRowComposeNode(gObject: AdwComboRow) : LeafComposeNode<AdwComboRow>(gObject) {
