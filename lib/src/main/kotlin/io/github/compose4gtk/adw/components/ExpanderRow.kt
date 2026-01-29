@@ -8,9 +8,9 @@ import androidx.compose.runtime.setValue
 import io.github.compose4gtk.GtkComposeWidget
 import io.github.compose4gtk.GtkContainerComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gobject.GObject
 import org.gnome.gtk.Widget
+import org.javagi.gobject.SignalConnection
 import org.gnome.adw.ExpanderRow as AdwExpanderRow
 
 private class AdwExpanderRowComposeNode(gObject: AdwExpanderRow) :

@@ -6,10 +6,10 @@ import androidx.compose.runtime.remember
 import io.github.compose4gtk.GtkApplier
 import io.github.compose4gtk.SingleChildComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.gnome.gdk.Rectangle
 import org.gnome.gtk.Popover
+import org.javagi.gobject.SignalConnection
 
 private val logger = KotlinLogging.logger {}
 

@@ -7,8 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.github.compose4gtk.LeafComposeNode
 import io.github.compose4gtk.modifier.Modifier
-import io.github.jwharm.javagi.gobject.SignalConnection
 import org.gnome.gtk.Editable
+import org.javagi.gobject.SignalConnection
 import org.gnome.adw.EntryRow as AdwEntryRow
 import org.gnome.adw.PasswordEntryRow as AdwPasswordEntryRow
 
