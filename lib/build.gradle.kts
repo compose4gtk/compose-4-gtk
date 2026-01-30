@@ -2,10 +2,13 @@ import org.jreleaser.model.Active
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.dokka)
     `maven-publish`
     id("org.jreleaser") version "1.20.0"
     alias(libs.plugins.versioning)
+    alias(libs.plugins.detekt)
 }
 
 allprojects {
