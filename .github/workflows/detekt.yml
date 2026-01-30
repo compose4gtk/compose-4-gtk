@@ -30,4 +30,4 @@ jobs:
 
       - name: Adding markdown
         if: ${{ always() }}
-        run: cat lib/build/reports/detekt/*.md >> $GITHUB_STEP_SUMMARY
+        run: cat lib/{core,gtk,adw}/build/reports/detekt/*.md >> $GITHUB_STEP_SUMMARY
