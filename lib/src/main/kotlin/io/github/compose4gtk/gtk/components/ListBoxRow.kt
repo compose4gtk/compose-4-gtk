@@ -28,6 +28,6 @@ fun ListBoxRow(
             set(activatable) { this.widget.activatable = activatable }
             set(selectable) { this.widget.selectable = selectable }
         },
-        content = child
+        content = child,
     )
 }

@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
         ApplicationWindow(title = "List Box Row", onClose = ::exitApplication) {
             Box {
                 ListBox {
-                    for (i in 0 .. 10) {
+                    for (i in 0..10) {
                         ListBoxRow {
                             Box(
                                 modifier = Modifier.margin(start = 4),
