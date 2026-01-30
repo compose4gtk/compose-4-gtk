@@ -119,8 +119,8 @@ private fun Sidebar(
             VirtualComposeNode<AdwNavigationSplitView> { navigationSplitView ->
                 SingleChildComposeNode(
                     navigationSplitView,
-                    set = {
-                        it?.let {
+                    set = { widget ->
+                        widget?.let {
                             if (it is AdwNavigationPage) {
                                 navigationSplitView.sidebar = it
                             } else {
@@ -145,8 +145,8 @@ private fun Content(
             VirtualComposeNode<AdwNavigationSplitView> { navigationSplitView ->
                 SingleChildComposeNode(
                     navigationSplitView,
-                    set = {
-                        it?.let {
+                    set = { widget ->
+                        widget?.let {
                             if (it is AdwNavigationPage) {
                                 navigationSplitView.content = it
                             } else {

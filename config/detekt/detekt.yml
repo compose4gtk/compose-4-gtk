@@ -21,6 +21,10 @@ style:
     excludeImports:
       - io.github.compose4gtk.adw.components.*
       - io.github.compose4gtk.gtk.components.*
+  MagicNumber:
+    excludes:
+      - '**/test/**'
+      - '**/tests/**'
 
 formatting:
   NoWildcardImports:
@@ -37,9 +41,13 @@ formatting:
 Compose:
   active: true
   ModifierMissing:
-    excludes: '**/test/**'
+    excludes:
+      - '**/test/**'
+      - '**/tests/**'
   MutableStateParam:
-    excludes: '**/test/**'
+    excludes:
+      - '**/test/**'
+      - '**/tests/**'
   CompositionLocalAllowlist:
     active: true
     allowedCompositionLocals:

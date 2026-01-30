@@ -1,8 +1,8 @@
 package io.github.compose4gtk.gtk.components
 
 import androidx.compose.runtime.Composable
-import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.components.InitializeApplicationWindow
+import io.github.compose4gtk.modifier.Modifier
 import org.gnome.gtk.ApplicationWindow
 import org.gnome.gtk.CssProvider
 

@@ -18,7 +18,6 @@ import io.github.compose4gtk.modifier.eventControllers
 import io.github.compose4gtk.modifier.expand
 import io.github.compose4gtk.modifier.margin
 import io.github.compose4gtk.useGioResource
-import org.javagi.gobject.types.Types
 import org.gnome.gdk.ContentFormats
 import org.gnome.gdk.ContentProvider
 import org.gnome.gdk.DragAction
@@ -28,6 +27,7 @@ import org.gnome.gtk.DragIcon
 import org.gnome.gtk.DragSource
 import org.gnome.gtk.DropTarget
 import org.gnome.gtk.Widget
+import org.javagi.gobject.types.Types
 import org.gnome.adw.ActionRow as AdwActionRow
 import org.gnome.gtk.Frame as GtkFrame
 import org.gnome.gtk.Image as GtkImage

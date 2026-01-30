@@ -41,3 +41,8 @@ tasks.named("processResources") {
 tasks.test {
     useJUnitPlatform()
 }
+
+detekt {
+    config.setFrom(rootProject.file("config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
+}

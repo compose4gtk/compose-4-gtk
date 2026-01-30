@@ -8,7 +8,6 @@ plugins {
     `maven-publish`
     id("org.jreleaser") version "1.20.0"
     alias(libs.plugins.versioning)
-    alias(libs.plugins.detekt)
 }
 
 allprojects {
@@ -51,8 +50,6 @@ dependencies {
     api(libs.kotlinx.datetime)
     implementation(libs.kotlin.logging)
     implementation(libs.slf4j.api)
-    detektPlugins(libs.detekt.formatting)
-    detektPlugins(libs.detekt.compose)
 
     testImplementation(libs.slf4j.simple)
 }
@@ -203,9 +200,4 @@ tasks.register<Exec>("compileTestGResources") {
 
 tasks.named("assembleTestResources") {
     dependsOn("compileTestGResources")
-}
-
-detekt {
-    config.setFrom(file("../config/detekt/detekt.yml"))
-    buildUponDefaultConfig = true
 }

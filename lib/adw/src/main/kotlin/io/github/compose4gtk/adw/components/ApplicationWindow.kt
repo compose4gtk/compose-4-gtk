@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.components.InitializeApplicationWindow
+import io.github.compose4gtk.modifier.Modifier
 import org.gnome.adw.ApplicationWindow
 import org.gnome.adw.Breakpoint
 import org.gnome.adw.BreakpointCondition

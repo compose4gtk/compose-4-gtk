@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.detekt)
 }
 
 dependencies {
@@ -13,6 +14,9 @@ dependencies {
     implementation(libs.slf4j.api)
     implementation(libs.kotlin.logging)
 
+    detektPlugins(libs.detekt.formatting)
+    detektPlugins(libs.detekt.compose)
+
     testImplementation(kotlin("test"))
     testImplementation(libs.slf4j.simple)
 }
@@ -23,4 +27,9 @@ kotlin {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+detekt {
+    config.setFrom(rootProject.file("config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
 }

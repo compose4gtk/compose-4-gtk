@@ -7,9 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.github.compose4gtk.SingleChildComposeNode
+import io.github.compose4gtk.components.LocalApplicationWindow
 import io.github.compose4gtk.gtkSubComposition
 import io.github.compose4gtk.modifier.Modifier
-import io.github.compose4gtk.components.LocalApplicationWindow
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.gnome.adw.AboutDialog
 import org.gnome.adw.AlertDialog
