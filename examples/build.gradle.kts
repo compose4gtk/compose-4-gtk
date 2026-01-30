@@ -15,7 +15,11 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":lib"))
+    implementation(project(":lib:core"))
+    implementation(project(":lib:gtk"))
+    implementation(project(":lib:adw"))
+    implementation(libs.slf4j.api)
+    implementation(libs.slf4j.simple)
     detektPlugins(libs.detekt.formatting)
     detektPlugins(libs.detekt.compose)
 }
