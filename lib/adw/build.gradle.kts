@@ -16,9 +16,6 @@ dependencies {
     implementation(libs.slf4j.api)
     implementation(libs.kotlin.logging)
 
-    detektPlugins(libs.detekt.formatting)
-    detektPlugins(libs.detekt.compose)
-
     testImplementation(kotlin("test"))
     testImplementation(libs.slf4j.simple)
 }
