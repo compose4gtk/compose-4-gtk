@@ -8,7 +8,7 @@ import org.gnome.gio.ApplicationFlags
 import org.gnome.gtk.Application
 
 @Deprecated(
-    "Use adwApplication instead",
+    "Use gtkApplication instead",
     replaceWith = ReplaceWith(
         expression = "gtkApplication(appId, args) { content() }",
         imports = ["io.github.compose4gtk.gtk.gtkApplication"],
@@ -21,7 +21,7 @@ fun application(
 ) = gtkApplication(appId, args, content = content)
 
 /**
- * This is the entry point of LibAdwaita applications.
+ * This is the entry point of gtk applications.
  *
  * This will start an application. [GtkApplicationWindow] can be added inside the [content] lambda.
  *
