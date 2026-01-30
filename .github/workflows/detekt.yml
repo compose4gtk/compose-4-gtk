@@ -26,7 +26,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          path: lib/build/reports/detekt/*
+          path: lib/{core,gtk,adw}/build/reports/detekt/*
 
       - name: Adding markdown
         if: ${{ always() }}
