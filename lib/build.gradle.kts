@@ -11,10 +11,12 @@ plugins {
     alias(libs.plugins.detekt)
 }
 
-repositories {
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    google()
+allprojects {
+    repositories {
+        mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        google()
+    }
 }
 
 group = "io.github.compose4gtk"
@@ -125,8 +127,10 @@ publishing {
                     }
                 }
                 contributors {
-                    // To add yourself here, please create a PR!
-                    contributor {}
+                    contributor {
+                        name = "Thomas Lavoie"
+                        email = "lavoiethomas17@gmail.com"
+                    }
                 }
                 scm {
                     connection = "scm:git:git://github.com/compose4gtk/compose-4-gtk.git"
