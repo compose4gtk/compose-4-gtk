@@ -1,6 +1,6 @@
 [versions]
-kotlin = "2.2.20"
-compose = "1.9.0"
+kotlin = "2.3.0"
+compose = "1.10.0"
 javagi = "0.13.1"
 dokka = "2.0.0"
 kotlin-logging = "7.0.13"
@@ -12,6 +12,7 @@ detekt-formatting = "1.23.8"
 detekt-compose = "0.4.27"
 
 [libraries]
+compose-runtime = {group = "org.jetbrains.compose.runtime", "name" = "runtime", version.ref = "compose"}
 javagi-gtk = { group = "org.java-gi", name = "gtk", version.ref = "javagi" }
 javagi-adw = { group = "org.java-gi", name = "adw", version.ref = "javagi" }
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlin-logging"}

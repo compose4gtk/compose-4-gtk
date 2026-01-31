@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose)
     alias(libs.plugins.detekt)
-    application
 }
 
 kotlin {
@@ -40,4 +40,8 @@ tasks.register<Exec>("compileGResources") {
 
 tasks.named("processResources") {
     dependsOn("compileGResources")
+}
+
+tasks.withType<AbstractTestTask>().configureEach {
+    failOnNoDiscoveredTests = false
 }
