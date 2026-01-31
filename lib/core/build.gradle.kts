@@ -8,7 +8,7 @@ plugins {
 }
 
 dependencies {
-    api(compose.runtime)
+    api(libs.compose.runtime)
     api(libs.javagi.gtk)
 
     detektPlugins(libs.detekt.formatting)
