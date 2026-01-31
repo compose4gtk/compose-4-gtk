@@ -184,3 +184,7 @@ tasks.register("publishAll") {
 tasks.named("jreleaserFullRelease") {
     dependsOn("publishAll")
 }
+
+tasks.withType<AbstractTestTask>().configureEach {
+    failOnNoDiscoveredTests = false
+}
