@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.dokka)
+    `maven-publish`
 }
 
 dependencies {
@@ -32,4 +34,10 @@ tasks.test {
 detekt {
     config.setFrom(rootProject.file("config/detekt/detekt.yml"))
     buildUponDefaultConfig = true
+}
+
+dokka {
+    dokkaPublications.html {
+        moduleName = "Gtk"
+    }
 }
