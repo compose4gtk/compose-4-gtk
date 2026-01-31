@@ -2,8 +2,6 @@ import org.jreleaser.model.Active
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.compose)
-    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.dokka)
     `maven-publish`
     id("org.jreleaser") version "1.20.0"
@@ -11,10 +9,18 @@ plugins {
     alias(libs.plugins.detekt)
 }
 
-repositories {
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    google()
+allprojects {
+    repositories {
+        mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        google()
+    }
+}
+
+dependencies {
+    dokka(project(":lib:core"))
+    dokka(project(":lib:gtk"))
+    dokka(project(":lib:adw"))
 }
 
 group = "io.github.compose4gtk"
@@ -42,22 +48,9 @@ java {
     targetCompatibility = JavaVersion.VERSION_22
 }
 
-dependencies {
-    api(libs.compose.runtime)
-    api(libs.javagi.gtk)
-    api(libs.javagi.adw)
-    api(libs.kotlinx.datetime)
-    implementation(libs.kotlin.logging)
-    implementation(libs.slf4j.api)
-    detektPlugins(libs.detekt.formatting)
-    detektPlugins(libs.detekt.compose)
-
-    testImplementation(libs.slf4j.simple)
-}
-
 val readMeToDocIndexTask = tasks.register<Copy>("readmeToDocIndex") {
     group = "dokka"
-    val inputFile = layout.projectDirectory.file("../README.md")
+    val inputFile = layout.projectDirectory.file("${rootProject.projectDir}/README.md")
     from(inputFile)
     into(layout.buildDirectory.dir("generated-doc"))
     filter { line ->
@@ -65,10 +58,6 @@ val readMeToDocIndexTask = tasks.register<Copy>("readmeToDocIndex") {
             ""
         } else {
             line
-                .replace(
-                    "# A Kotlin Compose library for Gtk4 and Adw",
-                    "# Module Compose 4 GTK",
-                )
                 .replace(
                     "](examples/",
                     "](https://github.com/compose4gtk/compose-4-gtk/blob/main/examples/",
@@ -79,17 +68,14 @@ val readMeToDocIndexTask = tasks.register<Copy>("readmeToDocIndex") {
 }
 
 tasks.named("dokkaGeneratePublicationHtml") {
-    dependsOn.add(readMeToDocIndexTask)
+    dependsOn(readMeToDocIndexTask)
 }
 
 dokka {
     moduleName.set("Compose 4 GTK")
     dokkaPublications.html {
         failOnWarning.set(true)
-    }
-    dokkaSourceSets.main {
-        includes.from(layout.buildDirectory.file("generated-doc/main.md"))
-        includes.from(layout.projectDirectory.files("../docs/gtk.md"))
+        includes.from(layout.buildDirectory.dir("generated-doc/main.md"))
     }
 }
 
@@ -99,46 +85,51 @@ tasks.register<Jar>("dokkaHtmlJar") {
     archiveClassifier = "javadoc"
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["kotlin"])
-            artifactId = "compose-4-gtk"
-            artifact(tasks.getByName("dokkaHtmlJar"))
-            artifact(tasks.getByName("kotlinSourcesJar"))
+subprojects {
+    group = "io.github.compose4gtk"
 
-            pom {
-                name = "compose-4-gtk"
-                description = "A Kotlin Compose library for Gtk4 and Adw"
-                inceptionYear = "2023"
-                url = "https://github.com/compose4gtk/compose-4-gtk"
-                licenses {
-                    license {
-                        name = "GNU General Public License v3.0"
-                        url = "https://www.gnu.org/licenses/gpl-3.0.en.html"
+    plugins.withId("maven-publish") {
+        publishing {
+            publications {
+                create<MavenPublication>("mavenJava") {
+                    from(components["kotlin"])
+                    artifactId = project.name
+                    artifact(tasks["kotlinSourcesJar"])
+
+                    pom {
+                        inceptionYear = "2023"
+                        url = "https://github.com/compose4gtk/compose-4-gtk"
+                        licenses {
+                            license {
+                                name = "GNU Lesser General Public License v3.0"
+                                url = "https://www.gnu.org/licenses/lgpl-3.0.en.html"
+                            }
+                        }
+                        developers {
+                            developer {
+                                name = "Marco Marangoni"
+                                email = "marco.marangoni1@gmail.com"
+                            }
+                        }
+                        contributors {
+                            contributor {
+                                name = "Thomas Lavoie"
+                                email = "lavoiethomas17@gmail.com"
+                            }
+                        }
+                        scm {
+                            connection = "scm:git:git://github.com/compose4gtk/compose-4-gtk.git"
+                            developerConnection = "scm:git:ssh://github.com:compose4gtk/compose-4-gtk.git"
+                            url = "https://github.com/compose4gtk/compose-4-gtk"
+                        }
                     }
-                }
-                developers {
-                    developer {
-                        name = "Marco Marangoni"
-                        email = "marco.marangoni1@gmail.com"
-                    }
-                }
-                contributors {
-                    // To add yourself here, please create a PR!
-                    contributor {}
-                }
-                scm {
-                    connection = "scm:git:git://github.com/compose4gtk/compose-4-gtk.git"
-                    developerConnection = "scm:git:ssh://github.com:compose4gtk/compose-4-gtk.git"
-                    url = "https://github.com/compose4gtk/compose-4-gtk"
                 }
             }
-        }
-    }
-    repositories {
-        maven {
-            setUrl(layout.buildDirectory.dir("staging-deploy"))
+            repositories {
+                maven {
+                    setUrl(layout.buildDirectory.dir("staging-deploy"))
+                }
+            }
         }
     }
 }
@@ -184,26 +175,16 @@ jreleaser {
     }
 }
 
-tasks.named("publish") {
-    dependsOn("clean")
+tasks.register("publishAll") {
+    dependsOn(subprojects.map { it.tasks.named("publish") })
 }
 
 tasks.named("jreleaserFullRelease") {
-    dependsOn("publish")
+    dependsOn("publishAll")
 }
 
-tasks.register<Exec>("compileTestGResources") {
-    workingDir("src/test/gresources")
-    commandLine("glib-compile-resources", "--target=../resources/resources.gresource", "resources.gresource.xml")
-}
-
-tasks.named("assembleTestResources") {
-    dependsOn("compileTestGResources")
-}
-
-detekt {
-    config.setFrom(file("../config/detekt/detekt.yml"))
-    buildUponDefaultConfig = true
+tasks.withType<AbstractTestTask>().configureEach {
+    failOnNoDiscoveredTests = false
 }
 
 tasks.withType<AbstractTestTask>().configureEach {

@@ -1,17 +1,8 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.compose)
     alias(libs.plugins.detekt)
-}
-
-kotlin {
-    jvmToolchain(22)
-}
-
-repositories {
-    mavenCentral()
-    google()
+    application
 }
 
 dependencies {
@@ -20,17 +11,22 @@ dependencies {
     implementation(project(":lib:adw"))
     implementation(libs.slf4j.api)
     implementation(libs.slf4j.simple)
+    implementation(libs.kotlin.logging)
     detektPlugins(libs.detekt.formatting)
     detektPlugins(libs.detekt.compose)
 }
 
-tasks.named("assemble") {
-    dependsOn("compileGResources")
+repositories {
+    mavenCentral()
+    google()
 }
 
-detekt {
-    config.setFrom(file("../config/detekt/detekt.yml"))
-    buildUponDefaultConfig = true
+kotlin {
+    jvmToolchain(22)
+}
+
+tasks.named("assemble") {
+    dependsOn("compileGResources")
 }
 
 tasks.register<Exec>("compileGResources") {
@@ -42,6 +38,11 @@ tasks.named("processResources") {
     dependsOn("compileGResources")
 }
 
-tasks.withType<AbstractTestTask>().configureEach {
-    failOnNoDiscoveredTests = false
+tasks.test {
+    useJUnitPlatform()
+}
+
+detekt {
+    config.setFrom(rootProject.file("config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
 }
