@@ -26,13 +26,13 @@ private class AdwComboRowComposeNode(gObject: AdwComboRow) : LeafComposeNode<Adw
  * @param items The list of string options to display in the combo box.
  * @param selectedIndex The index of the currently selected item.
  * @param title The title displayed on the row.
- * @param subtitle Optional subtitle displayed below the title.
  * @param modifier Compose [Modifier] for layout and styling.
  * @param onSelectedChange Callback invoked when the selected item changes, providing the new index.
  * @param activatable Whether the row can be activated (affects focus and accessibility).
  * @param titleSelectable Whether the user can select the title text.
  * @param useMarkup Whether the title and subtitle use Pango markup.
  * @param useUnderline Whether an underscore in the title or subtitle indicates a mnemonic.
+ * @param subtitle Optional subtitle displayed below the title.
  * @param subtitleLines The number of lines after which the subtitle is ellipsized (0 = no limit).
  * @param subtitleSelectable Whether the user can select the subtitle text.
  * @param titleLines The number of lines after which the title is ellipsized (0 = no limit).
@@ -42,13 +42,13 @@ fun ComboRow(
     items: List<String>,
     selectedIndex: Int,
     title: String,
-    subtitle: String,
     onSelectedChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
     activatable: Boolean = true,
     titleSelectable: Boolean = false,
     useMarkup: Boolean = true,
     useUnderline: Boolean = false,
+    subtitle: String? = null,
     subtitleLines: Int = 0,
     subtitleSelectable: Boolean = false,
     titleLines: Int = 0,
@@ -84,12 +84,12 @@ fun ComboRow(
             }
         },
         title = title,
-        subtitle = subtitle,
         modifier = modifier,
         activatable = activatable,
         titleSelectable = titleSelectable,
         useMarkup = useMarkup,
         useUnderline = useUnderline,
+        subtitle = subtitle,
         subtitleLines = subtitleLines,
         subtitleSelectable = subtitleSelectable,
         titleLines = titleLines,
@@ -104,12 +104,12 @@ fun ComboRow(
  * @param onSelectedChange Callback invoked when the selected item changes, providing the new [T] instance.
  * @param item Composable used to render each item in the dropdown list.
  * @param title The title displayed on the row.
- * @param subtitle Optional subtitle displayed below the title.
  * @param modifier Compose [Modifier] for layout and styling.
  * @param activatable Whether the row can be activated (affects focus and accessibility).
  * @param titleSelectable Whether the user can select the title text.
  * @param useMarkup Whether the title and subtitle use Pango markup.
  * @param useUnderline Whether an underscore in the title or subtitle indicates a mnemonic.
+ * @param subtitle Optional subtitle displayed below the title.
  * @param subtitleLines The number of lines after which the subtitle is ellipsized (0 = no limit).
  * @param subtitleSelectable Whether the user can select the subtitle text.
  * @param titleLines The number of lines after which the title is ellipsized (0 = no limit).
@@ -122,12 +122,12 @@ fun <T : GObject> ComboRow(
     onSelectedChange: (selectedItem: T) -> Unit,
     item: @Composable (T) -> Unit,
     title: String,
-    subtitle: String,
     modifier: Modifier = Modifier,
     activatable: Boolean = true,
     titleSelectable: Boolean = false,
     useMarkup: Boolean = true,
     useUnderline: Boolean = false,
+    subtitle: String? = null,
     subtitleLines: Int = 0,
     subtitleSelectable: Boolean = false,
     titleLines: Int = 0,
@@ -164,12 +164,12 @@ fun <T : GObject> ComboRow(
             }
         },
         title = title,
-        subtitle = subtitle,
         modifier = modifier,
         activatable = activatable,
         titleSelectable = titleSelectable,
         useMarkup = useMarkup,
         useUnderline = useUnderline,
+        subtitle = subtitle,
         subtitleLines = subtitleLines,
         subtitleSelectable = subtitleSelectable,
         titleLines = titleLines,

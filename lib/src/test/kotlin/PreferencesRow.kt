@@ -12,6 +12,7 @@ import io.github.compose4gtk.adw.components.ButtonRow
 import io.github.compose4gtk.adw.components.ComboRow
 import io.github.compose4gtk.adw.components.EntryRow
 import io.github.compose4gtk.adw.components.HeaderBar
+import io.github.compose4gtk.adw.components.PasswordEntryRow
 import io.github.compose4gtk.adw.components.PreferencesGroup
 import io.github.compose4gtk.adw.components.SpinRow
 import io.github.compose4gtk.adw.components.SwitchRow
@@ -75,25 +76,8 @@ fun main(args: Array<String>) {
                                 },
                             )
 
-                            var username by remember { mutableStateOf("guest") }
-                            EntryRow(
-                                text = username,
-                                title = "Username",
-                                showApplyButton = false,
-                                // "check" button pressed
-                                onApply = {
-                                    logger.info { "Apply btn: Username entered: $username" }
-                                },
-                                // won't work while showApplyButton = true
-                                onEntryActivate = {
-                                    logger.info { "Enter key: Username entered: $username" }
-                                },
-                                onTextChange = {
-                                    logger.info { "changed signal: EntryRow text changed: $it" }
-                                    username = it
-                                },
+                            Entries()
 
-                            )
                             ComboRows()
                             ActionRow(
                                 title = "Toast",
@@ -204,5 +188,44 @@ fun ComboRows() {
         },
         title = "Favorite number (model)",
         subtitle = "Pick one (custom render)",
+    )
+}
+
+@Composable
+fun Entries() {
+    var username by remember { mutableStateOf("guest") }
+    EntryRow(
+        text = username,
+        title = "Username",
+        showApplyButton = false,
+        // "check" button pressed
+        onApply = {
+            logger.info { "Apply btn: Username entered: $username" }
+        },
+        // won't work while showApplyButton = true
+        onEntryActivate = {
+            logger.info { "Enter key: Username entered: $username" }
+        },
+        onTextChange = {
+            logger.info { "Changed signal: EntryRow text changed: $it" }
+            username = it
+        },
+    )
+
+    var password by remember { mutableStateOf("password") }
+    PasswordEntryRow(
+        text = password,
+        title = "Password",
+        showApplyButton = false,
+        onApply = {
+            logger.info { "Apply btn: Password entered: $password" }
+        },
+        onEntryActivate = {
+            logger.info { "Enter key: Password entered: $password" }
+        },
+        onTextChange = {
+            logger.info { "Changed signal: PasswordEntryRow text changed: $it" }
+            password = it
+        },
     )
 }

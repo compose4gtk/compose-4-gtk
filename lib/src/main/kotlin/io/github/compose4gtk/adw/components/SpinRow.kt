@@ -25,7 +25,6 @@ private class AdwSpinRowComposeNode(gObject: AdwSpinRow) : LeafComposeNode<AdwSp
  *
  * @param value Number displayed in the component.
  * @param title The title for this row.
- * @param subtitle The subtitle for this row.
  * @param modifier Compose [Modifier] for layout and styling.
  * @param onActivate Callback triggered when the component is activated (pressing "enter").
  * @param onValueChange Callback triggered when the value changes.
@@ -40,6 +39,7 @@ private class AdwSpinRowComposeNode(gObject: AdwSpinRow) : LeafComposeNode<AdwSp
  * @param titleSelectable Whether the title is selectable.
  * @param useMarkup Whether to use Pango markup for the title and subtitle.
  * @param useUnderline Whether an embedded underline in the title or subtitle indicates a mnemonic.
+ * @param subtitle The subtitle for this row.
  * @param subtitleLines The number of lines at the end of which the subtitle label will be ellipsized.
  * @param subtitleSelectable Whether the subtitle is selectable.
  * @param titleLines The number of lines at the end of which the title label will be ellipsized.
@@ -48,7 +48,6 @@ private class AdwSpinRowComposeNode(gObject: AdwSpinRow) : LeafComposeNode<AdwSp
 fun SpinRow(
     value: Double,
     title: String,
-    subtitle: String,
     modifier: Modifier = Modifier,
     onActivate: () -> Unit = {},
     onValueChange: (Double) -> Unit = {},
@@ -63,6 +62,7 @@ fun SpinRow(
     titleSelectable: Boolean = false,
     useMarkup: Boolean = true,
     useUnderline: Boolean = false,
+    subtitle: String? = null,
     subtitleLines: Int = 0,
     subtitleSelectable: Boolean = false,
     titleLines: Int = 0,
@@ -111,12 +111,12 @@ fun SpinRow(
             set(numeric) { this.widget.numeric = it }
         },
         title = title,
-        subtitle = subtitle,
         modifier = modifier,
         activatable = activatable,
         titleSelectable = titleSelectable,
         useMarkup = useMarkup,
         useUnderline = useUnderline,
+        subtitle = subtitle,
         subtitleLines = subtitleLines,
         subtitleSelectable = subtitleSelectable,
         titleLines = titleLines,
