@@ -49,7 +49,7 @@ java {
 
 val readMeToDocIndexTask = tasks.register<Copy>("readmeToDocIndex") {
     group = "dokka"
-    val inputFile = layout.projectDirectory.file("../README.md")
+    val inputFile = layout.projectDirectory.file("${rootProject.projectDir}/README.md")
     from(inputFile)
     into(layout.buildDirectory.dir("generated-doc"))
     filter { line ->
@@ -57,10 +57,6 @@ val readMeToDocIndexTask = tasks.register<Copy>("readmeToDocIndex") {
             ""
         } else {
             line
-                .replace(
-                    "# A Kotlin Compose library for Gtk4 and Adw",
-                    "# Module Compose 4 GTK",
-                )
                 .replace(
                     "](examples/",
                     "](https://github.com/compose4gtk/compose-4-gtk/blob/main/examples/",
@@ -71,17 +67,14 @@ val readMeToDocIndexTask = tasks.register<Copy>("readmeToDocIndex") {
 }
 
 tasks.named("dokkaGeneratePublicationHtml") {
-    dependsOn.add(readMeToDocIndexTask)
+    dependsOn(readMeToDocIndexTask)
 }
 
 dokka {
     moduleName.set("Compose 4 GTK")
     dokkaPublications.html {
         failOnWarning.set(true)
-    }
-    dokkaSourceSets.main {
-        includes.from(layout.buildDirectory.file("generated-doc/main.md"))
-        includes.from(layout.projectDirectory.files("../docs/gtk.md"))
+        includes.from(layout.buildDirectory.dir("generated-doc/main.md"))
     }
 }
 
