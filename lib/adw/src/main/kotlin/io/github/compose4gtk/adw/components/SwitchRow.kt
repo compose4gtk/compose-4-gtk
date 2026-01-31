@@ -23,13 +23,13 @@ private class AdwSwitchRowComposeNode(gObject: AdwSwitchRow) : LeafComposeNode<A
  *
  * @param active Whether the switch is active.
  * @param title The title for this row.
- * @param subtitle The subtitle for this row.
  * @param modifier Compose [Modifier] for layout and styling.
  * @param onActivate Callback triggered when this row is activated.
  * @param activatable Whether the component can be activated.
  * @param titleSelectable Whether the title is selectable.
  * @param useMarkup Whether to use Pango markup for the title and subtitle.
  * @param useUnderline Whether an embedded underline in the title or subtitle indicates a mnemonic.
+ * @param subtitle The subtitle for this row.
  * @param subtitleLines The number of lines at the end of which the subtitle label will be ellipsized.
  * @param subtitleSelectable Whether the subtitle is selectable.
  * @param titleLines The number of lines at the end of which the title label will be ellipsized.
@@ -38,13 +38,13 @@ private class AdwSwitchRowComposeNode(gObject: AdwSwitchRow) : LeafComposeNode<A
 fun SwitchRow(
     active: Boolean,
     title: String,
-    subtitle: String,
     modifier: Modifier = Modifier,
     onActivate: () -> Unit = {},
     activatable: Boolean = true,
     titleSelectable: Boolean = false,
     useMarkup: Boolean = true,
     useUnderline: Boolean = false,
+    subtitle: String? = null,
     subtitleLines: Int = 0,
     subtitleSelectable: Boolean = false,
     titleLines: Int = 0,
@@ -73,11 +73,11 @@ fun SwitchRow(
             }
         },
         title = title,
-        subtitle = subtitle,
         modifier = modifier,
         activatable = activatable,
         titleSelectable = titleSelectable,
         useMarkup = useMarkup,
+        subtitle = subtitle,
         useUnderline = useUnderline,
         subtitleLines = subtitleLines,
         subtitleSelectable = subtitleSelectable,
