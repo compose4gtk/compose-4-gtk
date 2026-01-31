@@ -43,7 +43,7 @@ java {
 }
 
 dependencies {
-    api(compose.runtime)
+    api(libs.compose.runtime)
     api(libs.javagi.gtk)
     api(libs.javagi.adw)
     api(libs.kotlinx.datetime)
@@ -204,4 +204,8 @@ tasks.named("assembleTestResources") {
 detekt {
     config.setFrom(file("../config/detekt/detekt.yml"))
     buildUponDefaultConfig = true
+}
+
+tasks.withType<AbstractTestTask>().configureEach {
+    failOnNoDiscoveredTests = false
 }
