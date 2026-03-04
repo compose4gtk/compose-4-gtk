@@ -50,7 +50,7 @@ fun SwitchRow(
     titleLines: Int = 0,
 ) {
     val switchRow = remember { AdwSwitchRow() }
-    val switch = remember { switchRow.firstChild.lastChild.firstChild as GtkSwitch }
+    val switch = remember { switchRow.firstChild?.lastChild?.firstChild as GtkSwitch }
     var pendingChange by remember { mutableIntStateOf(0) }
 
     BaseActionRow(

@@ -56,9 +56,10 @@ fun main(args: Array<String>) {
                                         .expand()
                                         .eventControllers(
                                             generateFruitDropEvent { value ->
-                                                if (!leftLabels.contains(value.string)) {
+                                                val newValue = value.string
+                                                if (!leftLabels.contains(value.string) && newValue !== null) {
                                                     rightLabels.remove(value.string)
-                                                    leftLabels.add(value.string)
+                                                    leftLabels.add(newValue)
                                                 }
                                                 true
                                             },
@@ -84,9 +85,10 @@ fun main(args: Array<String>) {
                                         .expand()
                                         .eventControllers(
                                             generateFruitDropEvent { value ->
-                                                if (!rightLabels.contains(value.string)) {
+                                                val newValue = value.string
+                                                if (!rightLabels.contains(value.string) && newValue !== null) {
                                                     leftLabels.remove(value.string)
-                                                    rightLabels.add(value.string)
+                                                    rightLabels.add(newValue)
                                                 }
                                                 true
                                             },
@@ -185,7 +187,7 @@ private fun generateFruitDragEvent(label: String, gObject: Widget): DragSource {
         }
         .onDragBegin { drag ->
             // Sets where the component is grabbed
-            drag.setHotspot(dragX.toInt(), dragY.toInt())
+            drag?.setHotspot(dragX.toInt(), dragY.toInt())
 
             // Create a custom icon with gObjects
             // that matches the original component
@@ -209,7 +211,7 @@ private fun generateFruitDropEvent(onDrop: (Value) -> Boolean): DropTarget {
             setOf(DragAction.MOVE)
         }
         .onDrop { value, _, _ ->
-            onDrop(value)
+            onDrop(value!!)
         }
         .build()
 }
@@ -231,7 +233,7 @@ private fun generateOrderDragEvent(orderRow: OrderRow, gObject: Widget): DragSou
             ContentProvider.forValue(value)
         }
         .onDragBegin { drag ->
-            drag.setHotspot(dragX.toInt(), dragY.toInt())
+            drag?.setHotspot(dragX.toInt(), dragY.toInt())
 
             val icon = DragIcon.getForDrag(drag)
             gObject as AdwActionRow
@@ -266,7 +268,7 @@ private fun generateOrderDropEvent(onDrop: (Value) -> Boolean): DropTarget {
             setOf(DragAction.MOVE)
         }
         .onDrop { value, _, _ ->
-            onDrop(value)
+            onDrop(value!!)
         }
         .build()
 }

@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.3.0"
 compose = "1.10.0"
-javagi = "0.13.1"
+javagi = "0.14.1"
 dokka = "2.0.0"
 kotlin-logging = "7.0.13"
 kotlinx-datetime = "0.7.1"
