@@ -147,7 +147,7 @@ fun Entry(
         val onInsertText = editable.onInsertText { textToInsert, _, position ->
             val pd = pendingDelete
             var prevText = text
-            var newPosition = position.get()
+            var newPosition = position.get() ?: return@onInsertText
             if (pd != null) {
                 prevText = pd.apply(prevText)
                 newPosition -= pd.countDeletedCharacters(newPosition)

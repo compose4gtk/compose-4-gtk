@@ -77,7 +77,7 @@ fun SpinRow(
             .build()
     }
     val spinRow = remember { AdwSpinRow.builder().setAdjustment(adjustment).build() }
-    val spinButton = remember { spinRow.firstChild.lastChild.firstChild as GtkSpinButton }
+    val spinButton = remember { spinRow.firstChild?.lastChild?.firstChild as GtkSpinButton }
     var pendingChange by remember { mutableIntStateOf(0) }
 
     BaseActionRow(
