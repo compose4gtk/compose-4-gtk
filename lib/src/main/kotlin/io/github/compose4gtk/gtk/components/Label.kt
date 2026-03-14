@@ -80,7 +80,7 @@ fun Label(
         set(selectable) { this.widget.selectable = it }
         set(naturalWrapMode) { this.widget.naturalWrapMode = it }
         set(singleLineMode) { this.widget.singleLineMode = it }
-        set(useMarkup) { this.widget.useMarkup = it }
+        set(text to useMarkup) { (_, useMarkup) -> this.widget.useMarkup = useMarkup }
         set(useUnderline) { this.widget.useUnderline = it }
         set(widthChars) { this.widget.widthChars = it }
         set(wrap) { this.widget.wrap = it }

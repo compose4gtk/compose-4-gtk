@@ -10,6 +10,7 @@ import io.github.compose4gtk.adw.components.AlertDialogResponse
 import io.github.compose4gtk.adw.components.ApplicationWindow
 import io.github.compose4gtk.adw.components.Dialog
 import io.github.compose4gtk.adw.components.HeaderBar
+import io.github.compose4gtk.adw.components.ShortcutsDialog
 import io.github.compose4gtk.gtk.components.Button
 import io.github.compose4gtk.gtk.components.Label
 import io.github.compose4gtk.gtk.components.ToggleButton
@@ -19,6 +20,8 @@ import io.github.compose4gtk.modifier.horizontalAlignment
 import io.github.compose4gtk.modifier.margin
 import org.gnome.adw.DialogPresentationMode
 import org.gnome.adw.ResponseAppearance
+import org.gnome.adw.ShortcutsItem
+import org.gnome.adw.ShortcutsSection
 import org.gnome.gtk.Align
 import org.gnome.gtk.License
 
@@ -31,6 +34,20 @@ private val replaceResponse = AlertDialogResponse(
     label = "_Replace",
     appearance = ResponseAppearance.DESTRUCTIVE,
 )
+
+private const val ACCEL = "<Control>W"
+
+private val shortcutsItem = ShortcutsItem.builder()
+    .setTitle("Open Dialog")
+    .setAccelerator(ACCEL)
+    .build()
+
+private val shortcutsSection = ShortcutsSection.builder()
+    .setTitle("Basic Actions")
+    .build()
+    .apply {
+        add(shortcutsItem)
+    }
 
 fun main(args: Array<String>) {
     adwApplication("my.example.hello-app", args) {
@@ -59,6 +76,13 @@ fun main(args: Array<String>) {
             if (alertDialog) {
                 ExampleAlertDialog { alertDialog = false }
             }
+
+            var shortcutsDialog by remember { mutableStateOf(false) }
+            if (shortcutsDialog) {
+                ExampleShortcutsDialog { shortcutsDialog = false }
+            }
+
+            Accelerator("open-dialog", listOf(ACCEL), { shortcutsDialog = true })
 
             VerticalBox {
                 HeaderBar()
@@ -91,6 +115,11 @@ fun main(args: Array<String>) {
                         modifier = Modifier.horizontalAlignment(Align.CENTER),
                         label = "Alert dialog",
                         onClick = { alertDialog = true },
+                    )
+                    Button(
+                        modifier = Modifier.horizontalAlignment(Align.CENTER),
+                        label = "Shortcuts dialog",
+                        onClick = { shortcutsDialog = true },
                     )
                 }
             }
@@ -164,4 +193,9 @@ private fun ExampleAlertDialog(onClose: () -> Unit) {
         },
         onClose = onClose,
     )
+}
+
+@Composable
+private fun ExampleShortcutsDialog(onClose: () -> Unit) {
+    ShortcutsDialog(sections = listOf(shortcutsSection), onClose = onClose)
 }

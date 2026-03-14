@@ -11,18 +11,20 @@ import io.github.compose4gtk.gtkSubComposition
 import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.shared.components.LocalApplicationWindow
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.gnome.adw.AboutDialog
-import org.gnome.adw.AlertDialog
-import org.gnome.adw.Dialog
 import org.gnome.adw.DialogPresentationMode
 import org.gnome.adw.ResponseAppearance
+import org.gnome.adw.ShortcutsSection
 import org.gnome.gobject.GObjects
 import org.gnome.gtk.License
 import org.javagi.gobject.SignalConnection
+import org.gnome.adw.AboutDialog as AdwAboutDialog
+import org.gnome.adw.AlertDialog as AdwAlertDialog
+import org.gnome.adw.Dialog as AdwDialog
+import org.gnome.adw.ShortcutsDialog as AdwShortcutsDialog
 
 private val logger = KotlinLogging.logger {}
 
-private class GtkDialogComposeNode<D : Dialog>(
+private class GtkDialogComposeNode<D : AdwDialog>(
     gObject: D,
 ) : SingleChildComposeNode<D>(gObject, { this.child = it }) {
     var onCloseAttempt: SignalConnection<*>? = null
@@ -35,7 +37,7 @@ private class GtkDialogComposeNode<D : Dialog>(
  *   current breakpoint
  */
 @Composable
-private fun <D : Dialog> baseDialog(
+private fun <D : AdwDialog> baseDialog(
     creator: () -> D,
     title: String?,
     modifier: Modifier = Modifier,
@@ -106,9 +108,7 @@ fun Dialog(
     content: @Composable () -> Unit = {},
 ) {
     baseDialog(
-        creator = {
-            Dialog.builder().build()
-        },
+        creator = { AdwDialog() },
         title = title,
         modifier = modifier,
         contentHeight = contentHeight,
@@ -184,9 +184,7 @@ fun AboutDialog(
     content: @Composable () -> Unit = {},
 ) {
     val dialog = baseDialog(
-        creator = {
-            AboutDialog.builder().build()
-        },
+        creator = { AdwAboutDialog() },
         title = title,
         modifier = modifier,
         contentHeight = contentHeight,
@@ -266,9 +264,7 @@ fun AlertDialog(
     var previousResponses: List<AlertDialogResponse>? by remember { mutableStateOf(null) }
 
     val dialog = baseDialog(
-        creator = {
-            AlertDialog.builder().build()
-        },
+        creator = { AdwAlertDialog() },
         title = null,
         modifier = modifier,
         contentHeight = contentHeight,
@@ -317,4 +313,38 @@ fun AlertDialog(
             }
         }
     }
+}
+
+/**
+ * Creates a [org.gnome.adw.ShortcutsDialog] to display available keyboard shortcuts.
+ *
+ * @param modifier Compose [Modifier] for layout and styling.
+ * @param sections The sections to display, each containing a group of [org.gnome.adw.ShortcutsItem].
+ * @param contentHeight The height of the content.
+ * @param contentWidth The width of the content.
+ * @param followsContentSize Whether to size content automatically.
+ * @param presentationMode Which mode used to display the dialog.
+ * @param onClose Callback triggered when the dialog is closed.
+ */
+@Composable
+fun ShortcutsDialog(
+    modifier: Modifier = Modifier,
+    sections: List<ShortcutsSection<*>> = emptyList(),
+    contentHeight: Int = -1,
+    contentWidth: Int = -1,
+    followsContentSize: Boolean = false,
+    presentationMode: DialogPresentationMode = DialogPresentationMode.AUTO,
+    onClose: () -> Unit = {},
+) {
+    val dialog = baseDialog(
+        creator = { AdwShortcutsDialog() },
+        title = null,
+        modifier = modifier,
+        contentHeight = contentHeight,
+        contentWidth = contentWidth,
+        followsContentSize = followsContentSize,
+        presentationMode = presentationMode,
+        onClose = onClose,
+    )
+    remember(sections) { sections.forEach { dialog.add(it) } }
 }
