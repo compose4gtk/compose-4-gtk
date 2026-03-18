@@ -82,6 +82,11 @@ fun main(args: Array<String>) {
                 ExampleShortcutsDialog { shortcutsDialog = false }
             }
 
+            var shortcutsDialogWithScope by remember { mutableStateOf(false) }
+            if (shortcutsDialogWithScope) {
+                ExampleShortcutsDialogWithScope { shortcutsDialogWithScope = false }
+            }
+
             Accelerator("open-dialog", listOf(ACCEL), { shortcutsDialog = true })
 
             VerticalBox {
@@ -119,6 +124,11 @@ fun main(args: Array<String>) {
                     Button(
                         modifier = Modifier.horizontalAlignment(Align.CENTER),
                         label = "Shortcuts dialog",
+                        onClick = { shortcutsDialog = true },
+                    )
+                    Button(
+                        modifier = Modifier.horizontalAlignment(Align.CENTER),
+                        label = "Shortcuts dialog with scope",
                         onClick = { shortcutsDialog = true },
                     )
                 }
@@ -198,4 +208,13 @@ private fun ExampleAlertDialog(onClose: () -> Unit) {
 @Composable
 private fun ExampleShortcutsDialog(onClose: () -> Unit) {
     ShortcutsDialog(sections = listOf(shortcutsSection), onClose = onClose)
+}
+
+@Composable
+private fun ExampleShortcutsDialogWithScope(onClose: () -> Unit) {
+    ShortcutsDialog(onClose = onClose) {
+        section("Basic Actions") {
+            item("Open dialog", ACCEL)
+        }
+    }
 }
