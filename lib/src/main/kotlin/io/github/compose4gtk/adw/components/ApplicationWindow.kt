@@ -1,21 +1,14 @@
 package io.github.compose4gtk.adw.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import io.github.compose4gtk.LocalApplication
 import io.github.compose4gtk.modifier.Modifier
 import io.github.compose4gtk.shared.components.InitializeApplicationWindow
 import org.gnome.adw.ApplicationWindow
 import org.gnome.adw.Breakpoint
 import org.gnome.adw.BreakpointCondition
-import org.gnome.gio.SimpleAction
-import org.gnome.glib.Variant
-import org.gnome.glib.VariantType
 import org.gnome.gtk.CssProvider
 
 interface ApplicationWindowScope {
@@ -40,13 +33,6 @@ interface ApplicationWindowScope {
         }
         return matches
     }
-
-    @Composable
-    fun Accelerator(
-        name: String,
-        accelerators: List<String>,
-        onActivate: () -> Unit,
-    )
 }
 
 private class ApplicationWindowScopeImpl(val window: ApplicationWindow) : ApplicationWindowScope {
@@ -62,28 +48,6 @@ private class ApplicationWindowScopeImpl(val window: ApplicationWindow) : Applic
             .onUnapply { matches(false) }
             .build()
         window.addBreakpoint(breakpoint)
-    }
-
-    @Composable
-    override fun Accelerator(
-        name: String,
-        accelerators: List<String>,
-        onActivate: () -> Unit,
-    ) {
-        val application = LocalApplication.current
-        val currentOnActivate by rememberUpdatedState(onActivate)
-
-        DisposableEffect(name, accelerators) {
-            val action = SimpleAction(name, null as VariantType?)
-            val connection = action.onActivate { _: Variant? -> currentOnActivate() }
-            window.addAction(action)
-            application.setAccelsForAction("win.$name", accelerators.toTypedArray())
-            onDispose {
-                connection.disconnect()
-                window.removeAction(name)
-                application.setAccelsForAction("win.$name", emptyArray())
-            }
-        }
     }
 }
 

@@ -13,7 +13,6 @@ import io.github.compose4gtk.shared.components.LocalApplicationWindow
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.gnome.adw.DialogPresentationMode
 import org.gnome.adw.ResponseAppearance
-import org.gnome.adw.ShortcutsItem
 import org.gnome.adw.ShortcutsSection
 import org.gnome.gobject.GObjects
 import org.gnome.gtk.License
@@ -337,63 +336,6 @@ fun ShortcutsDialog(
     presentationMode: DialogPresentationMode = DialogPresentationMode.AUTO,
     onClose: () -> Unit = {},
 ) {
-    val dialog = baseDialog(
-        creator = { AdwShortcutsDialog() },
-        title = null,
-        modifier = modifier,
-        contentHeight = contentHeight,
-        contentWidth = contentWidth,
-        followsContentSize = followsContentSize,
-        presentationMode = presentationMode,
-        onClose = onClose,
-    )
-    remember(sections) { sections.forEach { dialog.add(it) } }
-}
-
-class ShortcutsDialogScope {
-    internal val sections = mutableListOf<ShortcutsSection<*>>()
-
-    fun section(title: String, content: ShortcutsSectionScope.() -> Unit) {
-        sections += ShortcutsSectionScope(title).apply(content).build()
-    }
-}
-
-class ShortcutsSectionScope(private val title: String) {
-    private val items = mutableListOf<ShortcutsItem>()
-
-    fun item(title: String, accelerator: String) {
-        items += ShortcutsItem(title, accelerator)
-    }
-
-    internal fun build() = ShortcutsSection.builder()
-        .setTitle(title)
-        .build()
-        .apply { items.forEach(::add) }
-}
-
-/**
- * Creates a [org.gnome.adw.ShortcutsDialog] to display available keyboard shortcuts.
- *
- * @param modifier Compose [Modifier] for layout and styling.
- * @param contentHeight The height of the content.
- * @param contentWidth The width of the content.
- * @param followsContentSize Whether to size content automatically.
- * @param presentationMode Which mode used to display the dialog.
- * @param onClose Callback triggered when the dialog is closed.
- * @param content Content using [ShortcutsDialogScope] to display the shortcuts.
- */
-@Composable
-fun ShortcutsDialog(
-    modifier: Modifier = Modifier,
-    contentHeight: Int = -1,
-    contentWidth: Int = -1,
-    followsContentSize: Boolean = false,
-    presentationMode: DialogPresentationMode = DialogPresentationMode.AUTO,
-    onClose: () -> Unit = {},
-    content: ShortcutsDialogScope.() -> Unit = {},
-) {
-    val sections = remember(content) { ShortcutsDialogScope().apply(content).sections }
-
     val dialog = baseDialog(
         creator = { AdwShortcutsDialog() },
         title = null,
