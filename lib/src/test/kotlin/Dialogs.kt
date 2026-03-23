@@ -1,8 +1,11 @@
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import io.github.compose4gtk.LocalApplication
 import io.github.compose4gtk.adw.adwApplication
 import io.github.compose4gtk.adw.components.AboutDialog
 import io.github.compose4gtk.adw.components.AlertDialog
@@ -10,6 +13,7 @@ import io.github.compose4gtk.adw.components.AlertDialogResponse
 import io.github.compose4gtk.adw.components.ApplicationWindow
 import io.github.compose4gtk.adw.components.Dialog
 import io.github.compose4gtk.adw.components.HeaderBar
+import io.github.compose4gtk.adw.components.ShortcutsDialog
 import io.github.compose4gtk.gtk.components.Button
 import io.github.compose4gtk.gtk.components.Label
 import io.github.compose4gtk.gtk.components.ToggleButton
@@ -19,6 +23,11 @@ import io.github.compose4gtk.modifier.horizontalAlignment
 import io.github.compose4gtk.modifier.margin
 import org.gnome.adw.DialogPresentationMode
 import org.gnome.adw.ResponseAppearance
+import org.gnome.adw.ShortcutsItem
+import org.gnome.adw.ShortcutsSection
+import org.gnome.gio.SimpleAction
+import org.gnome.glib.Variant
+import org.gnome.glib.VariantType
 import org.gnome.gtk.Align
 import org.gnome.gtk.License
 
@@ -31,6 +40,8 @@ private val replaceResponse = AlertDialogResponse(
     label = "_Replace",
     appearance = ResponseAppearance.DESTRUCTIVE,
 )
+
+const val ACCEL = "<Shift>W"
 
 fun main(args: Array<String>) {
     adwApplication("my.example.hello-app", args) {
@@ -59,6 +70,13 @@ fun main(args: Array<String>) {
             if (alertDialog) {
                 ExampleAlertDialog { alertDialog = false }
             }
+
+            var shortcutsDialog by remember { mutableStateOf(false) }
+            if (shortcutsDialog) {
+                ExampleShortcutsDialog { shortcutsDialog = false }
+            }
+
+            Shortcut("open-dialog", listOf(ACCEL), { shortcutsDialog = true })
 
             VerticalBox {
                 HeaderBar()
@@ -91,6 +109,11 @@ fun main(args: Array<String>) {
                         modifier = Modifier.horizontalAlignment(Align.CENTER),
                         label = "Alert dialog",
                         onClick = { alertDialog = true },
+                    )
+                    Button(
+                        modifier = Modifier.horizontalAlignment(Align.CENTER),
+                        label = "Shortcuts dialog",
+                        onClick = { shortcutsDialog = true },
                     )
                 }
             }
@@ -164,4 +187,41 @@ private fun ExampleAlertDialog(onClose: () -> Unit) {
         },
         onClose = onClose,
     )
+}
+
+@Composable
+private fun ExampleShortcutsDialog(onClose: () -> Unit) {
+    ShortcutsDialog(
+        sections = listOf(
+            ShortcutsSection.builder()
+                .setTitle("Basic Actions")
+                .build()
+                .apply {
+                    add(ShortcutsItem("Open Dialog", ACCEL))
+                },
+        ),
+        onClose = onClose,
+    )
+}
+
+@Composable
+private fun Shortcut(
+    name: String,
+    accelerators: List<String>,
+    onActivate: () -> Unit,
+) {
+    val application = LocalApplication.current
+    val currentOnActivate by rememberUpdatedState(onActivate)
+
+    DisposableEffect(name, accelerators) {
+        val action = SimpleAction(name, null as VariantType?)
+        val connection = action.onActivate { _: Variant? -> currentOnActivate() }
+        application.addAction(action)
+        application.setAccelsForAction("app.$name", accelerators.toTypedArray())
+        onDispose {
+            connection.disconnect()
+            application.removeAction(name)
+            application.setAccelsForAction("app.$name", emptyArray())
+        }
+    }
 }
