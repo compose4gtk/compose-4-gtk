@@ -20,7 +20,6 @@ import org.gnome.gtk.GraphicsOffloadEnabled
 import org.gnome.gtk.Video as GtkVideo
 
 sealed interface VideoState {
-    // Modifiable properties
     val video: GtkVideo?
     val duration: Long
     val ended: Boolean
