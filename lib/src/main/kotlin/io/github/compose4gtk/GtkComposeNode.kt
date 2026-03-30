@@ -43,13 +43,13 @@ abstract class GtkComposeContainer<out W : Widget>(widget: W) : GtkComposeWidget
     protected abstract fun addNode(index: Int, child: GtkComposeWidget<Widget>)
 }
 
-internal open class LeafComposeNode<G : Widget>(widget: G) : GtkComposeWidget<G>(widget) {
+open class LeafComposeNode<G : Widget>(widget: G) : GtkComposeWidget<G>(widget) {
     override fun addNode(index: Int, child: GtkComposeNode) = throw UnsupportedOperationException()
     override fun removeNode(index: Int) = throw UnsupportedOperationException()
     override fun clearNodes() = throw UnsupportedOperationException()
 }
 
-internal open class SingleChildComposeNode<W : Widget>(
+open class SingleChildComposeNode<W : Widget>(
     widget: W,
     val set: W.(Widget?) -> Unit,
 ) : GtkComposeContainer<W>(widget) {
@@ -79,7 +79,7 @@ internal open class SingleChildComposeNode<W : Widget>(
     }
 }
 
-internal class VirtualComposeNode<G : GObject>(
+class VirtualComposeNode<G : GObject>(
     val nodeCreator: (G) -> GtkComposeNode,
 ) : GtkComposeNode {
     private var parentCreator: GtkComposeNode? = null
@@ -112,7 +112,7 @@ internal class VirtualComposeNode<G : GObject>(
     }
 }
 
-internal class VirtualComposeNodeContainer<W : Widget>(widget: W) : GtkComposeWidget<W>(widget) {
+class VirtualComposeNodeContainer<W : Widget>(widget: W) : GtkComposeWidget<W>(widget) {
     private val children = mutableListOf<VirtualComposeNode<W>>()
     override fun addNode(index: Int, child: GtkComposeNode) {
         @Suppress("UNCHECKED_CAST")
@@ -131,7 +131,7 @@ internal class VirtualComposeNodeContainer<W : Widget>(widget: W) : GtkComposeWi
     }
 }
 
-internal abstract class GtkContainerComposeNode<W : Widget>(widget: W) : GtkComposeContainer<W>(widget) {
+abstract class GtkContainerComposeNode<W : Widget>(widget: W) : GtkComposeContainer<W>(widget) {
     private val _children = mutableListOf<Widget>()
     protected val children: List<Widget> = _children
     override fun addNode(index: Int, child: GtkComposeWidget<Widget>) {
