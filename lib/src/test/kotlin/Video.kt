@@ -56,7 +56,20 @@ fun main(args: Array<String>) {
         ) {
             val window = LocalApplicationWindow.current
 
+            fun getFile(callback: (File?) -> Unit) {
+                fileDialog.open(window, null) { _: GObject?, result, _: MemorySegment? ->
+                    val file = try {
+                        fileDialog.openFinish(result)
+                    } catch (_: Throwable) {
+                        null
+                    }
+                    callback(file)
+                }
+            }
+
             var selectedFile by remember { mutableStateOf<File?>(null) }
+
+            var useBasicVideoPlayer by remember { mutableStateOf(false) }
 
             ToolbarView(
                 topBar = {
@@ -75,49 +88,73 @@ fun main(args: Array<String>) {
                             title = "Video",
                             description = "Select a video file",
                         ) {
-                            Button(
-                                label = "Open…",
-                                onClick = {
-                                    fileDialog.open(
-                                        window,
-                                        null,
-                                    ) { _: GObject?, result, _: MemorySegment? ->
-                                        var file: File? = null
-                                        try {
-                                            file = fileDialog.openFinish(result)
-                                        } catch (_: Throwable) {
+                            VerticalBox(spacing = 8) {
+                                Button(
+                                    label = "Open…",
+                                    onClick = {
+                                        getFile {
+                                            selectedFile = it
                                         }
-                                        if (file == null) return@open
-                                        selectedFile = file
-                                    }
-                                },
-                                modifier = Modifier.cssClasses("pill", "suggested-action"),
-                            )
+                                        useBasicVideoPlayer = false
+                                    },
+                                    modifier = Modifier.cssClasses("pill", "suggested-action"),
+                                )
+                                Button(
+                                    label = "Open… (basic video player)",
+                                    onClick = {
+                                        getFile {
+                                            selectedFile = it
+                                        }
+                                        useBasicVideoPlayer = true
+                                    },
+                                    modifier = Modifier.cssClasses("pill", "suggested-action"),
+                                )
+                            }
                         }
                     } else {
-                        val videoState = rememberVideoState()
-                        ScrolledWindow(
-                            modifier = Modifier.expand(),
-                            propagateNaturalWidth = true,
-                            propagateNaturalHeight = true,
-                        ) {
-                            VerticalBox(
-                                modifier = Modifier.margin(8),
-                                spacing = 8,
-                            ) {
-                                Video(
-                                    state = videoState,
-                                    file = selectedFile,
-                                    modifier = Modifier.sizeRequest(-1, 300),
+                        if (useBasicVideoPlayer) {
+                            VerticalBox(spacing = 8) {
+                                var loop by remember { mutableStateOf(false) }
+
+                                Video(file = selectedFile, loop = loop)
+                                ToggleButton(
+                                    label = "Loop",
+                                    active = loop,
+                                    onToggle = { loop = !loop },
                                 )
-                                MediaControls(videoState)
-                                StreamInfo(videoState)
-                                StreamControls(videoState)
                                 Button(
                                     label = "Remove video",
                                     onClick = { selectedFile = null },
                                     modifier = Modifier.cssClasses("destructive-action").expand(false),
                                 )
+                            }
+                        } else {
+                            val videoState = rememberVideoState().apply {
+                                loop = true
+                            }
+                            ScrolledWindow(
+                                modifier = Modifier.expand(),
+                                propagateNaturalWidth = true,
+                                propagateNaturalHeight = true,
+                            ) {
+                                VerticalBox(
+                                    modifier = Modifier.margin(8),
+                                    spacing = 8,
+                                ) {
+                                    Video(
+                                        state = videoState,
+                                        file = selectedFile,
+                                        modifier = Modifier.sizeRequest(-1, 300),
+                                    )
+                                    MediaControls(videoState)
+                                    StreamInfo(videoState)
+                                    StreamControls(videoState)
+                                    Button(
+                                        label = "Remove video",
+                                        onClick = { selectedFile = null },
+                                        modifier = Modifier.cssClasses("destructive-action").expand(false),
+                                    )
+                                }
                             }
                         }
                     }

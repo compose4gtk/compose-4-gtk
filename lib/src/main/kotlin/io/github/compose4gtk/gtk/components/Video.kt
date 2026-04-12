@@ -183,6 +183,27 @@ fun rememberVideoState(): VideoState {
     return state
 }
 
+@Composable
+private fun <V : GtkComposeWidget<GtkVideo>> BaseVideo(
+    creator: () -> V,
+    modifier: Modifier = Modifier,
+    file: File? = null,
+    autoplay: Boolean = false,
+    graphicsOffload: GraphicsOffloadEnabled = GraphicsOffloadEnabled.DISABLED,
+    loop: Boolean = false,
+) {
+    ComposeNode<V, GtkApplier>(
+        factory = creator,
+        update = {
+            set(modifier) { applyModifier(modifier) }
+            set(file) { this.widget.file = it }
+            set(autoplay) { this.widget.autoplay = it }
+            set(graphicsOffload) { this.widget.graphicsOffload = it }
+            set(loop) { this.widget.mediaStream?.loop = it }
+        },
+    )
+}
+
 /**
  * Creates a [org.gnome.gtk.Video] that displays a video whose stream
  * is controlled by a [VideoState].
@@ -213,18 +234,17 @@ fun Video(
         }
     }
 
-    ComposeNode<GtkComposeWidget<GtkVideo>, GtkApplier>(
-        factory = {
+    BaseVideo(
+        creator = {
             val gObject = GtkVideo()
             stateImpl.video = gObject
             LeafComposeNode(gObject)
         },
-        update = {
-            set(modifier) { applyModifier(modifier) }
-            set(file) { this.widget.file = it }
-            set(autoplay) { this.widget.autoplay = it }
-            set(graphicsOffload) { this.widget.graphicsOffload = it }
-        },
+        modifier = modifier,
+        file = file,
+        autoplay = autoplay,
+        graphicsOffload = graphicsOffload,
+        loop = stateImpl.loop,
     )
 }
 
@@ -246,16 +266,14 @@ fun Video(
     graphicsOffload: GraphicsOffloadEnabled = GraphicsOffloadEnabled.DISABLED,
     loop: Boolean = false,
 ) {
-    ComposeNode<GtkComposeWidget<GtkVideo>, GtkApplier>(
-        factory = {
+    BaseVideo(
+        creator = {
             LeafComposeNode(GtkVideo())
         },
-        update = {
-            set(modifier) { applyModifier(modifier) }
-            set(file) { this.widget.file = it }
-            set(autoplay) { this.widget.autoplay = it }
-            set(graphicsOffload) { this.widget.graphicsOffload = it }
-            set(loop) { this.widget.loop = it }
-        },
+        modifier = modifier,
+        file = file,
+        autoplay = autoplay,
+        graphicsOffload = graphicsOffload,
+        loop = loop,
     )
 }
