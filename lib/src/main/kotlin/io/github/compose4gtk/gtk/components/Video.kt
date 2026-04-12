@@ -53,6 +53,10 @@ private class VideoStateImpl : VideoState {
             value.onNotify("media-stream") { _: ParamSpec? ->
                 val stream = value.mediaStream ?: return@onNotify
 
+                stream.loop = loop
+                stream.muted = muted
+                stream.volume = volume
+
                 stream.onNotify("duration") { _: ParamSpec? ->
                     duration = stream.duration
                 }
@@ -71,20 +75,6 @@ private class VideoStateImpl : VideoState {
 
                 stream.onNotify("has-video") { _: ParamSpec? ->
                     hasVideo = stream.hasVideo()
-                }
-
-                stream.onNotify("loop") { _: ParamSpec? ->
-                    loop = stream.loop
-                }
-
-                stream.onNotify("muted") { _: ParamSpec? ->
-                    muted = stream.muted
-                }
-
-                stream.onNotify("volume") { _: ParamSpec? ->
-                    if (!stream.muted) {
-                        volume = stream.volume
-                    }
                 }
 
                 stream.onNotify("playing") { _: ParamSpec? ->
