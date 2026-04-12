@@ -38,7 +38,7 @@ import org.gnome.gtk.FileFilter
 import org.gnome.gtk.SelectionMode
 import java.lang.foreign.MemorySegment
 
-val filter: FileFilter = FileFilter.builder().setName("Video files").setMimeTypes(arrayOf("video/mp4")).build()
+val filter: FileFilter = FileFilter.builder().setName("Video files").setMimeTypes(arrayOf("video/*")).build()
 
 val filters = ListStore<FileFilter>().apply {
     append(filter)

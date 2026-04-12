@@ -40,19 +40,6 @@ sealed interface VideoState {
 }
 
 private class VideoStateImpl : VideoState {
-    private var _duration by mutableLongStateOf(0L)
-    private var _ended by mutableStateOf(false)
-    private var _error by mutableStateOf<GError?>(null)
-    private var _hasAudio by mutableStateOf(false)
-    private var _hasVideo by mutableStateOf(false)
-    private var _loop by mutableStateOf(false)
-    private var _muted by mutableStateOf(false)
-    private var _volume by mutableDoubleStateOf(1.0)
-    private var _playing by mutableStateOf(false)
-    private var _prepared by mutableStateOf(false)
-    private var _seekable by mutableStateOf(true)
-    private var _seeking by mutableStateOf(false)
-    private var _timestamp by mutableLongStateOf(0L)
 
     private var _video by mutableStateOf<GtkVideo?>(null)
     override var video: GtkVideo?
@@ -67,112 +54,115 @@ private class VideoStateImpl : VideoState {
                 val stream = value.mediaStream ?: return@onNotify
 
                 stream.onNotify("duration") { _: ParamSpec? ->
-                    _duration = stream.duration
+                    duration = stream.duration
                 }
 
                 stream.onNotify("ended") { _: ParamSpec? ->
-                    _ended = stream.ended
+                    ended = stream.ended
                 }
 
                 stream.onNotify("error") { _: ParamSpec? ->
-                    _error = stream.error
+                    error = stream.error
                 }
 
                 stream.onNotify("has-audio") { _: ParamSpec? ->
-                    _hasAudio = stream.hasAudio()
+                    hasAudio = stream.hasAudio()
                 }
 
                 stream.onNotify("has-video") { _: ParamSpec? ->
-                    _hasVideo = stream.hasVideo()
+                    hasVideo = stream.hasVideo()
                 }
 
                 stream.onNotify("loop") { _: ParamSpec? ->
-                    _loop = stream.loop
+                    loop = stream.loop
                 }
 
                 stream.onNotify("muted") { _: ParamSpec? ->
-                    _muted = stream.muted
+                    muted = stream.muted
                 }
 
                 stream.onNotify("volume") { _: ParamSpec? ->
                     if (!stream.muted) {
-                        _volume = stream.volume
+                        volume = stream.volume
                     }
                 }
 
                 stream.onNotify("playing") { _: ParamSpec? ->
-                    _playing = stream.playing
+                    playing = stream.playing
                 }
 
                 stream.onNotify("prepared") { _: ParamSpec? ->
-                    _prepared = stream.isPrepared
+                    prepared = stream.isPrepared
                 }
 
                 stream.onNotify("seekable") { _: ParamSpec? ->
-                    _seekable = stream.isSeekable
+                    seekable = stream.isSeekable
                 }
 
                 stream.onNotify("seeking") { _: ParamSpec? ->
-                    _seeking = stream.isSeeking
+                    seeking = stream.isSeeking
                 }
 
                 stream.onNotify("timestamp") { _: ParamSpec? ->
-                    _timestamp = stream.timestamp
+                    timestamp = stream.timestamp
                 }
             }
         }
 
-    override val duration
-        get() = _duration
+    override var duration by mutableLongStateOf(0L)
+        private set
 
-    override val ended
-        get() = _ended
+    override var ended by mutableStateOf(false)
+        private set
 
-    override val error: GError?
-        get() = _error
+    override var error by mutableStateOf<GError?>(null)
+        private set
 
-    override val hasAudio: Boolean
-        get() = _hasAudio
+    override var hasAudio by mutableStateOf(false)
+        private set
 
-    override val hasVideo: Boolean
-        get() = _hasVideo
+    override var hasVideo by mutableStateOf(false)
+        private set
 
-    override var loop: Boolean
+    private var _loop by mutableStateOf(false)
+    override var loop
         get() = _loop
         set(value) {
             _loop = value
             video?.mediaStream?.loop = value
         }
 
-    override var muted: Boolean
+    private var _muted by mutableStateOf(false)
+    override var muted
         get() = _muted
         set(value) {
             _muted = value
             video?.mediaStream?.muted = value
-            video?.mediaStream?.volume = _volume
+            video?.mediaStream?.volume = volume
         }
 
-    override var volume: Double
+    private var _volume by mutableDoubleStateOf(1.0)
+    override var volume
         get() = _volume
         set(value) {
             _volume = value
             video?.mediaStream?.volume = value
         }
 
-    override val playing: Boolean
-        get() = _playing
+    override var playing by mutableStateOf(false)
+        private set
 
-    override val prepared: Boolean
-        get() = _prepared
+    override var prepared by mutableStateOf(false)
+        private set
 
-    override val seekable: Boolean
-        get() = _seekable
+    override var seekable by mutableStateOf(true)
+        private set
 
-    override val seeking: Boolean
-        get() = _seeking
+    override var seeking by mutableStateOf(false)
+        private set
 
-    override val timestamp: Long
-        get() = _timestamp
+    override var timestamp by mutableLongStateOf(0L)
+        private set
 
     override fun play() {
         video?.mediaStream?.play()
