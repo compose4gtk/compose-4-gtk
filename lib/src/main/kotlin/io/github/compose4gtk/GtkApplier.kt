@@ -2,7 +2,7 @@ package io.github.compose4gtk
 
 import androidx.compose.runtime.AbstractApplier
 
-internal class GtkApplier(root: GtkComposeNode) : AbstractApplier<GtkComposeNode>(root) {
+class GtkApplier(root: GtkComposeNode) : AbstractApplier<GtkComposeNode>(root) {
     override fun insertBottomUp(index: Int, instance: GtkComposeNode) = Unit
     override fun insertTopDown(index: Int, instance: GtkComposeNode) {
         current.addNode(index, instance)
